@@ -499,7 +499,7 @@ public class Concert
                 returnQuery = customer.getName() + " is entitled to " + customer.getEntitlement() + "\n";
             }
             int counter = 0;
-            returnQuery += customer.getName() + " has booked:\n"; 
+            returnQuery += customer.getName() + " has booked " + customer.getAmountBooked() + " seat(s):\n"; 
             for(Seat seat : customer.getBookedSeats())
             {
                 counter++;
