@@ -102,6 +102,11 @@ public class Customer
         return this.bookedSeats;
     }
     
+    public int getAmountBooked()
+    {
+        return this.nBookedSeats;   
+    }
+    
     public boolean save(PrintWriter output)
     {
         try
