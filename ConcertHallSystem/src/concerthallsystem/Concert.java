@@ -490,12 +490,16 @@ public class Concert
     //This method returns all the seats that the supplied customer has booked
     public String queryByCustomer(String customerName)
     {              
-        String returnQuery;
+        String returnQuery = "";
         Customer customer = this.findCustomer(customerName);
         if(customer != null)
         {
+            if(customer.getEntitlement() != null)
+            {
+                returnQuery = customer.getName() + " is entitled to " + customer.getEntitlement() + "\n";
+            }
             int counter = 0;
-            returnQuery = customer.getName() + " has booked:\n"; 
+            returnQuery += customer.getName() + " has booked:\n"; 
             for(Seat seat : customer.getBookedSeats())
             {
                 counter++;
@@ -508,7 +512,7 @@ public class Concert
                     returnQuery += "(" + seat.getSeatPosition() + ")\n";
                     counter = 0;
                 }                   
-            }
+            }                        
             return returnQuery;
         }
         else

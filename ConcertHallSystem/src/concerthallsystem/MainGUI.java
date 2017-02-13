@@ -1677,30 +1677,39 @@ public class MainGUI extends JFrame
     //When you click the "Query By Customer" button, this code is called
     //It asks you pass in the customer newConcertName to query, returning all the seats booked by that customer    
     private void queryByCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryByCustomerButtonActionPerformed
-        String customerList = "List of Customers:\n";
-        int i = 1;
-        for(Customer customer : this.currentConcert.getCustomers())
-        {
-            customerList += i + ". " + customer.getName() + "\n";
-            i++;
-        }
-        
-        String customerName = MessagePanel.inputDialog(
-            this, "Please input customer name from list to query\n"
-                  + customerList, "Query By Customer"
-        );
-               
-        if(customerName != null && customerName.length() > 0)
-        {
-            MessagePanel.displayMessage(
-                this, this.currentConcert.queryByCustomer(customerName), "Query Result"
-            );            
+        if(this.currentConcert.getCustomers().size() > 0)
+        {                 
+            String customerList = "List of customers:\n";
+            int i = 1;
+            for(Customer customer : this.currentConcert.getCustomers())
+            {
+                customerList += i + ". " + customer.getName() + "\n";
+                i++;
+            }
+
+            String customerName = MessagePanel.inputDialog(
+                this, "Please input customer name from list to query\n"
+                      + customerList, "Query By Customer"
+            );
+
+            if(customerName.length() > 0)
+            {
+                MessagePanel.displayMessage(
+                    this, this.currentConcert.queryByCustomer(customerName), "Query Result"
+                );            
+            }
+            else
+            {
+                MessagePanel.displayMessage(
+                    this, "Please input a customer name", "Error: Invalid Input"
+                );          
+            }
         }
         else
         {
             MessagePanel.displayMessage(
-                this, "Please input a customer name", "Error: Invalid Input"
-            );          
+                this, "There are no customers available to query for this concert", "No Available Customers to Query"
+            );
         }
     }//GEN-LAST:event_queryByCustomerButtonActionPerformed
 

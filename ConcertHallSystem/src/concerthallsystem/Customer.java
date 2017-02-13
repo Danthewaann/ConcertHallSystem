@@ -39,17 +39,7 @@ public class Customer
     {
         return this.name_;
     }
-    
-    public void setGoldEntitlement(boolean entitlement)
-    {
-        this.goldEntitled_ = entitlement;
-    }
-    
-    public void setSilverEntitlement(boolean entitlement)
-    {
-        this.silverEntitled_ = entitlement;
-    }
-    
+         
     public void setEntitlement(Seat seat)
     {
         if(seat.getIndex() < 30)
@@ -66,8 +56,7 @@ public class Customer
             this.silverEntitled_ = true;
         }
     }
-    
-    
+       
     public String getEntitlement()
     {
         String result = null;
