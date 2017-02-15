@@ -27,7 +27,7 @@ public class Concert
     private String name_;
     private String dateWithSlashes_;
     private String date_;
-    private int nCustomers_; //Not useful currently
+    private int nCustomers_; 
     private int nBookedSeats_;
     private int nAvailableSeats_;
     private double totalSales_;
@@ -52,6 +52,11 @@ public class Concert
     {   
         this.customers = new ArrayList<>();
         this.initializeSeats();   
+    }
+    
+    public Concert(String name)
+    {
+        this(name, 1, 1, 2000);
     }
                   
     //This method creates instances of gold, silver and bronze seats 
@@ -338,33 +343,30 @@ public class Concert
                   
     public void bookSeat(Seat seat, String name)
     {                        
-        Customer customer = this.findCustomer(name);
+        String customerName = Constant.capitalize(name);
+        Customer customer = this.findCustomer(customerName);
         if(customer != null)
         {
             customer.setEntitlement(seat);
-            this.seats[seat.getIndex()].book(Constant.capitalize(name));
-            customer.addSeat(this.seats[seat.getIndex()]);               
+            this.seats[seat.getIndex()].book(customer);                     
             this.nBookedSeats_++;
         }
         else
         {           
-            Customer newCustomer = new Customer(Constant.capitalize(name));
-            newCustomer.setEntitlement(seat);
-            this.seats[seat.getIndex()].book(Constant.capitalize(name));
-            newCustomer.addSeat(this.seats[seat.getIndex()]);
+            Customer newCustomer = new Customer(customerName);            
+            this.seats[seat.getIndex()].book(newCustomer);            
             this.customers.add(newCustomer);                       
             this.nBookedSeats_++;
             this.nCustomers_++;
         }               
     }
             
-    public void unBookSeat(Seat seat)
+    public void unBookSeat(Seat seat) throws CannotUnbookSeatException
     {        
         Customer customer = this.findCustomer(seat.getBookee());
         if(customer != null)
-        {
-            customer.removeSeat(seat);
-            this.seats[seat.getIndex()].unBook();
+        {           
+            this.seats[seat.getIndex()].unBook(customer);
             this.nBookedSeats_--; 
             if(!customer.hasBookedASeat())
             {
@@ -497,9 +499,19 @@ public class Concert
             if(customer.getEntitlement() != null)
             {
                 returnQuery = customer.getName() + " is entitled to " + customer.getEntitlement() + "\n";
+            }       
+            
+            returnQuery += customer.getName() + " has booked " + customer.getBookedSeats().size();
+            if(customer.getBookedSeats().size() > 1)
+            {
+                returnQuery += " seats:\n";
             }
+            else
+            {
+                returnQuery += " seat:\n";
+            }
+                           
             int counter = 0;
-            returnQuery += customer.getName() + " has booked " + customer.getAmountBooked() + " seat(s):\n"; 
             for(Seat seat : customer.getBookedSeats())
             {
                 counter++;
