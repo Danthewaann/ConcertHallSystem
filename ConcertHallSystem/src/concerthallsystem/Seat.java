@@ -22,7 +22,7 @@ public abstract class Seat implements Comparable
     private String bookedBy_ = null;
     private final String row_;
     private final int number_;
-    private final int index_;
+    private int index_;
     
     public Seat(String row, int num, int index)
     {
@@ -30,7 +30,13 @@ public abstract class Seat implements Comparable
         this.number_ = num;
         this.index_ = index;
     }
-      
+    
+    public Seat(String row, int num)
+    {
+        this.row_ = row;
+        this.number_ = num;
+    }
+            
     @Override
     public int compareTo(Object seat)
     {
@@ -48,13 +54,19 @@ public abstract class Seat implements Comparable
         }
     }
     
-    public void book(String name)
+    public void book(Customer customer)
     {
         this.setStatus(true);
-        this.setBookee(name);
+        this.setBookee(customer.getName());
+        customer.addSeat(this);        
     }
     
-    public void unBook(){}
+    public void unBook(Customer customer) throws CannotUnbookSeatException
+    {
+        this.setStatus(false);
+        this.setBookee(null);
+        customer.removeSeat(this);
+    }
     
     public boolean save(PrintWriter output)
     {             
@@ -158,7 +170,7 @@ public abstract class Seat implements Comparable
     {
         return this.price_;
     }
-    
+          
     public void setPrice(double price)
     {
         this.price_ = price;

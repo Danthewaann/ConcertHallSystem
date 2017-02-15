@@ -4,20 +4,13 @@ public class GoldSeat extends Seat
 {   
     public GoldSeat(String row, int num, int index)
     {
-       super(row, num, index);
-    }
-    
+        super(row, num, index);
+    } 
+
     @Override
-    public void book(String name)
-    {               
-        this.setBookee(name);
-        this.setStatus(true);                                 
-    }
-               
-    @Override
-    public void unBook()
+    public void book(Customer customer) 
     {
-        this.setStatus(false);
-        this.setBookee(null);
-    }     
+        super.book(customer); 
+        customer.setEntitlement(this);
+    }  
 }

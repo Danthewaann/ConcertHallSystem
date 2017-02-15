@@ -5,19 +5,12 @@ public class SilverSeat extends Seat
     public SilverSeat(String row, int num, int index)
     {
         super(row, num, index);
-    }
+    }  
     
     @Override
-    public void book(String name)
+    public void book(Customer customer) 
     {
-        this.setBookee(name);
-        this.setStatus(true);       
-    }
-             
-    @Override
-    public void unBook()
-    {
-        this.setStatus(false);
-        this.setBookee(null);
-    }
+        super.book(customer); 
+        customer.setEntitlement(this);
+    }  
 }
