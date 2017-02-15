@@ -34,39 +34,42 @@ public class SeatHandler implements ActionListener
     public void actionPerformed(ActionEvent ae) 
     {                                          
         //Checks if the seat is either a gold or silver seat and if it is booked
-        if(this.selectedSeat_.getStatus() && (this.seatType_.equals("GoldSeat") || this.seatType_.equals("SilverSeat")))
+        if(this.selectedSeat_.getStatus())
         {
-            //Prompt the user to ask them if they want to unbook the selected seat
-            Object[] options = {"Yes", "No"};
-            int option = MessagePanel.optionDialog(
-                this.frame_, "Are you sure you want to unbook this seat?", 
-                "Unbook Seat " + "(" + this.selectedSeat_.getSeatPosition() + ")", options
-            );
-                       
-            //If the option selected was yes, then unbook the selected seat
-            if(option == 0)
+            try
             {
-                this.selectedConcert_.unBookSeat(this.selectedSeat_);
-                if(this.seatType_.equals("GoldSeat"))
+                if(this.seatType_.equals("GoldSeat") || this.seatType_.equals("SilverSeat"))
                 {
-                    this.seatIcon_.setBackground(Constant.GOLD);
+                    //Prompt the user to ask them if they want to unbook the selected seat
+                    Object[] options = {"Yes", "No"};
+                    int option = MessagePanel.optionDialog(
+                        this.frame_, "Are you sure you want to unbook this seat?", 
+                        "Unbook Seat " + "(" + this.selectedSeat_.getSeatPosition() + ")", options
+                    );   
+                    
+                    //If the option selected was yes, then unbook the selected seat
+                    if(option == 0)
+                    {                                                                       
+                        if(this.seatType_.equals("GoldSeat"))
+                        {
+                            this.seatIcon_.setBackground(Constant.GOLD);
+                        }
+                        else
+                        {
+                            this.seatIcon_.setBackground(Constant.SILVER);
+                        }                                               
+                    }
                 }
-                else
-                {
-                    this.seatIcon_.setBackground(Constant.SILVER);
-                }                                               
-            }  
-        }
-        
-        //Checks if the seat is a bronze seat and is booked, telling the user they can't unbook it
-        else if(this.selectedSeat_.getStatus() && this.seatType_.equals("BronzeSeat"))
-        {    
-            MessagePanel.displayMessage(
-                this.frame_, "Cannot unbook seats in the Bronze section", "Cannot unbook seat " 
-                + "(" + this.selectedSeat_.getSeatPosition() + ")"
-            );           
-        }
-        
+                this.selectedConcert_.unBookSeat(this.selectedSeat_);
+            }
+            catch(CannotUnbookSeatException e)
+            {
+                MessagePanel.displayMessage(
+                    this.frame_, e.getMessage(), "Cannot Unbook Seat " 
+                    + "(" + this.selectedSeat_.getSeatPosition() + ")"
+                );
+            }          
+        }                        
         //If the seat is not booked, then allow the user to book it
         else
         {                                                 
@@ -120,7 +123,6 @@ public class SeatHandler implements ActionListener
                             + "(" + this.selectedSeat_.getSeatPosition() + ")" + "\n" + entitlement, "Seat Bookings"
                         );                       
                     }                   
-
                     this.seatIcon_.setBackground(Constant.RED);
                 } 
                 else
