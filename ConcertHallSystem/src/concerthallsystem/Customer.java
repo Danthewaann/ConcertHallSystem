@@ -31,8 +31,8 @@ public class Customer
     }
     
     private Customer()
-    {             
-        this.bookedSeats = new ArrayList<>();
+    {                    
+        this.bookedSeats = new ArrayList<>();        
     }
     
     public String getName()
@@ -101,12 +101,7 @@ public class Customer
     {
         return this.bookedSeats;
     }
-    
-    public int getAmountBooked()
-    {
-        return this.nBookedSeats;   
-    }
-    
+          
     public boolean save(PrintWriter output)
     {
         try

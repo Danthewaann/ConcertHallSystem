@@ -11,7 +11,7 @@ public class BronzeSeat extends Seat
     public void unBook(Customer customer) throws CannotUnbookSeatException
     {
         throw new CannotUnbookSeatException(
-            this.getSeatPosition(), "Reason: seat (" + this.getSeatPosition() + ") is in the Bronze section"
+            this.getPosition(), "Reason: seat (" + this.getPosition() + ") is in the Bronze section"
         );
     }       
 }
