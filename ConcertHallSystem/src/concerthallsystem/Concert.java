@@ -134,14 +134,14 @@ public class Concert
                     if(seat.save(seatOutput))
                     {
                         System.out.println(
-                            "Successfully saved seat " + "(" + seat.getSeatPosition() + ")" 
+                            "Successfully saved seat " + "(" + seat.getPosition() + ")" 
                             + " for concert " + this.getName() + " " + this.getDateWithSlashes()
                         );
                     }
                     else
                     {
                         System.out.println(
-                            "Failed to save seat " + "(" + seat.getSeatPosition() + ")" 
+                            "Failed to save seat " + "(" + seat.getPosition() + ")" 
                             + " for concert " + this.getName() + " " + this.getDateWithSlashes()
                         );
                     }
@@ -346,8 +346,7 @@ public class Concert
         String customerName = Constant.capitalize(name);
         Customer customer = this.findCustomer(customerName);
         if(customer != null)
-        {
-            customer.setEntitlement(seat);
+        {           
             this.seats[seat.getIndex()].book(customer);                     
             this.nBookedSeats_++;
         }
@@ -468,24 +467,24 @@ public class Concert
             {
                 if(customer.getEntitlement() == null)
                 {
-                    return "Selected seat " + "(" + seat.getSeatPosition() 
+                    return "Selected seat " + "(" + seat.getPosition() 
                             + ")" + " is booked by " + seat.getBookee();
                 }
                 else
                 {
-                    return "Selected seat " + "(" + seat.getSeatPosition() + ")" 
+                    return "Selected seat " + "(" + seat.getPosition() + ")" 
                             + " is booked by " + seat.getBookee() + "\n" + seat.getBookee() + " is entitled to " 
                             + customer.getEntitlement();
                 }
             }
             else
             {
-                return "Could not find customer for " + "(" + seat.getSeatPosition() + ")";
+                return "Could not find customer for " + "(" + seat.getPosition() + ")";
             }
         }
         else
         {
-            return "Selected seat " + "(" + seat.getSeatPosition() + ")" + " hasn't been booked";
+            return "Selected seat " + "(" + seat.getPosition() + ")" + " hasn't been booked";
         }
     }
     
@@ -517,11 +516,11 @@ public class Concert
                 counter++;
                 if(counter < 5)
                 {
-                    returnQuery += "(" + seat.getSeatPosition() + ") ";
+                    returnQuery += "(" + seat.getPosition() + ") ";
                 }
                 else
                 {
-                    returnQuery += "(" + seat.getSeatPosition() + ")\n";
+                    returnQuery += "(" + seat.getPosition() + ")\n";
                     counter = 0;
                 }                   
             }                        
