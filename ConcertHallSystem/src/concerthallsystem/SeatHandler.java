@@ -32,8 +32,7 @@ public class SeatHandler implements ActionListener
     
     @Override
     public void actionPerformed(ActionEvent ae) 
-    {                                          
-        //Checks if the seat is either a gold or silver seat and if it is booked
+    {                                                  
         if(this.selectedSeat_.getStatus())
         {
             try
@@ -44,7 +43,7 @@ public class SeatHandler implements ActionListener
                     Object[] options = {"Yes", "No"};
                     int option = MessagePanel.optionDialog(
                         this.frame_, "Are you sure you want to unbook this seat?", 
-                        "Unbook Seat " + "(" + this.selectedSeat_.getSeatPosition() + ")", options
+                        "Unbook Seat " + "(" + this.selectedSeat_.getPosition() + ")", options
                     );   
                     
                     //If the option selected was yes, then unbook the selected seat
@@ -66,7 +65,7 @@ public class SeatHandler implements ActionListener
             {
                 MessagePanel.displayMessage(
                     this.frame_, e.getMessage(), "Cannot Unbook Seat " 
-                    + "(" + this.selectedSeat_.getSeatPosition() + ")"
+                    + "(" + this.selectedSeat_.getPosition() + ")"
                 );
             }          
         }                        
@@ -75,7 +74,7 @@ public class SeatHandler implements ActionListener
         {                                                 
             String customerName = MessagePanel.inputDialog(
                 this.frame_, "Please input your fullname:", "Booking for " 
-                +  "(" + this.selectedSeat_.getSeatPosition() + ")"
+                +  "(" + this.selectedSeat_.getPosition() + ")"
             );
                         
             //Numerous checks on the supplied customerName for the booking
@@ -113,14 +112,14 @@ public class SeatHandler implements ActionListener
                     {
                         MessagePanel.displayMessage(
                             this.frame_, Constant.capitalize(customerName) + " has booked seat " 
-                            + "(" + this.selectedSeat_.getSeatPosition() + ")", "Seat Bookings"
+                            + "(" + this.selectedSeat_.getPosition() + ")", "Seat Bookings"
                         );                       
                     }
                     else
                     {
                         MessagePanel.displayMessage(
                             this.frame_, Constant.capitalize(customerName) + " has booked seat " 
-                            + "(" + this.selectedSeat_.getSeatPosition() + ")" + "\n" + entitlement, "Seat Bookings"
+                            + "(" + this.selectedSeat_.getPosition() + ")" + "\n" + entitlement, "Seat Bookings"
                         );                       
                     }                   
                     this.seatIcon_.setBackground(Constant.RED);
