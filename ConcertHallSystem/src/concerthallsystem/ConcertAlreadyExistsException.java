@@ -7,8 +7,11 @@ package concerthallsystem;
 
 public class ConcertAlreadyExistsException extends RuntimeException
 {
-    public ConcertAlreadyExistsException()
+    public ConcertAlreadyExistsException(Concert concert)
     {
-        super("This concert already exists, do you want to override it?");
+        super(
+            "Concert: " + concert.getName() + " " + concert.getDateWithSlashes() 
+            + " already exists, do you want to override it?"
+        );
     }
 }

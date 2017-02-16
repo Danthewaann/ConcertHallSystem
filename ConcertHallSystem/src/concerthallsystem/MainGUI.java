@@ -1751,7 +1751,7 @@ public class MainGUI extends JFrame
                         try
                         {
                             concertAlreadyExists = true;
-                            throw new ConcertAlreadyExistsException();
+                            throw new ConcertAlreadyExistsException(this.concerts.get(i));
                         }
                         catch(ConcertAlreadyExistsException e)
                         {                                                   
@@ -1768,8 +1768,8 @@ public class MainGUI extends JFrame
                                 this.concertDropDownList.removeItemAt(i);
                                 this.concertDropDownList.addItem(this.currentConcert.getName()
                                     + " | " + this.currentConcert.getDateWithSlashes()
-                                );
-
+                                );              
+                                
                                 MessagePanel.displayMessage(
                                     this, "Created a new concert called:\n" + this.currentConcert.getName() 
                                     + "\n" + "For date: " + this.currentConcert.getDateWithSlashes(), "New Concert"
@@ -1796,16 +1796,16 @@ public class MainGUI extends JFrame
                 this.concerts.add(this.currentConcert);
                 this.concertDropDownList.addItem(
                     this.currentConcert.getName() + " | " + this.currentConcert.getDateWithSlashes()
-                );
+                );         
                 
                 MessagePanel.displayMessage(
                     this, "Created a new concert called:\n" + this.currentConcert.getName() 
-                    + "\n" + "For date: " + this.currentConcert.getDateWithSlashes(), "Created New Concert"
-                );      
-                                                 
+                    + "\n" + "For date: " + this.currentConcert.getDateWithSlashes(), "New Concert"
+                );
+
                 this.createConcertPanel.setVisible(false);
-                this.displaySeatingPlan(); 
-            }            
+                this.displaySeatingPlan();
+            }           
         }            
         else 
         {                                      
