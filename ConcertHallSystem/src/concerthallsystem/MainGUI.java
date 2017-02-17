@@ -1453,27 +1453,30 @@ public class MainGUI extends JFrame
                 //and if it does it adds it to tempConcerts that will hold it for error checking 
                 //after we have finished loading in all the concerts
                 Concert concert = Concert.load(concertInput);
-                if(this.concerts.size() > 0)
+                if(concert != null)
                 {
-                    for(int i = 0; i < this.concerts.size(); i++)
-                    {                                               
-                        if(concert.getName().compareToIgnoreCase(this.concerts.get(i).getName()) == 0)
-                        {
-                            if(concert.getDateWithSlashes().compareTo(this.concerts.get(i).getDateWithSlashes()) == 0)
+                    if(this.concerts.size() > 0)
+                    {
+                        for(int i = 0; i < this.concerts.size(); i++)
+                        {                                               
+                            if(concert.getName().compareToIgnoreCase(this.concerts.get(i).getName()) == 0)
                             {
-                                if(!tempConcerts.contains(concert))                              
+                                if(concert.getDateWithSlashes().compareTo(this.concerts.get(i).getDateWithSlashes()) == 0)
                                 {
-                                    tempConcerts.add(concert);                                    
-                                }                               
-                            }
-                        }                        
+                                    if(!tempConcerts.contains(concert))                              
+                                    {
+                                        tempConcerts.add(concert);                                    
+                                    }                               
+                                }
+                            }                        
+                        }
                     }
+                    this.concerts.add(concert);
+                    this.concertDropDownList.addItem(
+                        concert.getName() + " | " + concert.getDateWithSlashes()
+                    );    
+                    concertInput.nextLine(); 
                 }
-                this.concerts.add(concert);
-                this.concertDropDownList.addItem(
-                    concert.getName() + " | " + concert.getDateWithSlashes()
-                );    
-                concertInput.nextLine(); 
             }
             
             //This is where tempConcerts is checked to see if any concerts are
