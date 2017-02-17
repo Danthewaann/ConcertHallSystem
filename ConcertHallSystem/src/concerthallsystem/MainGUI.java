@@ -1444,18 +1444,58 @@ public class MainGUI extends JFrame
     {
         //Connect to concerts directory and load each concert into the system from file
         Scanner concertInput = new Scanner(new File(Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE));
-        while(concertInput.hasNextLine())
+        ArrayList<Concert> tempConcerts = new ArrayList<>();            
+        try
         {
-            Concert concert = Concert.load(concertInput); 
-            if(concert != null)
-            {
+            while(concertInput.hasNextLine())
+            {                  
+                //This part checks if the currently loaded concert already exists in the system,
+                //and if it does it adds it to tempConcerts that will hold it for error checking 
+                //after we have finished loading in all the concerts
+                Concert concert = Concert.load(concertInput);
+                if(this.concerts.size() > 0)
+                {
+                    for(int i = 0; i < this.concerts.size(); i++)
+                    {                                               
+                        if(concert.getName().compareToIgnoreCase(this.concerts.get(i).getName()) == 0)
+                        {
+                            if(concert.getDateWithSlashes().compareTo(this.concerts.get(i).getDateWithSlashes()) == 0)
+                            {
+                                if(!tempConcerts.contains(concert))                              
+                                {
+                                    tempConcerts.add(concert);                                    
+                                }                               
+                            }
+                        }                        
+                    }
+                }
                 this.concerts.add(concert);
                 this.concertDropDownList.addItem(
                     concert.getName() + " | " + concert.getDateWithSlashes()
-                );  
+                );    
+                concertInput.nextLine(); 
             }
-            concertInput.nextLine();
-        }           
+            
+            //This is where tempConcerts is checked to see if any concerts are
+            //stored inside it, if there is then we throw an exception, passing the
+            //concerts that have duplicates to a ConcertAlreadyExistsException
+            if(tempConcerts.size() > 0)
+            {
+                String concertList = "";               
+                for(Concert concert : tempConcerts)
+                {
+                    concertList += "----- " + concert.getName() + " " + concert.getDateWithSlashes() + " -----\n";                                   
+                }            
+                throw new ConcertAlreadyExistsException(concertList, Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE);
+            }          
+        }       
+        catch(ConcertAlreadyExistsException c)
+        {
+            //This displays a message to user, telling them what concerts have duplicates that are
+            //stored on file, they must then either edit them or delete the file entirely
+            MessagePanel.displayMessage(this, c.getMessage(), "Fatal Error: " + Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE);
+            System.exit(0);
+        }                       
         concertInput.close();                
     }   
     
