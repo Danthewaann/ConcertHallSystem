@@ -151,7 +151,7 @@ public abstract class Seat implements Comparable
         return this.bookedBy_;
     }
     
-    public String getSeatPosition()
+    public String getPosition()
     {
         return this.row_ + this.number_;
     }
