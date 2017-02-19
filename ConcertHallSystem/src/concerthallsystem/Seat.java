@@ -1,5 +1,6 @@
 package concerthallsystem;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -20,8 +21,8 @@ public abstract class Seat implements Comparable
     private double price_;
     private boolean isBooked_ = false;   
     private String bookedBy_ = null;
-    private final String row_;
-    private final int number_;
+    private String row_;
+    private int number_;
     private int index_;
     
     public Seat(String row, int num, int index)
@@ -35,6 +36,11 @@ public abstract class Seat implements Comparable
     {
         this.row_ = row;
         this.number_ = num;
+    }
+    
+    private Seat()
+    {
+        
     }
             
     @Override
@@ -83,61 +89,67 @@ public abstract class Seat implements Comparable
         return true;
     }
     
-    public static Seat load(Scanner input, Concert concert)
+    public static Seat load(Scanner input, Concert concert, File seatsFile, int seatLineNum) throws SeatIOException
     {                                 
         Seat result;
         String seatRow, bookee;
         int seatIndex, seatNum;
+        int rowIndex = 0;
+        int numIndex = 0;
         try
         {
             seatIndex = input.nextInt();
             seatRow = input.next();
             seatNum = input.nextInt();
-            bookee = input.nextLine().trim();  
-        }
-        catch(InputMismatchException ex)
-        {
-            input.nextLine();
-            return null;
-        }
-        
-        int i = 0;
-        try
-        {    
-            while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[i]) != 0)
+            bookee = input.nextLine();            
+            
+            //Check if seatRow is an actual row defined by its concert
+            while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[rowIndex]) != 0)
             {
-                i++;
+                rowIndex++;
+            }
+
+            //Check is seatNum is an actual number defined by its concert
+            while(seatNum != (Concert.SEAT_NUMBERS[numIndex]))
+            {
+                numIndex++;
+            }
+           
+            //Return the seat type depending on its row
+            if(rowIndex < 3)
+            {
+                result = new GoldSeat(seatRow, seatNum, seatIndex);
+                result.setStatus(true);
+                result.setBookee(bookee);
+                result.setPrice(concert.getSectionPrice("gold"));
+                return result;
+            }
+            else if(rowIndex < 6)
+            {
+                result = new SilverSeat(seatRow, seatNum, seatIndex);
+                result.setStatus(true);
+                result.setBookee(bookee);            
+                result.setPrice(concert.getSectionPrice("silver"));
+                return result;
+            }
+            else
+            {
+                result = new BronzeSeat(seatRow, seatNum, seatIndex);
+                result.setStatus(true);
+                result.setBookee(bookee);             
+                result.setPrice(concert.getSectionPrice("bronze"));
+                return result;
             }
         }
-        catch(ArrayIndexOutOfBoundsException ex)
-        {
-            System.out.println(ex.getMessage());
+        //If any info is incorrect detail them then return null
+        catch(InputMismatchException | ArrayIndexOutOfBoundsException ex)
+        {                     
             input.nextLine();
+            System.out.println(
+                "Fatal Error: Failed to load seat on line " + seatLineNum + "...\n"
+                + "...in location " + seatsFile
+            ); 
             return null;
-        }
-        if(i < 3)
-        {
-            result = new GoldSeat(seatRow, seatNum, seatIndex);
-            result.setStatus(true);
-            result.setBookee(bookee);
-            result.setPrice(concert.getSectionPrice("gold"));
-            return result;
-        }
-        else if(i < 6)
-        {
-            result = new SilverSeat(seatRow, seatNum, seatIndex);
-            result.setStatus(true);
-            result.setBookee(bookee);            
-            result.setPrice(concert.getSectionPrice("silver"));
-            return result;
-        }
-        else
-        {
-            result = new BronzeSeat(seatRow, seatNum, seatIndex);
-            result.setStatus(true);
-            result.setBookee(bookee);             
-            result.setPrice(concert.getSectionPrice("bronze"));
-            return result;
         }        
     }
       

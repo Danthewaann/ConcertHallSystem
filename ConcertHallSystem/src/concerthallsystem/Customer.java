@@ -1,6 +1,7 @@
 
 package concerthallsystem;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -41,8 +42,8 @@ public class Customer
     }
          
     public void setEntitlement(Seat seat)
-    {
-        if(seat.getIndex() < 30)
+    {        
+        if(seat.getClass().getSimpleName().equals("GoldSeat"))
         {
             //1 in 10 chance of getting a free backstage pass
             int randomNum = ((int)(Math.random() * 10 + 1 ));
@@ -51,7 +52,7 @@ public class Customer
                 this.goldEntitled_ = true;
             }
         }
-        else if(seat.getIndex() < 60)
+        else if(seat.getClass().getSimpleName().equals("SilverSeat"))
         {
             this.silverEntitled_ = true;
         }
@@ -117,7 +118,7 @@ public class Customer
         return true;
     }
     
-    public static Customer load(Scanner input)
+    public static Customer load(Scanner input, File customerFile, int customerLineNum)
     {
         Customer result = new Customer();
         try
@@ -128,14 +129,21 @@ public class Customer
                 result.name_ += " " + input.next();
             }       
             result.goldEntitled_ = input.nextBoolean();
-            result.silverEntitled_ = input.nextBoolean();
-            input.nextLine();
+            result.silverEntitled_ = input.nextBoolean();            
         } 
+        //If any info is incorrect, detail them then return null
         catch(InputMismatchException ex)
-        {
-            input.nextLine();
+        {            
+            System.out.println(
+                "Fatal Error: Failed to load customer on line " + customerLineNum + "...\n"
+                + "...in location " + customerFile
+            );            
             return null;
         }
+        finally
+        {
+            input.nextLine();
+        }        
         return result;
     }               
 }
