@@ -89,7 +89,7 @@ public abstract class Seat implements Comparable
         return true;
     }
     
-    public static Seat load(Scanner input, Concert concert, File seatsFile, int seatLineNum) throws SeatIOException
+    public static Seat load(Scanner input, Concert concert, File seatsFile, int seatLineNum)
     {                                 
         Seat result;
         String seatRow, bookee;
@@ -109,7 +109,7 @@ public abstract class Seat implements Comparable
                 rowIndex++;
             }
 
-            //Check is seatNum is an actual number defined by its concert
+            //Check if seatNum is an actual number defined by its concert
             while(seatNum != (Concert.SEAT_NUMBERS[numIndex]))
             {
                 numIndex++;
