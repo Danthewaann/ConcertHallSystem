@@ -1436,7 +1436,7 @@ public class MainGUI extends JFrame
         }  
         catch(ConcertAlreadyExistsException c)
         {
-            //This displays a message to user, telling them what concerts have duplicates that are
+            //This displays a message to the user, telling them what concerts have duplicates that are
             //stored on file, they must then either edit them or delete the file entirely
             MessagePanel.displayMessage(this, c.getMessage(), "Fatal Error: " + Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE);
             System.exit(0);
@@ -1453,13 +1453,12 @@ public class MainGUI extends JFrame
         Scanner concertInput = new Scanner(new File(Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE));
         
         ArrayList<ConcertIOException> concertExceptions = new ArrayList<>(); //Stores concert load errors
-        ArrayList<Concert> dupConcerts = new ArrayList<>(); //Stores duplicate concerts detected in file
-        //concertLineNum keeps track of what line we are on in the Concert_list file
-        int concertLineNum = 1;       
+        ArrayList<Concert> dupConcerts = new ArrayList<>(); //Stores duplicate concerts detected in file        
+        int concertLineNum = 1; //Keeps track of what line we are on in the Concert_list file     
         while(concertInput.hasNextLine())
         {                  
             //This part checks if the currently loaded concert already exists in the system,
-            //and if it does it adds it to tempConcerts that will hold it for error checking 
+            //and if it does it adds it to dupConcerts that will hold it for error checking 
             //after we have finished loading in all the concerts
             try
             {
@@ -1488,8 +1487,9 @@ public class MainGUI extends JFrame
             }                       
             catch(ConcertIOException e)
             {
-                //stores the exception when catch, so we can detail all
-                //ConcertIOException to the use all at once
+                //stores the ConcertIOException when caught, so we can detail all
+                //ConcertIOExceptions to the user all at once when we finish loading
+                //in all the concerts from file
                 concertExceptions.add(e);
                 concertLineNum++;
             }
@@ -1506,7 +1506,7 @@ public class MainGUI extends JFrame
             
         //This is where dupConcerts is checked to see if any concerts are
         //stored inside it, if there is then we throw an exception, passing the
-        //concerts that have duplicates to a ConcertAlreadyExistsException
+        //concerts that have duplicates to a ConcertAlreadyExistsException object to be caught
         if(dupConcerts.size() > 0)
         {
             String concertList = "";               
@@ -1517,6 +1517,9 @@ public class MainGUI extends JFrame
             throw new ConcertAlreadyExistsException(concertList, Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE);
         }     
         
+        //This is where concertExceptions is checked to see if we have caught any 
+        //ConcertIOExceptions, and if we have, we detail them to the user so they know
+        //which concert on which line in the Concert_list file has failed to load
         if(concertExceptions.size() > 0)
         {
             String errorReport = "";
