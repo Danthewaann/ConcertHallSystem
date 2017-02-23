@@ -1,5 +1,7 @@
 package concerthallsystem;
 
+import concerthallsystem.exceptions.ConcertIOException;
+import concerthallsystem.exceptions.CannotUnbookSeatException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.PrintWriter;
@@ -32,13 +34,13 @@ public class Concert
     private int nBookedSeats_;
     private int nAvailableSeats_;
     private double totalSales_;
-    private double goldSectionPrice_ = 0.00;
-    private double silverSectionPrice_ = 0.00;
-    private double bronzeSectionPrice_ = 0.00;
-    public static final String[] SEAT_SECTIONS = {"GOLD", "SILVER", "BRONZE"};
+    private double goldSectionPrice_;
+    private double silverSectionPrice_;
+    private double bronzeSectionPrice_;
+    public static final String[] SEAT_SECTIONS = {"Gold", "Silver", "Bronze"};
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
     public static final int[] SEAT_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    public static final int TOTAL_SEATS = Concert.SEAT_ROWS.length * Concert.SEAT_NUMBERS.length;
+    public static final int TOTAL_SEATS = SEAT_ROWS.length * SEAT_NUMBERS.length;
        
     public Concert(String name, int day, int month, int year)
     {
@@ -47,6 +49,14 @@ public class Concert
         this.date_ = day + " " + month + " " + year;
         this.customers = new ArrayList<>();
         this.initializeSeats();       
+    }
+    
+    public Concert(String name, String date)
+    {
+        this.name_ = name;
+        this.dateWithSlashes_ = date;
+        this.customers = new ArrayList<>();
+        this.initializeSeats(); 
     }
     
     private Concert()
@@ -65,27 +75,27 @@ public class Concert
     //depending on their index position in the seats array
     private void initializeSeats() 
     {        
-        this.seats = new Seat[Concert.TOTAL_SEATS];
+        this.seats = new Seat[TOTAL_SEATS];
         int seatIndex = 0;
         
         //Go through every row in the concert, and add 10 seats to that row depending
         //on the row e.g. rows 0 to 2 (A to C) will need 10 gold seats each, totaling to 30 seats
-        for(int i = 0; i < Concert.SEAT_ROWS.length; i++)           
+        for(int i = 0; i < SEAT_ROWS.length; i++)           
         {                                  
             if(i < 3)
             {               
-                for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++)
+                for(int j = 0; j < SEAT_NUMBERS.length; j++)
                 {                                  
-                    this.seats[seatIndex] = new GoldSeat(Concert.SEAT_ROWS[i], Concert.SEAT_NUMBERS[j], seatIndex);
+                    this.seats[seatIndex] = new GoldSeat(SEAT_ROWS[i], SEAT_NUMBERS[j], seatIndex);
                     this.seats[seatIndex].setPrice(this.goldSectionPrice_);
                     seatIndex++;
                 }
             }
             else if(i < 6)
             {
-                for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++)
+                for(int j = 0; j < SEAT_NUMBERS.length; j++)
                 {                                 
-                    this.seats[seatIndex] = new SilverSeat(Concert.SEAT_ROWS[i], Concert.SEAT_NUMBERS[j], seatIndex); 
+                    this.seats[seatIndex] = new SilverSeat(SEAT_ROWS[i], SEAT_NUMBERS[j], seatIndex); 
                     this.seats[seatIndex].setPrice(this.silverSectionPrice_);
                     seatIndex++;
                 }
@@ -94,7 +104,7 @@ public class Concert
             {
                 for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++)
                 {                                   
-                    this.seats[seatIndex] = new BronzeSeat(Concert.SEAT_ROWS[i], Concert.SEAT_NUMBERS[j], seatIndex);
+                    this.seats[seatIndex] = new BronzeSeat(SEAT_ROWS[i], SEAT_NUMBERS[j], seatIndex);
                     this.seats[seatIndex].setPrice(this.bronzeSectionPrice_);
                     seatIndex++;
                 }                

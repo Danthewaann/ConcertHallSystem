@@ -1,5 +1,6 @@
 package concerthallsystem;
 
+import concerthallsystem.exceptions.CannotUnbookSeatException;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
@@ -101,7 +102,7 @@ public abstract class Seat implements Comparable
             seatIndex = input.nextInt();
             seatRow = input.next();
             seatNum = input.nextInt();
-            bookee = input.nextLine();            
+            bookee = input.nextLine().trim();            
             
             //Check if seatRow is an actual row defined by its concert
             while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[rowIndex]) != 0)
