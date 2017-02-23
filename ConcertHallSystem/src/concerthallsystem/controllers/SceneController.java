@@ -29,13 +29,12 @@ public class SceneController extends StackPane
         "MainMenuScene.fxml", "CreateConcertScene.fxml", 
         "SelectConcertScene.fxml", "SeatingPlanScene.fxml"
     };
-    
-    
+       
     public SceneController()
     {
         super();                         
-        this.prefWidthProperty().bind(Main.window.widthProperty());
-        this.prefHeightProperty().bind(Main.window.heightProperty());  
+        this.prefWidthProperty().bind(Main.WINDOW.widthProperty());
+        this.prefHeightProperty().bind(Main.WINDOW.heightProperty());  
         this.loadScenes();
     }
     
