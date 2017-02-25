@@ -1,12 +1,18 @@
 package concerthallsystem;
 
+import concerthallsystem.exceptions.ConcertIOException;
+import concerthallsystem.exceptions.CannotUnbookSeatException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * The Concert class holds all the important information that can
@@ -26,66 +32,57 @@ public class Concert
     private Seat[] seats;
     private final ArrayList<Customer> customers;    
     private String name_;
-    private String dateWithSlashes_;
     private String date_;
     private int nCustomers_; 
-    private int nBookedSeats_;
-    private int nAvailableSeats_;
-    private double totalSales_;
-    private double goldSectionPrice_ = 0.00;
-    private double silverSectionPrice_ = 0.00;
-    private double bronzeSectionPrice_ = 0.00;
-    public static final String[] SEAT_SECTIONS = {"GOLD", "SILVER", "BRONZE"};
+    private int nBookedSeats_;     
+    private double silverSectionPrice_;
+    private double goldSectionPrice_;
+    private double bronzeSectionPrice_;
+    public static final String[] SEAT_SECTIONS = {"Gold", "Silver", "Bronze"};
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
     public static final int[] SEAT_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    public static final int TOTAL_SEATS = Concert.SEAT_ROWS.length * Concert.SEAT_NUMBERS.length;
-       
-    public Concert(String name, int day, int month, int year)
+    public static final int TOTAL_SEATS = SEAT_ROWS.length * SEAT_NUMBERS.length;
+    public static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#.00");
+           
+    public Concert(String name, String date)
     {
         this.name_ = name;
-        this.dateWithSlashes_ = day + "/" + month + "/" + year; 
-        this.date_ = day + " " + month + " " + year;
+        this.date_ = date;
         this.customers = new ArrayList<>();
-        this.initializeSeats();       
+        this.initializeSeats(); 
     }
     
     private Concert()
     {   
-        this.customers = new ArrayList<>();
-        this.initializeSeats();   
+        this.customers = new ArrayList<>();           
     }
-    
-    public Concert(String name)
-    {
-        this(name, 1, 1, 2000);
-    }
-                  
+                         
     //This method creates instances of gold, silver and bronze seats 
     //for a concert, assigning them each a row and a number 
     //depending on their index position in the seats array
     private void initializeSeats() 
     {        
-        this.seats = new Seat[Concert.TOTAL_SEATS];
+        this.seats = new Seat[TOTAL_SEATS];
         int seatIndex = 0;
         
         //Go through every row in the concert, and add 10 seats to that row depending
         //on the row e.g. rows 0 to 2 (A to C) will need 10 gold seats each, totaling to 30 seats
-        for(int i = 0; i < Concert.SEAT_ROWS.length; i++)           
+        for(int i = 0; i < SEAT_ROWS.length; i++)           
         {                                  
             if(i < 3)
             {               
-                for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++)
+                for(int j = 0; j < SEAT_NUMBERS.length; j++)
                 {                                  
-                    this.seats[seatIndex] = new GoldSeat(Concert.SEAT_ROWS[i], Concert.SEAT_NUMBERS[j], seatIndex);
+                    this.seats[seatIndex] = new GoldSeat(SEAT_ROWS[i], SEAT_NUMBERS[j], seatIndex);
                     this.seats[seatIndex].setPrice(this.goldSectionPrice_);
                     seatIndex++;
                 }
             }
             else if(i < 6)
             {
-                for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++)
+                for(int j = 0; j < SEAT_NUMBERS.length; j++)
                 {                                 
-                    this.seats[seatIndex] = new SilverSeat(Concert.SEAT_ROWS[i], Concert.SEAT_NUMBERS[j], seatIndex); 
+                    this.seats[seatIndex] = new SilverSeat(SEAT_ROWS[i], SEAT_NUMBERS[j], seatIndex); 
                     this.seats[seatIndex].setPrice(this.silverSectionPrice_);
                     seatIndex++;
                 }
@@ -94,7 +91,7 @@ public class Concert
             {
                 for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++)
                 {                                   
-                    this.seats[seatIndex] = new BronzeSeat(Concert.SEAT_ROWS[i], Concert.SEAT_NUMBERS[j], seatIndex);
+                    this.seats[seatIndex] = new BronzeSeat(SEAT_ROWS[i], SEAT_NUMBERS[j], seatIndex);
                     this.seats[seatIndex].setPrice(this.bronzeSectionPrice_);
                     seatIndex++;
                 }                
@@ -102,7 +99,7 @@ public class Concert
         }
     }
     
-    public boolean save(PrintWriter concertOutput) 
+    public boolean save(PrintWriter concertOutput, String directory) 
     {                
         PrintWriter seatOutput = null; 
         PrintWriter customerOutput = null;             
@@ -110,16 +107,14 @@ public class Concert
         {                                
             //Save concert to Concert_list file
             concertOutput.println(
-                this.getName() + " " + this.getDate() 
-                + " " + this.goldSectionPrice_ 
+                this + " " + this.goldSectionPrice_ 
                 + " " + this.silverSectionPrice_ 
                 + " " + this.bronzeSectionPrice_
             );
             
             //Create directory for current concert
             File concertDirectory = new File(
-                Constant.DIRECTORY + File.separator 
-                + this.getName() + "_" + this.getDate()
+                directory + File.separator + this
             );
             concertDirectory.mkdir();
             
@@ -136,14 +131,14 @@ public class Concert
                     {
                         System.out.println(
                             "Successfully saved seat " + "(" + seat.getPosition() + ")" 
-                            + " for concert " + this.getName() + " " + this.getDateWithSlashes()
+                            + " for concert " + this
                         );
                     }
                     else
                     {
                         System.out.println(
                             "Failed to save seat " + "(" + seat.getPosition() + ")" 
-                            + " for concert " + this.getName() + " " + this.getDateWithSlashes()
+                            + " for concert " + this
                         );
                     }
                 }
@@ -160,14 +155,14 @@ public class Concert
                 {
                     System.out.println(
                         "Successfully saved customer " + customer.getName() 
-                        + " for concert " + this.getName() + " " + this.getDateWithSlashes()
+                        + " for concert " + this
                     );
                 }
                 else
                 {
                     System.out.println(
                         "Failed to save customer " + customer.getName() 
-                        + " for concert " + this.getName() + " " + this.getDateWithSlashes()
+                        + " for concert " + this
                     );
                 }
             }            
@@ -192,7 +187,7 @@ public class Concert
     }
     
     //Load in concert from file, populating it with its customers and booked seats
-    public static Concert load(Scanner concertInput, int concertLineNum) throws FileNotFoundException
+    public static Concert load(Scanner concertInput, String directory, int concertLineNum) throws FileNotFoundException
     {
         Scanner seatInput = null;
         Scanner customerInput = null;
@@ -201,26 +196,23 @@ public class Concert
         {      
             /* LOAD IN CONCERT INFO */
             result.name_ = concertInput.next(); 
-            while(!concertInput.hasNextInt())
+            Pattern dateRegex = Pattern.compile("[\\d]{4}[-][\\d]{2}[-][\\d]{2}");
+            while(!concertInput.hasNext(dateRegex))
             {
                 result.name_ += " " + concertInput.next();
-            }        
-            int day = concertInput.nextInt();
-            int month = concertInput.nextInt();
-            int year = concertInput.nextInt();
-            result.dateWithSlashes_ = day + "/" + month + "/" + year;
-            result.date_ = day + " " + month + " " + year;
+            }                 
+            result.date_ = concertInput.next();
             result.goldSectionPrice_ = concertInput.nextDouble();
             result.silverSectionPrice_ = concertInput.nextDouble();
             result.bronzeSectionPrice_ = concertInput.nextDouble();
             /* END OF LOADING IN CONCERT INFO */
+            result.initializeSeats();
                    
             //CREATE DIRECTORY FOR THE CURRENTLY LOADED CONCERT. 
             //THIS IS WHERE ALL THE CURRENT CONCERT'S INFO SHOULD BE
             //STORED, TWO FILES, ONE FOR BOOKED SEATS, ONE FOR CUSTOMERS 
             File concertDirectory = new File(
-                Constant.DIRECTORY + File.separator + result.getName()
-                + "_" + result.getDate()
+                directory + File.separator + result                                  
             );
             
             //If the current concert's directory doesn't exist, create it
@@ -314,12 +306,7 @@ public class Concert
     {
         return this.name_;
     }
-    
-    public String getDateWithSlashes()
-    {
-        return this.dateWithSlashes_;
-    }
-    
+         
     public String getDate()
     {
         return this.date_;
@@ -414,7 +401,7 @@ public class Concert
     
     public double getSectionPrice(String seatSection)
     {              
-        int i = 0;
+        int i = 0;       
         while(seatSection.compareToIgnoreCase(Concert.SEAT_SECTIONS[i]) != 0)
         {
             i++;
@@ -424,19 +411,19 @@ public class Concert
             case 0:
             {
                 return Double.parseDouble(
-                    Constant.PRICE_FORMAT.format(this.goldSectionPrice_)
+                    PRICE_FORMAT.format(this.goldSectionPrice_)
                 );                              
             }
             case 1:
             {
                 return Double.parseDouble(
-                    Constant.PRICE_FORMAT.format(this.silverSectionPrice_)
+                    PRICE_FORMAT.format(this.silverSectionPrice_)
                 );                
             }
             default:
             {
                 return Double.parseDouble(
-                    Constant.PRICE_FORMAT.format(this.bronzeSectionPrice_)
+                   PRICE_FORMAT.format(this.bronzeSectionPrice_)
                 );               
             }
         }       
@@ -444,31 +431,24 @@ public class Concert
 
     //This method returns a report, detailing the available seats,
     //booked seats and total sales of the concert
-    public String getReport() 
+    public List<String> getReport() 
     {             
-        for(Seat seat : this.seats) 
-        {
-            if(seat.getStatus()) 
-            {
-                this.totalSales_ += seat.getPrice();
+        List<String> fullReport = new ArrayList<>();
+        double totalSales = 0;
+        for(Seat seat : this.seats) {
+            if(seat.getStatus()) {
+                totalSales += seat.getPrice();
             }
-        }     
+        }  
         
-        this.nAvailableSeats_ = this.seats.length - this.nBookedSeats_;
-        String report = "Available Seats: " + this.nAvailableSeats_ + "\nBooked Seats: " + this.nBookedSeats_;
-        report += "\nNumber of Customers: " + this.nCustomers_;
-        
-        if(this.totalSales_ == 0.00)
-        {            
-            report += "\nTotal Sales: " + "N/A";
-        }
-        else
-        {                                  
-            report += "\nTotal Sales: £" + Constant.PRICE_FORMAT.format(this.totalSales_);                      
-        }
-        
-        this.totalSales_ = 0;
-        return report;
+        fullReport.add("Available Seats: " + String.valueOf(this.seats.length - this.nBookedSeats_) + " Seats");      
+        fullReport.add("Booked Seats: " + String.valueOf(this.nBookedSeats_) + " Seats");   
+        fullReport.add("Customers: " + String.valueOf(this.nCustomers_) + " Customers");
+        fullReport.add("GoldSeat Price: " + "£" + this.goldSectionPrice_);
+        fullReport.add("SilverSeat Price: " + "£" + this.silverSectionPrice_);
+        fullReport.add("BronzeSeat Price: " + "£" + this.bronzeSectionPrice_);                                  
+        fullReport.add("Total Sales: " + "£" + PRICE_FORMAT.format(totalSales));         
+        return fullReport;
     }
     
     //This method returns information about a specific seat,
@@ -551,7 +531,7 @@ public class Concert
     public void setSectionPrice(String seatSection, double newPrice) 
     {               
         int i = 0;
-        double finalPrice = Double.parseDouble(Constant.PRICE_FORMAT.format(newPrice));        
+        double finalPrice = Double.parseDouble(PRICE_FORMAT.format(newPrice));        
         while(seatSection.compareToIgnoreCase(Concert.SEAT_SECTIONS[i]) != 0)
         {
             i++;
@@ -612,5 +592,34 @@ public class Concert
             return null;
         }
     }
+
+    @Override
+    public String toString() 
+    {
+        return this.getName() + " " + this.getDate();
+    }
+
+    @Override
+    public boolean equals(Object obj) 
+    {   
+        if(obj.getClass().isInstance(this))
+            if(this.hashCode() == ((Concert) obj).hashCode())        
+                return true;
+        
+        return false;       
+    }
+
+    @Override
+    public int hashCode() 
+    {
+        int hash = 5;
+        hash = 61 * hash + Objects.hashCode(this.name_);
+        hash = 61 * hash + Objects.hashCode(this.date_);
+        return hash;
+    }
+    
+    
+    
+    
 }                                
 

@@ -1,5 +1,6 @@
 package concerthallsystem;
 
+import concerthallsystem.exceptions.CannotUnbookSeatException;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
@@ -101,7 +102,7 @@ public abstract class Seat implements Comparable
             seatIndex = input.nextInt();
             seatRow = input.next();
             seatNum = input.nextInt();
-            bookee = input.nextLine();            
+            bookee = input.nextLine().trim();            
             
             //Check if seatRow is an actual row defined by its concert
             while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[rowIndex]) != 0)
@@ -121,7 +122,7 @@ public abstract class Seat implements Comparable
                 result = new GoldSeat(seatRow, seatNum, seatIndex);
                 result.setStatus(true);
                 result.setBookee(bookee);
-                result.setPrice(concert.getSectionPrice("gold"));
+                result.setPrice(concert.getSectionPrice("Gold"));
                 return result;
             }
             else if(rowIndex < 6)
@@ -129,7 +130,7 @@ public abstract class Seat implements Comparable
                 result = new SilverSeat(seatRow, seatNum, seatIndex);
                 result.setStatus(true);
                 result.setBookee(bookee);            
-                result.setPrice(concert.getSectionPrice("silver"));
+                result.setPrice(concert.getSectionPrice("Silver"));
                 return result;
             }
             else
@@ -137,7 +138,7 @@ public abstract class Seat implements Comparable
                 result = new BronzeSeat(seatRow, seatNum, seatIndex);
                 result.setStatus(true);
                 result.setBookee(bookee);             
-                result.setPrice(concert.getSectionPrice("bronze"));
+                result.setPrice(concert.getSectionPrice("Bronze"));
                 return result;
             }
         }

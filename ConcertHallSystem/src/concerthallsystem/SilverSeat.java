@@ -7,6 +7,11 @@ public class SilverSeat extends Seat
         super(row, num, index);
     }  
     
+    public SilverSeat(String row, int num)
+    {
+        super(row, num);
+    }
+    
     @Override
     public void book(Customer customer) 
     {

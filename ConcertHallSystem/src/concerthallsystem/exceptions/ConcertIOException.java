@@ -1,4 +1,4 @@
-package concerthallsystem;
+package concerthallsystem.exceptions;
 
 /**
  *
