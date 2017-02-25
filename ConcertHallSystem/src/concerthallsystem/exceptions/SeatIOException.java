@@ -43,15 +43,14 @@ public class SeatIOException extends RuntimeException
         if(this.seatIndex < 0 || this.seatIndex > Concert.TOTAL_SEATS - 1)
         {
             invalidIndex = true;
-            return "Seat Index of a seat for concert " + this.concert.getName() + " " + this.concert.getDateWithSlashes() + " is invalid";
+            return "Seat Index of a seat for concert " + this.concert + " is invalid";
         }    
         if(this.seatRow == null) 
         {
             return( 
                 "Seat (" + this.seatRow + this.seatNum + ") for concert " 
-                + this.concert.getName() + " " + this.concert.getDateWithSlashes()
-                + " isn't an actual seat in location " + Constant.DIRECTORY + File.separator 
-                + this.concert.getName() + this.concert.getDate() + File.separator + "Booked_seats.txt"
+                + this.concert + " isn't an actual seat in location " + "Concerts" + File.separator 
+                + this.concert + File.separator + "Booked_seats.txt"
             );
         }
         else

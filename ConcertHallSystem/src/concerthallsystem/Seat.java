@@ -122,7 +122,7 @@ public abstract class Seat implements Comparable
                 result = new GoldSeat(seatRow, seatNum, seatIndex);
                 result.setStatus(true);
                 result.setBookee(bookee);
-                result.setPrice(concert.getSectionPrice("gold"));
+                result.setPrice(concert.getSectionPrice("Gold"));
                 return result;
             }
             else if(rowIndex < 6)
@@ -130,7 +130,7 @@ public abstract class Seat implements Comparable
                 result = new SilverSeat(seatRow, seatNum, seatIndex);
                 result.setStatus(true);
                 result.setBookee(bookee);            
-                result.setPrice(concert.getSectionPrice("silver"));
+                result.setPrice(concert.getSectionPrice("Silver"));
                 return result;
             }
             else
@@ -138,7 +138,7 @@ public abstract class Seat implements Comparable
                 result = new BronzeSeat(seatRow, seatNum, seatIndex);
                 result.setStatus(true);
                 result.setBookee(bookee);             
-                result.setPrice(concert.getSectionPrice("bronze"));
+                result.setPrice(concert.getSectionPrice("Bronze"));
                 return result;
             }
         }

@@ -1,41 +1,50 @@
 package concerthallsystem.controllers;
 
 import concerthallsystem.Concert;
-import concerthallsystem.Constant;
+import concerthallsystem.DialogPopup;
 import concerthallsystem.exceptions.ConcertIOException;
 import concerthallsystem.exceptions.ConcertAlreadyExistsException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  *
  * @author Daniel
  */
-class ConcertController 
+
+public class ConcertController 
 {
-    private ArrayList<Concert> concerts = new ArrayList<>();
-    private Concert currentConcert;   
+    private List<Concert> concerts;
+    private Concert currentConcert;  
+    private static final String MAIN_DIRECTORY = "Concerts";
+    private static final String CONCERT_LIST = "Concert_list.txt";  
     
-    public ConcertController()
-    {
+    public ConcertController(EventController controller)
+    {      
+        this.concerts = new ArrayList<>();
         try
         {            
             this.loadConcerts();
         }
         catch(FileNotFoundException f)
         {
-            File directory = new File(Constant.DIRECTORY);
+            File directory = new File(MAIN_DIRECTORY);
             directory.mkdir();
+        }
+        catch(ConcertAlreadyExistsException e)
+        {
+            DialogPopup.drawResultDialog(e.getMessage());
         }
     }
     
-    private void loadConcerts() throws FileNotFoundException
+    private void loadConcerts() throws FileNotFoundException, ConcertAlreadyExistsException
     {
         //Connect to concerts directory and load each concert into the system from file
-        Scanner concertInput = new Scanner(new File(Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE));
-        
+        Scanner concertInput = new Scanner(new File(MAIN_DIRECTORY + File.separator + CONCERT_LIST));
         ArrayList<ConcertIOException> concertExceptions = new ArrayList<>(); //Stores concert load errors
         ArrayList<Concert> dupConcerts = new ArrayList<>(); //Stores duplicate concerts detected in file        
         int concertLineNum = 1; //Keeps track of what line we are on in the Concert_list file    
@@ -46,28 +55,21 @@ class ConcertController
             //after we have finished loading in all the concerts
             try
             {
-                Concert concert = Concert.load(concertInput, concertLineNum);
+                Concert concert = Concert.load(concertInput, MAIN_DIRECTORY, concertLineNum++);
                 if(concert != null)
-                {
-                    if(this.concerts.size() > 0)
-                    {
-                        for(int i = 0; i < this.concerts.size(); i++)
-                        {                                               
-                            if(concert.getName().compareToIgnoreCase(this.concerts.get(i).getName()) == 0)
+                {                                       
+                    for(int i = 0; i < this.concerts.size(); i++)
+                    {                                               
+                        if(concert.equals(this.concerts.get(i)))
+                        {                               
+                            if(!dupConcerts.contains(concert))                              
                             {
-                                if(concert.getDateWithSlashes().compareTo(this.concerts.get(i).getDateWithSlashes()) == 0)
-                                {
-                                    if(!dupConcerts.contains(concert))                              
-                                    {
-                                        dupConcerts.add(concert);                                    
-                                    }                               
-                                }
-                            }                        
-                        }
-                    }
+                                dupConcerts.add(concert);                                    
+                            }                                                              
+                        }                        
+                    }                    
                     this.concerts.add(concert);                    
-                }
-                concertLineNum++;
+                }               
             }                       
             catch(ConcertIOException e)
             {
@@ -87,9 +89,9 @@ class ConcertController
             String concertList = "";               
             for(Concert concert : dupConcerts)
             {
-                concertList += "----- " + concert.getName() + " " + concert.getDateWithSlashes() + " -----\n";                                   
+                concertList += "----- " + concert.toString() + " -----\n";                                   
             }            
-            throw new ConcertAlreadyExistsException(concertList, Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE);
+            throw new ConcertAlreadyExistsException(concertList, MAIN_DIRECTORY + File.separator + CONCERT_LIST);
         }     
         
         //This is where concertExceptions is checked to see if we have caught any 
@@ -102,16 +104,38 @@ class ConcertController
             {
                 errorReport += exception.getMessage() + "\n";
             }
-//            MessagePanel.displayMessage(
-//                this, "One or more concerts failed to load:\n" + errorReport + "\n"
-//                + "...in location " + Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE,
-//                "Fatal Error: " + Constant.DIRECTORY + File.separator + Constant.CONCERTS_FILE
-//            ); 
+            DialogPopup.drawResultDialog(
+                "One or more concerts failed to load:\n" + errorReport + "\n" 
+                + "...in loaction " + MAIN_DIRECTORY + File.separator + CONCERT_LIST
+            );                     
             System.exit(0);
         }       
     }  
     
-    public ArrayList<Concert> getConcertList()
+    //Saves all concerts, along with their customers and seats to file
+    public void saveConcerts() throws FileNotFoundException
+    {                             
+        //Connect to concerts directory and save each concert to file
+        PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
+        for(int i = 0; i < this.concerts.size(); i++)
+        {           
+            if(this.concerts.get(i).save(concertOutput, MAIN_DIRECTORY))
+            {
+                System.out.printf(
+                    "Successfully saved concert %s%n", this.concerts.get(i)                   
+                );
+            }
+            else
+            {
+                System.out.printf(
+                    "Failed to save concert %s%n", this.concerts.get(i)
+                );
+            }
+        }
+        concertOutput.close();                
+    }   
+    
+    public List<Concert> getConcertList()
     {
         return this.concerts;
     }
