@@ -74,7 +74,7 @@ public abstract class Seat implements Comparable
         try
         {
             output.println(
-                this + this.getBookee()                           
+                this + " " + this.getBookee()                           
             );  
         }
         catch(Exception e)
