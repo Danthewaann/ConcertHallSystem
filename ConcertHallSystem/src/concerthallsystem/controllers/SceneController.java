@@ -78,18 +78,14 @@ public class SceneController extends StackPane
             {
                 Timeline fadeOut = new Timeline(
                     new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
-                    new KeyFrame(new Duration(250), new EventHandler<ActionEvent>() 
-                    {
-                        @Override
-                        public void handle(ActionEvent event) 
-                        {
-                            getChildren().remove(0);
-                            getChildren().add(0, scenes.get(name));                            
-                            Timeline fadeIn = new Timeline(
-                                new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                                new KeyFrame(new Duration(250), new KeyValue(opacity, 1.0)));
-                            fadeIn.play();
-                        }                  
+                    new KeyFrame(new Duration(250),(ActionEvent event) -> {
+                        getChildren().remove(0);
+                        getChildren().add(0, scenes.get(name));
+                        Timeline fadeIn = new Timeline(
+                            new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
+                            new KeyFrame(new Duration(250), new KeyValue(opacity, 1.0))
+                        );
+                        fadeIn.play();
                     }, new KeyValue(opacity, 0.0)));
                 fadeOut.play();                           
             }                                                       
@@ -98,9 +94,10 @@ public class SceneController extends StackPane
                 setOpacity(0.0);
                 getChildren().add(this.scenes.get(name));
                 Timeline fadeIn = new Timeline(
-                            new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                            new KeyFrame(new Duration(250), new KeyValue(opacity, 1.0)));
-                    fadeIn.play();                            
+                    new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
+                    new KeyFrame(new Duration(250), new KeyValue(opacity, 1.0))
+                );
+                fadeIn.play();                            
             }
         }
     } 
@@ -115,11 +112,11 @@ public class SceneController extends StackPane
         return this.scenes;
     }                   
     
-    public void displayReportDialog(List<String> elements, Concert concert)
+    public void displayReportDialog(Concert concert)
     {
         DialogPopup reportDialog = new DialogPopup();
         reportDialog.setHeaderText("Full Report For Concert | " + concert);
-        reportDialog.drawReportDialog(elements, 2, 7);       
+        reportDialog.drawReportDialog(concert.getReport(), 2, 7);       
         reportDialog.show();      
     }
     

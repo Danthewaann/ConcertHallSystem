@@ -12,14 +12,15 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/SeatEventHandler.java</file>
             <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/Seat.java</file>
+            <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/Customer.java</file>
             <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/BronzeSeat.java</file>
             <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/DialogPopup.java</file>
             <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/controllers/ConcertController.java</file>
-            <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/Main.java</file>
             <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/controllers/EventController.java</file>
+            <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/GoldSeat.java</file>
             <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/controllers/SceneController.java</file>
+            <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/SilverSeat.java</file>
             <file>file:/F:/BSc%20Computer%20Science/Year%202/Programming%20II/ConcertHallSystem/src/concerthallsystem/Concert.java</file>
         </group>
     </open-files>

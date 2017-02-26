@@ -23,7 +23,7 @@ public class ConcertController
     private static final String MAIN_DIRECTORY = "Concerts";
     private static final String CONCERT_LIST = "Concert_list.txt";  
     
-    public ConcertController(EventController controller)
+    public ConcertController()
     {      
         this.concerts = new ArrayList<>();
         try
@@ -76,10 +76,10 @@ public class ConcertController
                 //stores the ConcertIOException when caught, so we can detail all
                 //ConcertIOExceptions to the user all at once when we finish loading
                 //in all the concerts from file
-                concertExceptions.add(e);
-                concertLineNum++;
+                concertExceptions.add(e);               
             }
         }
+        concertInput.close();
                          
         //This is where dupConcerts is checked to see if any concerts are
         //stored inside it, if there is then we throw an exception, passing the
@@ -89,7 +89,7 @@ public class ConcertController
             String concertList = "";               
             for(Concert concert : dupConcerts)
             {
-                concertList += "----- " + concert.toString() + " -----\n";                                   
+                concertList += "----- " + concert + " -----\n";                                   
             }            
             throw new ConcertAlreadyExistsException(concertList, MAIN_DIRECTORY + File.separator + CONCERT_LIST);
         }     

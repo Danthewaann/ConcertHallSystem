@@ -1,12 +1,7 @@
 package concerthallsystem;
 
 public class SilverSeat extends Seat
-{
-    public SilverSeat(String row, int num, int index)
-    {
-        super(row, num, index);
-    }  
-    
+{      
     public SilverSeat(String row, int num)
     {
         super(row, num);

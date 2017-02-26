@@ -40,7 +40,7 @@ public class EventController
     public EventController(SceneController controller)
     {        
         this.sceneController = controller;
-        this.concertController = new ConcertController(this);        
+        this.concertController = new ConcertController();        
     }
                               
     @FXML
@@ -182,7 +182,6 @@ public class EventController
                 this.concertController.getCurrentConcert().getSeats()[j], seats.get(j))
             );
         }           
-
         this.selectedConcertTitle.setText(selectedConcert);
         this.sceneController.setScene("SeatingPlan");
     }
@@ -190,8 +189,7 @@ public class EventController
     @FXML
     private void obtainReport(ActionEvent event)
     {    
-        this.sceneController.displayReportDialog(
-            this.concertController.getCurrentConcert().getReport(),  
+        this.sceneController.displayReportDialog(            
             this.concertController.getCurrentConcert()
         );                              
     }
@@ -226,7 +224,9 @@ public class EventController
         try
         {
             this.concertController.saveConcerts();
-            this.sceneController.displaySaveDialog(this.concertController.getCurrentConcert());
+            this.sceneController.displaySaveDialog(
+                this.concertController.getCurrentConcert()
+            );
         }
         catch(FileNotFoundException e)
         {
