@@ -1,11 +1,13 @@
 package concerthallsystem.exceptions;
 
 import concerthallsystem.Concert;
-import concerthallsystem.Constant;
 import java.io.File;
 
 /**
- *
+ * This exception is still a work in progress, still trying to figure out how
+ * to send information to this class so I can accurately report the errors that
+ * occur when a seat fails to load/save
+ * 
  * @author Daniel
  */
 

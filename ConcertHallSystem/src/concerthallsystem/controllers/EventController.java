@@ -17,7 +17,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 /**
- *
+ * The EventController class responds to user action, such as a button press in 
+ * any view. This class then decides how to respond to that event, and it calls
+ * on the SceneController and ConcertController classes to provide the necessary information
+ * to display to the user
+ * 
  * @author Daniel
  */
 
@@ -93,7 +97,7 @@ public class EventController
                     concertAlreadyExists = true;
                     throw new ConcertAlreadyExistsException(this.concertController.getConcertList().get(i));
                 }
-                catch(ConcertAlreadyExistsException e) {   
+                catch(ConcertAlreadyExistsException e) {   //TODO
                     System.out.println("That concert already Exists!");
                 }               
             }

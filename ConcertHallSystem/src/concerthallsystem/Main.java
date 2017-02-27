@@ -7,7 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.Group;
 
 /**
- *
+ * This is the main starting point for the application.
+ * The start() method is called when you open the application, and
+ * main() method is a backup incase start() doesn't work
+ * 
  * @author Daniel
  */
 

@@ -17,7 +17,12 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
- *
+ * The SceneController class is responsible for displaying the appropriate
+ * views and UI components for the user to see on screen. The EventController class
+ * tells this class what scene to display depending on what button the user presses.
+ * This class also calls on the DialogPopup class to display dialog boxes that are
+ * used to display query information to the user, based on the concert they are viewing.
+ * 
  * @author Daniel
  */
 

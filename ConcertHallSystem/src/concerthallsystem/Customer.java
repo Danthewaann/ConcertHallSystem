@@ -19,8 +19,7 @@ import java.util.Scanner;
 
 public class Customer 
 {
-    private final ArrayList<Seat> bookedSeats;
-    private int nBookedSeats;
+    private final ArrayList<Seat> bookedSeats;  
     private String name_;
     private boolean goldEntitled_ = false;
     private boolean silverEntitled_ = false;
@@ -76,19 +75,17 @@ public class Customer
     {
         this.bookedSeats.add(seat);
         this.bookedSeats.sort(null);
-        this.nBookedSeats++;
     }
     
     public void removeSeat(Seat seat)
     {
         this.bookedSeats.remove(seat);
-        this.bookedSeats.sort(null);
-        this.nBookedSeats--;           
+        this.bookedSeats.sort(null);              
     }
     
     public boolean hasBookedASeat()
     {
-        return this.nBookedSeats > 0;
+        return this.bookedSeats.size() > 0;
     }
     
     public ArrayList<Seat> getBookedSeats()

@@ -1,7 +1,8 @@
 package concerthallsystem.exceptions;
 
 /**
- *
+ * This class is thrown when a concert fails to load from file
+ * 
  * @author Daniel
  */
 

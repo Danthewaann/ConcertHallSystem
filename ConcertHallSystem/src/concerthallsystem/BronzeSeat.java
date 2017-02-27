@@ -2,6 +2,12 @@ package concerthallsystem;
 
 import concerthallsystem.exceptions.CannotUnbookSeatException;
 
+/**
+ * This class is a derived class of the Seat abstract class
+ * 
+ * @author Daniel Black
+ */
+
 public class BronzeSeat extends Seat
 {           
     public BronzeSeat(String row, int num)

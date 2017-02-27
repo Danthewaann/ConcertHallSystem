@@ -1,7 +1,9 @@
 package concerthallsystem.exceptions;
 
 /**
- *
+ * This class is thrown when a user tries to un-book a seat that throws this
+ * exception in its unBook() method
+ * 
  * @author Daniel Black
  */
 

@@ -29,15 +29,14 @@ import java.util.regex.Pattern;
 
 public class Concert
 {
-    private Seat[] seats;
-    private final ArrayList<Customer> customers;    
+    private Seat[] seats;    
     private String name_;
-    private String date_;
-    private int nCustomers_; 
+    private String date_;   
     private int nBookedSeats_;     
     private double silverSectionPrice_;
     private double goldSectionPrice_;
     private double bronzeSectionPrice_;
+    private final ArrayList<Customer> customers;    
     public static final String[] SEAT_SECTIONS = {"Gold", "Silver", "Bronze"};
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
     public static final int[] SEAT_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -212,8 +211,7 @@ public class Concert
                 while(customerInput.hasNextLine()) {                              
                     Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);                    
                     if(tempCustomer != null) {
-                        tempConcert.customers.add(tempCustomer);
-                        tempConcert.nCustomers_++;
+                        tempConcert.customers.add(tempCustomer);                       
                     }                       
                 }
             }
@@ -317,9 +315,8 @@ public class Concert
     }
                   
     public void bookSeat(Seat seat, String name)
-    {                        
-        String customerName = Constant.capitalize(name);
-        Customer customer = this.findCustomer(customerName);
+    {                               
+        Customer customer = this.findCustomer(name);
         
         if(customer != null) {           
             Seat temp = this.findSeat(seat);
@@ -327,12 +324,11 @@ public class Concert
             this.nBookedSeats_++;
         }
         else {           
-            Customer newCustomer = new Customer(customerName); 
+            Customer newCustomer = new Customer(name); 
             Seat temp = this.findSeat(seat);
             temp.book(newCustomer);                       
             this.customers.add(newCustomer);                       
-            this.nBookedSeats_++;
-            this.nCustomers_++;
+            this.nBookedSeats_++;           
         }               
     }
             
@@ -346,8 +342,7 @@ public class Concert
             this.nBookedSeats_--; 
             if(!customer.hasBookedASeat())
             {
-                this.customers.remove(customer);
-                this.nCustomers_--;
+                this.customers.remove(customer);               
             }
         }                                  
     }
@@ -411,7 +406,7 @@ public class Concert
         
         fullReport.add("Available Seats: " + String.valueOf(this.seats.length - this.nBookedSeats_));      
         fullReport.add("Booked Seats: " + String.valueOf(this.nBookedSeats_));   
-        fullReport.add("Customers: " + String.valueOf(this.nCustomers_));
+        fullReport.add("Customers: " + String.valueOf(this.customers.size()));
         fullReport.add("GoldSeat Price: £" + PRICE_FORMAT.format(this.goldSectionPrice_));
         fullReport.add("SilverSeat Price: £" + PRICE_FORMAT.format(this.silverSectionPrice_));
         fullReport.add("BronzeSeat Price: £" + PRICE_FORMAT.format(this.bronzeSectionPrice_));                                  

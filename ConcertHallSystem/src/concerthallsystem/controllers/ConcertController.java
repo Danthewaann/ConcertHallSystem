@@ -12,7 +12,12 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- *
+ * This is the ConcertController class that manages and holds each concert in the system.
+ * This class is responsible for loading and saving concerts from/to file.
+ * The class also manages and reports errors if their is a problem when trying to either
+ * load or save a concert to file, so this class is the main area where error checking will be
+ * carried out.
+ * 
  * @author Daniel
  */
 

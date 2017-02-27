@@ -1,6 +1,5 @@
 package concerthallsystem;
 
-import concerthallsystem.exceptions.CannotUnbookSeatException;
 import javafx.event.EventHandler;
 import javafx.event.Event;
 import javafx.scene.Node;
@@ -32,8 +31,8 @@ public class SeatEventHandler implements EventHandler
     {
         //If the seat is booked, then try to unbook it
         if(this.selectedSeat_.getStatus()) {                       
-            DialogPopup unBookSeat = new DialogPopup();
-            unBookSeat.drawUnBookSeatDialog(this.selectedConcert_, this.selectedSeat_, this.seatIcon);                                   
+            DialogPopup unBookSeatDialog = new DialogPopup();
+            unBookSeatDialog.drawUnBookSeatDialog(this.selectedConcert_, this.selectedSeat_, this.seatIcon);                                   
         }        
         //If the seat is not booked, then allow the user to book it
         else {         

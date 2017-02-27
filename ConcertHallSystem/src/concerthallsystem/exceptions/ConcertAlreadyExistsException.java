@@ -3,7 +3,10 @@ package concerthallsystem.exceptions;
 import concerthallsystem.Concert;
 
 /**
- *
+ * This class is thrown when a concert is loaded into the same that has
+ * the same name and date that a currently loaded concert in the system has,
+ * also when the user tries to create a new concert that also already exists in the system
+ * 
  * @author Daniel Black
  */
 
