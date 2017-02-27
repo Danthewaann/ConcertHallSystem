@@ -26,17 +26,14 @@ public class ConcertController
     public ConcertController()
     {      
         this.concerts = new ArrayList<>();
-        try
-        {            
+        try {            
             this.loadConcerts();
         }
-        catch(FileNotFoundException f)
-        {
+        catch(FileNotFoundException f) {
             File directory = new File(MAIN_DIRECTORY);
             directory.mkdir();
         }
-        catch(ConcertAlreadyExistsException e)
-        {
+        catch(ConcertAlreadyExistsException e) {
             DialogPopup.drawResultDialog(e.getMessage());
         }
     }
@@ -48,22 +45,16 @@ public class ConcertController
         ArrayList<ConcertIOException> concertExceptions = new ArrayList<>(); //Stores concert load errors
         ArrayList<Concert> dupConcerts = new ArrayList<>(); //Stores duplicate concerts detected in file        
         int concertLineNum = 1; //Keeps track of what line we are on in the Concert_list file    
-        while(concertInput.hasNextLine())
-        {                  
+        while(concertInput.hasNextLine()) {                  
             //This part checks if the currently loaded concert already exists in the system,
             //and if it does it adds it to dupConcerts that will hold it for error checking 
             //after we have finished loading in all the concerts
-            try
-            {
+            try {
                 Concert concert = Concert.load(concertInput, MAIN_DIRECTORY, concertLineNum++);
-                if(concert != null)
-                {                                       
-                    for(int i = 0; i < this.concerts.size(); i++)
-                    {                                               
-                        if(concert.equals(this.concerts.get(i)))
-                        {                               
-                            if(!dupConcerts.contains(concert))                              
-                            {
+                if(concert != null) {                                       
+                    for(int i = 0; i < this.concerts.size(); i++) {                                               
+                        if(concert.equals(this.concerts.get(i))) {                               
+                            if(!dupConcerts.contains(concert)) {
                                 dupConcerts.add(concert);                                    
                             }                                                              
                         }                        
@@ -71,8 +62,7 @@ public class ConcertController
                     this.concerts.add(concert);                    
                 }               
             }                       
-            catch(ConcertIOException e)
-            {
+            catch(ConcertIOException e) {
                 //stores the ConcertIOException when caught, so we can detail all
                 //ConcertIOExceptions to the user all at once when we finish loading
                 //in all the concerts from file
@@ -84,11 +74,9 @@ public class ConcertController
         //This is where dupConcerts is checked to see if any concerts are
         //stored inside it, if there is then we throw an exception, passing the
         //concerts that have duplicates to a ConcertAlreadyExistsException object to be caught
-        if(dupConcerts.size() > 0)
-        {
+        if(dupConcerts.size() > 0) {
             String concertList = "";               
-            for(Concert concert : dupConcerts)
-            {
+            for(Concert concert : dupConcerts) {
                 concertList += "----- " + concert + " -----\n";                                   
             }            
             throw new ConcertAlreadyExistsException(concertList, MAIN_DIRECTORY + File.separator + CONCERT_LIST);
@@ -97,11 +85,9 @@ public class ConcertController
         //This is where concertExceptions is checked to see if we have caught any 
         //ConcertIOExceptions, and if we have, we detail them to the user so they know
         //which concert on which line in the Concert_list file has failed to load
-        if(concertExceptions.size() > 0)
-        {
+        if(concertExceptions.size() > 0) {
             String errorReport = "";
-            for(ConcertIOException exception : concertExceptions)
-            {
+            for(ConcertIOException exception : concertExceptions) {
                 errorReport += exception.getMessage() + "\n";
             }
             DialogPopup.drawResultDialog(
@@ -117,16 +103,13 @@ public class ConcertController
     {                             
         //Connect to concerts directory and save each concert to file
         PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
-        for(int i = 0; i < this.concerts.size(); i++)
-        {           
-            if(this.concerts.get(i).save(concertOutput, MAIN_DIRECTORY))
-            {
+        for(int i = 0; i < this.concerts.size(); i++) {           
+            if(this.concerts.get(i).save(concertOutput, MAIN_DIRECTORY)) {
                 System.out.printf(
                     "Successfully saved concert %s%n", this.concerts.get(i)                   
                 );
             }
-            else
-            {
+            else {
                 System.out.printf(
                     "Failed to save concert %s%n", this.concerts.get(i)
                 );

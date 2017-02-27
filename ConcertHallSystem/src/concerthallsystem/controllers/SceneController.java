@@ -5,13 +5,11 @@ import concerthallsystem.DialogPopup;
 import concerthallsystem.Main;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -51,17 +49,14 @@ public class SceneController extends StackPane
     private void loadScenes()
     {    
         int i = 0;
-        for(String sourceFile : this.sourceFiles)
-        {           
-            try
-            {              
+        for(String sourceFile : this.sourceFiles) {           
+            try {              
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(sourceFile));                                              
                 loader.setController(this.eventController);  
                 Parent scene = loader.load();
                 this.scenes.put(fileNames[i++], scene);              
             }
-            catch(IOException e)
-            {
+            catch(IOException e) {
                 System.out.println("Failed to load " + sourceFile);
             }                                   
         }        
@@ -74,8 +69,7 @@ public class SceneController extends StackPane
         {     
             DoubleProperty opacity = opacityProperty();
             this.currentScene = this.scenes.get(name);
-            if(!getChildren().isEmpty())
-            {
+            if(!getChildren().isEmpty()) {
                 Timeline fadeOut = new Timeline(
                     new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
                     new KeyFrame(new Duration(250),(ActionEvent event) -> {
@@ -89,8 +83,7 @@ public class SceneController extends StackPane
                     }, new KeyValue(opacity, 0.0)));
                 fadeOut.play();                           
             }                                                       
-            else
-            {
+            else {
                 setOpacity(0.0);
                 getChildren().add(this.scenes.get(name));
                 Timeline fadeIn = new Timeline(

@@ -43,17 +43,14 @@ public class Customer
          
     public void setEntitlement(Seat seat)
     {        
-        if(seat.getClass().getSimpleName().equals("GoldSeat"))
-        {
+        if(seat.getClass().getSimpleName().equals("GoldSeat")) {
             //1 in 10 chance of getting a free backstage pass
             int randomNum = ((int)(Math.random() * 10 + 1 ));
-            if(randomNum == 1)
-            {           
+            if(randomNum == 1) {           
                 this.goldEntitled_ = true;
             }
         }
-        else if(seat.getClass().getSimpleName().equals("SilverSeat"))
-        {
+        else if(seat.getClass().getSimpleName().equals("SilverSeat")) {
             this.silverEntitled_ = true;
         }
     }
@@ -61,18 +58,14 @@ public class Customer
     public String getEntitlement()
     {
         String result = null;
-        if(this.goldEntitled_)
-        {
+        if(this.goldEntitled_) {
             result = "a free backstage pass";
         }
-        if(this.silverEntitled_)
-        {
-            if(result != null)
-            {
+        if(this.silverEntitled_) {
+            if(result != null) {
                 result += " " + "and a free programme";
             }
-            else
-            {
+            else {
                 result = "a free programme";
             }
         }
@@ -105,14 +98,12 @@ public class Customer
           
     public boolean save(PrintWriter output)
     {
-        try
-        {
+        try {
             output.println(
                 this.name_ + " " + this.goldEntitled_ + " " + this.silverEntitled_
             );
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             return false;
         }
         return true;
@@ -121,27 +112,23 @@ public class Customer
     public static Customer load(Scanner input, File customerFile, int customerLineNum)
     {
         Customer result = new Customer();
-        try
-        {
+        try {
             result.name_ = input.next();  
-            while(!input.hasNextBoolean())
-            {
+            while(!input.hasNextBoolean()) {
                 result.name_ += " " + input.next();
             }       
             result.goldEntitled_ = input.nextBoolean();
             result.silverEntitled_ = input.nextBoolean();            
         } 
         //If any info is incorrect, detail them then return null
-        catch(InputMismatchException ex)
-        {            
+        catch(InputMismatchException ex) {            
             System.out.println(
                 "Fatal Error: Failed to load customer on line " + customerLineNum + "...\n"
                 + "...in location " + customerFile
             );            
             return null;
         }
-        finally
-        {
+        finally {
             input.nextLine();
         }        
         return result;

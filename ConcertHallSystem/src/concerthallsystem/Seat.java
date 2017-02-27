@@ -41,16 +41,13 @@ public abstract class Seat implements Comparable
     @Override
     public int compareTo(Object seat)
     {
-        if(this.hashCode() < ((Seat) seat).hashCode())
-        {
+        if(this.hashCode() < ((Seat) seat).hashCode()) {
             return -1;
         }
-        else if(this.hashCode() == ((Seat) seat).hashCode())
-        {
+        else if(this.hashCode() == ((Seat) seat).hashCode()) {
             return 0;
         }
-        else
-        {
+        else {
             return 1;
         }
     }
@@ -71,14 +68,12 @@ public abstract class Seat implements Comparable
     
     public boolean save(PrintWriter output)
     {             
-        try
-        {
+        try {
             output.println(
                 this.getRow() + " " + this.getNumber() + " " + this.getBookee()                           
             );  
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             return false;
         }
         return true;
@@ -91,41 +86,35 @@ public abstract class Seat implements Comparable
         int seatNum;
         int rowIndex = 0;
         int numIndex = 0;
-        try
-        {           
+        try {           
             seatRow = input.next(Pattern.compile("[a-iA-I]")).toUpperCase();
             seatNum = input.nextInt();
             bookee = input.nextLine().trim();            
             
             //Check if seatRow is an actual row defined by its concert
-            while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[rowIndex]) != 0)
-            {
+            while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[rowIndex]) != 0) {
                 rowIndex++;
             }
 
             //Check if seatNum is an actual number defined by its concert
-            while(seatNum != (Concert.SEAT_NUMBERS[numIndex]))
-            {
+            while(seatNum != (Concert.SEAT_NUMBERS[numIndex])) {
                 numIndex++;
             }
            
             //Return the seat type depending on its row
-            if(rowIndex < 3)
-            {
+            if(rowIndex < 3) {
                 result = new GoldSeat(seatRow, seatNum);
                 result.setStatus(true);
                 result.setBookee(bookee);               
                 return result;
             }
-            else if(rowIndex < 6)
-            {
+            else if(rowIndex < 6) {
                 result = new SilverSeat(seatRow, seatNum);
                 result.setStatus(true);
                 result.setBookee(bookee);                           
                 return result;
             }
-            else
-            {
+            else {
                 result = new BronzeSeat(seatRow, seatNum);
                 result.setStatus(true);
                 result.setBookee(bookee);                             
@@ -133,8 +122,7 @@ public abstract class Seat implements Comparable
             }
         }
         //If any info is incorrect detail them then return null
-        catch(InputMismatchException | ArrayIndexOutOfBoundsException ex)
-        {                     
+        catch(InputMismatchException | ArrayIndexOutOfBoundsException ex) {                     
             input.nextLine();
             System.out.println(
                 "Fatal Error: Failed to load seat on line " + seatLineNum + "...\n"
@@ -193,10 +181,11 @@ public abstract class Seat implements Comparable
     @Override
     public boolean equals(Object obj) 
     {
-        if(obj.getClass().isInstance(this))       
-            if(this.hashCode() == ((Seat) obj).hashCode())
+        if(obj.getClass().isInstance(this)) {                           
+            if(this.hashCode() == ((Seat) obj).hashCode()) {
                 return true;
-        
+            }
+        }       
         return false;
     }
 

@@ -31,22 +31,12 @@ public class SeatEventHandler implements EventHandler
     public void handle(Event event) 
     {
         //If the seat is booked, then try to unbook it
-        if(this.selectedSeat_.getStatus())
-        {            
-            try
-            {  
-                DialogPopup unBookSeat = new DialogPopup();
-                unBookSeat.drawUnBookSeatDialog(selectedConcert_, selectedSeat_, seatIcon);                
-            }
-            catch(CannotUnbookSeatException e)
-            {
-                DialogPopup.drawResultDialog(e.getMessage());                                 
-            }          
-        } 
-        
+        if(this.selectedSeat_.getStatus()) {                       
+            DialogPopup unBookSeat = new DialogPopup();
+            unBookSeat.drawUnBookSeatDialog(this.selectedConcert_, this.selectedSeat_, this.seatIcon);                                   
+        }        
         //If the seat is not booked, then allow the user to book it
-        else
-        {         
+        else {         
             DialogPopup bookSeatDialog = new DialogPopup();
             bookSeatDialog.drawBookSeatDialog(this.selectedConcert_, this.selectedSeat_, this.seatIcon);           
         }

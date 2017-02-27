@@ -73,44 +73,50 @@ public class DialogPopup extends Dialog
     }
     
     public void drawReportDialog(List<String> elements, int maxCols, int maxRows)
-    {       
+    {           
         ObservableList<Node> nodes = FXCollections.observableArrayList();
-        for(String element : elements)
-        {
+        
+        for(String element : elements) {
             int i = element.lastIndexOf(":");
+            
             Label label = new Label(element.substring(0, i+1));           
             label.setStyle("-fx-font-size: 16px");
+            
             Label value = new Label(element.substring(i+2));
             value.setStyle("-fx-font-size: 16px");
+            
             nodes.addAll(label, value);
-        }
+        }      
         this.drawGridPane(nodes, this.grid, maxCols, maxRows);  
         this.getDialogPane().getButtonTypes().add(OK);
     }
     
     public void drawQuerySeatDialog(Concert concert, int maxCols, int maxRows)
-    {  
-        ObservableList<Node> nodes = FXCollections.observableArrayList();
+    {          
         Label rowLabel = new Label("Select a Seat Row:");
-        rowLabel.setStyle("-fx-font-size: 16px;");       
+        rowLabel.setStyle("-fx-font-size: 16px;");    
+        
         Label numberLabel = new Label("Select a Seat Number:");
         numberLabel.setStyle("-fx-font-size: 16px;");
+        
         ComboBox rows = new ComboBox();
         rows.prefWidthProperty().set(50);
+        
         ComboBox numbers = new ComboBox();   
         numbers.prefWidthProperty().set(50);
-        for(String row : Concert.SEAT_ROWS)
-        {
+        
+        for(String row : Concert.SEAT_ROWS) {
             rows.getItems().add(row);
         }
         rows.getSelectionModel().selectFirst();
-        for(int number : Concert.SEAT_NUMBERS)
-        {
+        
+        for(int number : Concert.SEAT_NUMBERS) {
             numbers.getItems().add(String.valueOf(number));
         }
         numbers.getSelectionModel().selectFirst();
-        nodes.addAll(rowLabel, rows, numberLabel, numbers);   
-        rows.getSelectionModel().selectedItemProperty().get();
+        
+        ObservableList<Node> nodes = FXCollections.observableArrayList();
+        nodes.addAll(rowLabel, rows, numberLabel, numbers);          
         this.drawGridPane(nodes, this.grid, maxCols, maxRows);
         this.getDialogPane().getButtonTypes().addAll(QUERY, CANCEL); 
         
@@ -123,6 +129,7 @@ public class DialogPopup extends Dialog
             }
             return null;
         });
+        
         Optional<Pair<String, String>> result = this.showAndWait();
         result.ifPresent(seatAndRow -> {              
             Seat seat = concert.getSeat(seatAndRow.getKey(), Integer.parseInt(seatAndRow.getValue()));               
@@ -134,30 +141,32 @@ public class DialogPopup extends Dialog
     {
         DialogPopup dialog = new DialogPopup();
         dialog.setHeaderText("Result Confirmation");
+        
         Label label = new Label(result);
         label.setStyle("-fx-font-size: 16px");
+        
         dialog.grid.add(label, 1, 1);
         dialog.getDialogPane().getButtonTypes().add(OK);
         dialog.show();
     }
     
     public void drawQueryCustomerDialog(Concert concert, int maxCols, int maxRows)
-    {      
-        this.getDialogPane().getButtonTypes().addAll(QUERY, CANCEL);
+    {             
+        Label label = new Label("Select Customer to Query:");
+        label.setStyle("-fx-font-size: 16px"); 
+        
         ComboBox options = new ComboBox();
         options.prefWidthProperty().set(180);
-        for(Customer customer: concert.getCustomers())
-        {
+        
+        for(Customer customer: concert.getCustomers()) {
             options.getItems().add(customer.getName());
         }
         options.getSelectionModel().selectFirst();
+                                      
         ObservableList<Node> nodes = FXCollections.observableArrayList();
-        Label label = new Label("Select Customer to Query:");
-        label.setAlignment(Pos.CENTER);
-        label.setStyle("-fx-font-size: 16px");
-        nodes.add(label);
-        nodes.add(options);
+        nodes.addAll(label, options);
         this.drawGridPane(nodes, this.grid, maxCols, maxRows);
+        this.getDialogPane().getButtonTypes().addAll(QUERY, CANCEL);
 
         this.setResultConverter(button -> {
             if(button == QUERY) {
@@ -165,6 +174,7 @@ public class DialogPopup extends Dialog
             }
             return null;
         });
+        
         Optional<String> result = this.showAndWait();
         result.ifPresent(customer -> {                                     
             drawResultDialog(concert.queryByCustomer(customer));
@@ -172,21 +182,25 @@ public class DialogPopup extends Dialog
     }
     
     public void drawSectionPriceDialog(Concert concert, int maxCols, int maxRows)
-    {
-        ObservableList<Node> nodes = FXCollections.observableArrayList();
+    {       
         Label sectionLabel = new Label("Select a Seat Section:");
         sectionLabel.setStyle("-fx-font-size: 16px;");
+        
         Label inputLabel = new Label("Input a New Price:");
         inputLabel.setStyle("-fx-font-size: 16px;");
+        
         ComboBox sections = new ComboBox();
         sections.prefWidthProperty().set(175);
-        TextField priceInput = new TextField();
+        
+        TextField priceInput = new TextField();       
         priceInput.promptTextProperty().set("00.00");
-        for(String section : Concert.SEAT_SECTIONS)
-        {
+        
+        for(String section : Concert.SEAT_SECTIONS) {
             sections.getItems().add(section);
-        }
+        }       
         sections.getSelectionModel().selectFirst();
+        
+        ObservableList<Node> nodes = FXCollections.observableArrayList();
         nodes.addAll(sectionLabel, sections, inputLabel, priceInput);       
         this.drawGridPane(nodes, this.grid, maxCols, maxRows);
         this.getDialogPane().getButtonTypes().addAll(OK, CANCEL);
@@ -200,6 +214,7 @@ public class DialogPopup extends Dialog
             }
             return null;
         });
+        
         Optional<Pair<String, String>> result = this.showAndWait();
         result.ifPresent(input -> {
             concert.setSectionPrice(input.getKey(), Double.parseDouble(input.getValue()));
@@ -211,6 +226,7 @@ public class DialogPopup extends Dialog
     {
         Label label = new Label(message);       
         label.setStyle("-fx-font-size: 16px");
+        
         this.grid.add(label, 0, 0);        
         this.getDialogPane().getButtonTypes().add(OK);
     }
@@ -220,8 +236,10 @@ public class DialogPopup extends Dialog
         this.setHeaderText("Book Seat (" + seat + ")");
         Label label = new Label("Input name to book this seat:");
         label.setStyle("-fx-font-size: 16px;");
+        
         TextField nameInput = new TextField();
         nameInput.promptTextProperty().set("Input fullname here...");
+        
         ObservableList<Node> nodes = FXCollections.observableArrayList();
         nodes.addAll(label, nameInput);
         this.drawGridPane(nodes, this.grid, 1, 2);
@@ -239,15 +257,13 @@ public class DialogPopup extends Dialog
         result.ifPresent(input -> {                      
             concert.bookSeat(seat, input);
             seatIcon.setStyle("-fx-background-color: linear-gradient(#FF0000, #D10000);");
-            if(concert.getCustomerEntitlement(seat) != null)
-            {
+            if(concert.getCustomerEntitlement(seat) != null) {
                 drawResultDialog(
                     Constant.capitalize(input) + " has booked seat " 
                     + "(" + seat + ")" + "\n" + concert.getCustomerEntitlement(seat)
                 );     
             }
-            else
-            {
+            else {
                 drawResultDialog(
                     Constant.capitalize(input) + " has booked seat " 
                     + "(" + seat + ")" 
@@ -256,38 +272,38 @@ public class DialogPopup extends Dialog
         });
     } 
     
-    public void drawUnBookSeatDialog(Concert concert, Seat seat, Node seatIcon) throws CannotUnbookSeatException
+    public void drawUnBookSeatDialog(Concert concert, Seat seat, Node seatIcon)
     {
-        if(seat.getClass().getSimpleName().equals("BronzeSeat"))
-        {
-            concert.unBookSeat(seat);
-        }
         this.setHeaderText("Unbook Seat (" + seat + ")");
-        Label label = new Label("Are you sure you want to unbook this seat?");       
+        Label label = new Label("Are you sure you want to unbook this seat?"); 
+        label.setStyle("-fx-font-size: 16px;");
+        
         ObservableList<Node> nodes = FXCollections.observableArrayList();
-        nodes.addAll(label);
+        nodes.addAll(label);       
         this.drawGridPane(nodes, this.grid, 1, 2);    
         this.getDialogPane().getButtonTypes().addAll(UNBOOK, CANCEL);
 
         this.setResultConverter(button -> {
-            if(button == UNBOOK)
-            {
+            if(button == UNBOOK) {
                 return UNBOOK.getText();
             }
             return null;
         });
         
         Optional<String> result = this.showAndWait();
-        result.ifPresent(input -> {            
-            concert.unBookSeat(seat);
-            if(seat.getClass().getSimpleName().equals("GoldSeat"))
-            {
-                seatIcon.setStyle("-fx-background-color: linear-gradient(#FFD700, #EDC800);");
+        result.ifPresent(input -> { 
+            try {  
+                concert.unBookSeat(seat);
+                if(seat.getClass().getSimpleName().equals("GoldSeat")) {
+                    seatIcon.setStyle("-fx-background-color: linear-gradient(#FFD700, #EDC800);");
+                }
+                else {
+                    seatIcon.setStyle("-fx-background-color: linear-gradient(#C0C0C0, #ABABAB);");
+                }
             }
-            else
-            {
-                seatIcon.setStyle("-fx-background-color: linear-gradient(#C0C0C0, #ABABAB);");
-            }                          
+            catch(CannotUnbookSeatException e) {
+                drawResultDialog(e.getMessage());                                 
+            }                                                 
         });
     } 
 }

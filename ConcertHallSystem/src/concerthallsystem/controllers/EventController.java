@@ -53,8 +53,7 @@ public class EventController
     private void goToSelectConcertScene(ActionEvent event)
     {           
         ObservableList<String> concertList = FXCollections.observableArrayList();
-        for(Concert concert : this.concertController.getConcertList())
-        {
+        for(Concert concert : this.concertController.getConcertList()) {
             concertList.add(concert.getName() + " | " + concert.getDate());
         }
         this.dropDownList.setItems(concertList);
@@ -64,13 +63,11 @@ public class EventController
     @FXML
     private void goToMainMenuScene(ActionEvent event)
     {        
-        if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("SelectConcertScene.fxml")))
-        {
+        if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("SelectConcertScene.fxml"))) {
             this.sceneController.setScene("MainMenu");
             this.dropDownList.getItems().clear();
         }  
-        else
-        {
+        else {
             this.sceneController.setScene("MainMenu");
         }
     }
@@ -87,29 +84,24 @@ public class EventController
         String name = newConcertName.getText();
         String date = newConcertDate.getValue().toString();
         Concert temp = new Concert(name, date);
+        
         int i = 0;
         boolean concertAlreadyExists = false;
-        while(i < this.concertController.getConcertList().size() && !concertAlreadyExists)
-        {
-            if(temp.equals(this.concertController.getConcertList().get(i)))
-            {
-                try
-                {
+        while(i < this.concertController.getConcertList().size() && !concertAlreadyExists) {
+            if(temp.equals(this.concertController.getConcertList().get(i))) {
+                try {
                     concertAlreadyExists = true;
                     throw new ConcertAlreadyExistsException(this.concertController.getConcertList().get(i));
                 }
-                catch(ConcertAlreadyExistsException e)
-                {   
+                catch(ConcertAlreadyExistsException e) {   
                     System.out.println("That concert already Exists!");
                 }               
             }
-            else
-            {
+            else {
                 i++;
             }
         }
-        if(!concertAlreadyExists)
-        {
+        if(!concertAlreadyExists) {
             Concert concert = new Concert(name, date);
             this.concertController.getConcertList().add(concert);
             this.concertController.setCurrentConcert(concert);
@@ -129,25 +121,20 @@ public class EventController
         
         int i = 0;
         boolean foundConcert = false;
-        while(i < this.concertController.getConcertList().size() && !foundConcert)
-        {
-            if(temp.equals(this.concertController.getConcertList().get(i)))
-            {               
+        while(i < this.concertController.getConcertList().size() && !foundConcert) {
+            if(temp.equals(this.concertController.getConcertList().get(i))) {               
                 foundConcert = true;
                 break;               
             }
-            else
-            {
+            else {
                 i++;
             }
         }
-        if(foundConcert)
-        {           
+        if(foundConcert) {           
             this.concertController.setCurrentConcert(this.concertController.getConcertList().get(i));
             this.goToSeatingPlanScene(selectedConcert);
         }
-        else
-        {
+        else {
             System.out.println("Error, couldn't find concert");
         }
     }
@@ -155,16 +142,12 @@ public class EventController
     private void goToSeatingPlanScene(String selectedConcert)
     {
         ObservableList<Node> seats = this.seatIcons.getChildren();
-        for(int j = 0; j < seats.size(); j++)
-        {               
-            if(this.concertController.getCurrentConcert().getSeats()[j].getStatus())
-            {                    
+        for(int j = 0; j < seats.size(); j++) {               
+            if(this.concertController.getCurrentConcert().getSeats()[j].getStatus()) {                    
                 seats.get(j).setStyle("-fx-background-color: linear-gradient(#FF0000, #D10000);");
             }
-            else
-            {
-                switch(this.concertController.getCurrentConcert().getSeats()[j].getClass().getSimpleName()) 
-                {
+            else {
+                switch(this.concertController.getCurrentConcert().getSeats()[j].getClass().getSimpleName()) {
                     case "GoldSeat":
                         seats.get(j).setStyle("-fx-background-color: linear-gradient(#FFD700, #EDC800);");
                         break;
@@ -221,15 +204,13 @@ public class EventController
     @FXML
     private void saveConcert(ActionEvent event)
     {
-        try
-        {
+        try {
             this.concertController.saveConcerts();
             this.sceneController.displaySaveDialog(
                 this.concertController.getCurrentConcert()
             );
         }
-        catch(FileNotFoundException e)
-        {
+        catch(FileNotFoundException e) {
             System.out.println("Error");
         }
     }       

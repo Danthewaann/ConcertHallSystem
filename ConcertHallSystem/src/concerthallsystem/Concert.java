@@ -13,7 +13,6 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.util.Arrays;
 
 /**
  * The Concert class holds all the important information that can
@@ -43,7 +42,7 @@ public class Concert
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
     public static final int[] SEAT_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public static final int TOTAL_SEATS = SEAT_ROWS.length * SEAT_NUMBERS.length;
-    public static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#.00");
+    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("00.00");
            
     public Concert(String name, String date)
     {
@@ -68,30 +67,23 @@ public class Concert
         
         //Go through every row in the concert, and add 10 seats to that row depending
         //on the row e.g. rows 0 to 2 (A to C) will need 10 gold seats each, totaling to 30 seats
-        for(int i = 0; i < SEAT_ROWS.length; i++)           
-        {                                  
-            if(i < 3)
-            {               
-                for(int j = 0; j < SEAT_NUMBERS.length; j++)
-                {                                  
+        for(int i = 0; i < SEAT_ROWS.length; i++) {                                  
+            if(i < 3) {               
+                for(int j = 0; j < SEAT_NUMBERS.length; j++) {                                  
                     this.seats[seatIndex] = new GoldSeat(SEAT_ROWS[i], SEAT_NUMBERS[j]);
                     this.seats[seatIndex].setPrice(this.goldSectionPrice_);
                     seatIndex++;
                 }
             }
-            else if(i < 6)
-            {
-                for(int j = 0; j < SEAT_NUMBERS.length; j++)
-                {                                 
+            else if(i < 6) {
+                for(int j = 0; j < SEAT_NUMBERS.length; j++) {                                 
                     this.seats[seatIndex] = new SilverSeat(SEAT_ROWS[i], SEAT_NUMBERS[j]); 
                     this.seats[seatIndex].setPrice(this.silverSectionPrice_);
                     seatIndex++;
                 }
             }
-            else
-            {
-                for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++)
-                {                                   
+            else {
+                for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++) {                                   
                     this.seats[seatIndex] = new BronzeSeat(SEAT_ROWS[i], SEAT_NUMBERS[j]);
                     this.seats[seatIndex].setPrice(this.bronzeSectionPrice_);
                     seatIndex++;
@@ -104,8 +96,7 @@ public class Concert
     {                
         PrintWriter seatOutput = null; 
         PrintWriter customerOutput = null;             
-        try
-        {                                
+        try {                                
             //Save concert to Concert_list file
             concertOutput.println(
                 this + " " + this.goldSectionPrice_ 
@@ -124,19 +115,15 @@ public class Concert
                 concertDirectory + File.separator + "Booked_seats.txt")
             );           
             
-            for(Seat seat : this.seats) 
-            {
-                if(seat.getStatus()) 
-                {
-                    if(seat.save(seatOutput))
-                    {
+            for(Seat seat : this.seats) {
+                if(seat.getStatus()) {
+                    if(seat.save(seatOutput)) {
                         System.out.println(
                             "Successfully saved seat " + "(" + seat + ")" 
                             + " for concert " + this
                         );
                     }
-                    else
-                    {
+                    else {
                         System.out.println(
                             "Failed to save seat " + "(" + seat + ")" 
                             + " for concert " + this
@@ -150,17 +137,14 @@ public class Concert
                 concertDirectory + File.separator + "Customers.txt")
             );   
             
-            for(Customer customer : this.customers)
-            {
-                if(customer.save(customerOutput))
-                {
+            for(Customer customer : this.customers) {
+                if(customer.save(customerOutput)) {
                     System.out.println(
                         "Successfully saved customer " + customer.getName() 
                         + " for concert " + this
                     );
                 }
-                else
-                {
+                else {
                     System.out.println(
                         "Failed to save customer " + customer.getName() 
                         + " for concert " + this
@@ -168,19 +152,15 @@ public class Concert
                 }
             }            
         }
-        catch(IOException io)
-        {
+        catch(IOException io) {
             System.out.println(io.getMessage());
             return false;
         }
-        finally
-        {           
-            if(seatOutput != null)
-            {
+        finally {           
+            if(seatOutput != null) {
                 seatOutput.close();
             }
-            if(customerOutput != null)
-            {
+            if(customerOutput != null) {
                 customerOutput.close();
             }
         }
@@ -192,28 +172,28 @@ public class Concert
     {
         Scanner seatInput = null;
         Scanner customerInput = null;
-        Concert result = new Concert();
-        try
-        {      
+        Concert tempConcert = new Concert();
+        try {      
             /* LOAD IN CONCERT INFO */
-            result.name_ = concertInput.next(); 
-            Pattern dateRegex = Pattern.compile("[\\d]{4}[-][\\d]{2}[-][\\d]{2}");
-            while(!concertInput.hasNext(dateRegex))
-            {
-                result.name_ += " " + concertInput.next();
+            tempConcert.name_ = concertInput.next(); 
+            
+            Pattern dateRegex = Pattern.compile("[\\d]{4}[-][\\d]{2}[-][\\d]{2}");           
+            while(!concertInput.hasNext(dateRegex)) {
+                tempConcert.name_ += " " + concertInput.next();
             }                 
-            result.date_ = concertInput.next();
-            result.goldSectionPrice_ = concertInput.nextDouble();
-            result.silverSectionPrice_ = concertInput.nextDouble();
-            result.bronzeSectionPrice_ = concertInput.nextDouble();
-            result.initializeSeats();
+            
+            tempConcert.date_ = concertInput.next();
+            tempConcert.goldSectionPrice_ = concertInput.nextDouble();
+            tempConcert.silverSectionPrice_ = concertInput.nextDouble();
+            tempConcert.bronzeSectionPrice_ = concertInput.nextDouble();
+            tempConcert.initializeSeats();          
             /* END OF LOADING IN CONCERT INFO */           
                    
             //CREATE DIRECTORY FOR THE CURRENTLY LOADED CONCERT. 
             //THIS IS WHERE ALL THE CURRENT CONCERT'S INFO SHOULD BE
             //STORED, TWO FILES, ONE FOR BOOKED SEATS, ONE FOR CUSTOMERS 
             File concertDirectory = new File(
-                mainDirectory + File.separator + result                                  
+                mainDirectory + File.separator + tempConcert                                  
             );
             
             //If the current concert's directory doesn't exist, create it
@@ -225,22 +205,19 @@ public class Concert
             );
             
             //If the customers file exists, start loading in the customers 
-            if(customersFile.canRead())               
-            {                
+            if(customersFile.canRead()) {                
                 int customerLineNum = 1;
-                customerInput  = new Scanner(customersFile);
-                while(customerInput.hasNextLine())
-                {                              
-                    Customer customer = Customer.load(customerInput, customersFile, customerLineNum++);                    
-                    if(customer != null)
-                    {
-                        result.customers.add(customer);
-                        result.nCustomers_++;
+                customerInput = new Scanner(customersFile);
+                
+                while(customerInput.hasNextLine()) {                              
+                    Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);                    
+                    if(tempCustomer != null) {
+                        tempConcert.customers.add(tempCustomer);
+                        tempConcert.nCustomers_++;
                     }                       
                 }
             }
-            else
-            {
+            else {
                 customersFile.createNewFile();
             } 
             /* END OF LOADING IN CUSTOMER INFO */
@@ -251,61 +228,52 @@ public class Concert
             );
             
             //If the seats file exists, start loading in the seats
-            if(seatsFile.canRead())
-            {
+            if(seatsFile.canRead()) {
                 int seatLineNum = 1;
                 seatInput = new Scanner(seatsFile);
-                while(seatInput.hasNextLine())
-                {                               
+                
+                while(seatInput.hasNextLine()) {                               
                     Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
-                    Seat actualSeat = result.findSeat(tempSeat);
-                    if(actualSeat != null)
-                    {
+                    Seat actualSeat = tempConcert.findSeat(tempSeat);
+                    
+                    if(actualSeat != null) {
                         actualSeat.setStatus(true);                       
                         actualSeat.setBookee(tempSeat.getBookee());
-                        result.nBookedSeats_++;
-                        Customer customer = result.findCustomer(actualSeat.getBookee());
-                        if(customer != null)
-                        {
-                            customer.addSeat(actualSeat);
+                        tempConcert.nBookedSeats_++;
+                        Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
+                        if(tempCustomer != null) {
+                            tempCustomer.addSeat(actualSeat);
                         }
-                        else
-                        {
+                        else {
                             Customer newCustomer = new Customer(actualSeat.getBookee());
                             newCustomer.addSeat(actualSeat);
-                            result.customers.add(newCustomer);
+                            tempConcert.customers.add(newCustomer);
                         }     
                     }
-                    else
-                    {
+                    else {
                         System.out.println("Error: tried to load a seat that doesn't exist");
                     }
                                          
                 }
             }
-            else
-            {
+            else {
                 seatsFile.createNewFile();
             }   
             /* END OF LOADING IN SEAT INFO */
         }        
-        catch(InputMismatchException | IOException io)
-        {
+        catch(InputMismatchException | IOException io) {
             throw new ConcertIOException(concertLineNum);                                   
         }       
-        finally
-        {
-            if(seatInput != null)
-            {
+        finally {
+            if(seatInput != null) {
                 seatInput.close();
             }
-            if(customerInput != null)
-            {
+            if(customerInput != null) {
                 customerInput.close();
             }
             concertInput.nextLine();
         }                     
-        return result;
+        return tempConcert;
     }   
     
     public String getName()
@@ -332,17 +300,15 @@ public class Concert
     public Seat getSeat(String seatRow, int seatNum)
     {                   
         int i = 0;
-        while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[i]) != 0)
-        {
+        while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[i]) != 0) {
             i++;
-        }      
-        if(i == 0)
-        {
+        }    
+        
+        if(i == 0) {
             //If the seatRow is A, just return seat at index seatNum - 1
             return this.seats[seatNum-1];
         }
-        else
-        {
+        else {
             //If the seatRow is not A, return seat at index (seatNum - 1) + (seatRow index * 10)
             //Each row has 10 seats, so if seatRow is B and seatNum is 5,
             //its index is 14 because seatRow B index is 1 and (5 - 1) + (1 * 10) = 14
@@ -354,14 +320,13 @@ public class Concert
     {                        
         String customerName = Constant.capitalize(name);
         Customer customer = this.findCustomer(customerName);
-        if(customer != null)
-        {           
+        
+        if(customer != null) {           
             Seat temp = this.findSeat(seat);
             temp.book(customer);                         
             this.nBookedSeats_++;
         }
-        else
-        {           
+        else {           
             Customer newCustomer = new Customer(customerName); 
             Seat temp = this.findSeat(seat);
             temp.book(newCustomer);                       
@@ -375,8 +340,8 @@ public class Concert
     {        
         Customer customer = this.findCustomer(seat.getBookee());
         Seat temp = this.findSeat(seat);
-        if(customer != null )
-        {               
+        
+        if(customer != null ) {               
             temp.unBook(customer);           
             this.nBookedSeats_--; 
             if(!customer.hasBookedASeat())
@@ -391,19 +356,16 @@ public class Concert
     public String getCustomerEntitlement(Seat seat)
     {               
         Customer customer = this.findCustomer(seat.getBookee());
-        if(customer != null)
-        {
-            if(customer.getEntitlement() == null)
-            {
+        
+        if(customer != null)  {
+            if(customer.getEntitlement() == null) {
                 return null;
             }
-            else
-            {
+            else {
                 return customer.getName() + " is entitled to " + customer.getEntitlement();
             }
         }
-        else
-        {
+        else {
             return null;
         }                       
     }
@@ -411,26 +373,22 @@ public class Concert
     public double getSectionPrice(String seatSection)
     {              
         int i = 0;       
-        while(seatSection.compareToIgnoreCase(Concert.SEAT_SECTIONS[i]) != 0)
-        {
+        while(seatSection.compareToIgnoreCase(Concert.SEAT_SECTIONS[i]) != 0) {
             i++;
         }
-        switch(i)
-        {
-            case 0:
-            {
+        
+        switch(i) {
+            case 0: {
                 return Double.parseDouble(
                     PRICE_FORMAT.format(this.goldSectionPrice_)
                 );                              
             }
-            case 1:
-            {
+            case 1: {
                 return Double.parseDouble(
                     PRICE_FORMAT.format(this.silverSectionPrice_)
                 );                
             }
-            default:
-            {
+            default: {
                 return Double.parseDouble(
                    PRICE_FORMAT.format(this.bronzeSectionPrice_)
                 );               
@@ -444,19 +402,20 @@ public class Concert
     {             
         List<String> fullReport = new ArrayList<>();
         double totalSales = 0;
+        
         for(Seat seat : this.seats) {
             if(seat.getStatus()) {
                 totalSales += seat.getPrice();
             }
         }  
         
-        fullReport.add("Available Seats: " + String.valueOf(this.seats.length - this.nBookedSeats_) + " Seats");      
-        fullReport.add("Booked Seats: " + String.valueOf(this.nBookedSeats_) + " Seats");   
-        fullReport.add("Customers: " + String.valueOf(this.nCustomers_) + " Customers");
-        fullReport.add("GoldSeat Price: " + "£" + this.goldSectionPrice_);
-        fullReport.add("SilverSeat Price: " + "£" + this.silverSectionPrice_);
-        fullReport.add("BronzeSeat Price: " + "£" + this.bronzeSectionPrice_);                                  
-        fullReport.add("Total Sales: " + "£" + PRICE_FORMAT.format(totalSales));         
+        fullReport.add("Available Seats: " + String.valueOf(this.seats.length - this.nBookedSeats_));      
+        fullReport.add("Booked Seats: " + String.valueOf(this.nBookedSeats_));   
+        fullReport.add("Customers: " + String.valueOf(this.nCustomers_));
+        fullReport.add("GoldSeat Price: £" + PRICE_FORMAT.format(this.goldSectionPrice_));
+        fullReport.add("SilverSeat Price: £" + PRICE_FORMAT.format(this.silverSectionPrice_));
+        fullReport.add("BronzeSeat Price: £" + PRICE_FORMAT.format(this.bronzeSectionPrice_));                                  
+        fullReport.add("Total Sales: £" + PRICE_FORMAT.format(totalSales));         
         return fullReport;
     }
     
@@ -465,30 +424,25 @@ public class Concert
     //and returns if the person should receive any entitlements
     public String queryBySeat(Seat seat)
     {                         
-        if(seat.getStatus())
-        {
+        if(seat.getStatus()) {
             Customer customer = this.findCustomer(seat.getBookee());
-            if(customer != null)
-            {
-                if(customer.getEntitlement() == null)
-                {
+            if(customer != null)  {
+                if(customer.getEntitlement() == null) {
                     return "Selected seat " + "(" + seat 
                             + ")" + " is booked by " + seat.getBookee();
                 }
-                else
-                {
+                else {
                     return "Selected seat " + "(" + seat + ")" 
-                            + " is booked by " + seat.getBookee() + "\n" + seat.getBookee() + " is entitled to " 
+                            + " is booked by " + seat.getBookee() + "\n" 
+                            + seat.getBookee() + " is entitled to " 
                             + customer.getEntitlement();
                 }
             }
-            else
-            {
+            else {
                 return "Could not find customer for " + "(" + seat + ")";
             }
         }
-        else
-        {
+        else {
             return "Selected seat " + "(" + seat + ")" + " hasn't been booked";
         }        
     }
@@ -498,41 +452,35 @@ public class Concert
     {              
         String returnQuery = "";
         Customer customer = this.findCustomer(customerName);
-        if(customer != null)
-        {
-            if(customer.getEntitlement() != null)
-            {
+        
+        if(customer != null) {
+            if(customer.getEntitlement() != null) {
                 returnQuery = customer.getName() + " is entitled to " + customer.getEntitlement() + "\n";
             }       
             
             returnQuery += customer.getName() + " has booked " + customer.getBookedSeats().size();
-            if(customer.getBookedSeats().size() > 1)
-            {
+            
+            if(customer.getBookedSeats().size() > 1) {
                 returnQuery += " seats:\n";
             }
-            else
-            {
+            else {
                 returnQuery += " seat:\n";
             }
                            
             int counter = 0;
-            for(Seat seat : customer.getBookedSeats())
-            {
+            for(Seat seat : customer.getBookedSeats()) {
                 counter++;
-                if(counter < 5)
-                {
+                if(counter < 5){
                     returnQuery += "(" + seat + ") ";
                 }
-                else
-                {
+                else {
                     returnQuery += "(" + seat + ")\n";
                     counter = 0;
                 }                   
             }                        
             return returnQuery;
         }
-        else
-        {
+        else {
             return "Customer does not exist";
         }       
     }
@@ -540,36 +488,30 @@ public class Concert
     public void setSectionPrice(String seatSection, double newPrice) 
     {               
         int i = 0;
-        double finalPrice = Double.parseDouble(PRICE_FORMAT.format(newPrice));        
-        while(seatSection.compareToIgnoreCase(Concert.SEAT_SECTIONS[i]) != 0)
-        {
+        double finalPrice = Double.parseDouble(PRICE_FORMAT.format(newPrice)); 
+        
+        while(seatSection.compareToIgnoreCase(Concert.SEAT_SECTIONS[i]) != 0) {
             i++;
-        }       
-        switch(i) 
-        {
-            case 0:
-            {                              
+        }    
+        
+        switch(i) {
+            case 0: {                              
                 this.goldSectionPrice_ = finalPrice;                  
-                for(int j = 0; j < 30; j++)                       
-                {
+                for(int j = 0; j < 30; j++) {
                     this.seats[j].setPrice(this.goldSectionPrice_);
                 }   
                 break;
             }                
-            case 1:
-            {
+            case 1: {
                 this.silverSectionPrice_ = finalPrice;
-                for(int j = 30; j < 60; j++)
-                {
+                for(int j = 30; j < 60; j++) {
                     this.seats[j].setPrice(this.silverSectionPrice_);
                 }   
                 break;
             }
-            default:
-            {
+            default: {
                 this.bronzeSectionPrice_ = finalPrice;
-                for(int j = 60; j < 90; j++)
-                {
+                for(int j = 60; j < 90; j++) {
                     this.seats[j].setPrice(this.bronzeSectionPrice_);
                 }   
                 break;
@@ -581,23 +523,19 @@ public class Concert
     {
         int i = 0;
         boolean found = false;
-        while(i < this.customers.size() && !found)
-        {
-            if(this.customers.get(i).getName().compareToIgnoreCase(name) == 0)
-            {
+        
+        while(i < this.customers.size() && !found) {
+            if(this.customers.get(i).getName().compareToIgnoreCase(name) == 0) {
                 found = true;
             }
-            else
-            {
+            else {
                 i++;
             }
         }
-        if(found)
-        {
+        if(found) {
             return this.customers.get(i);
         }
-        else
-        {
+        else {
             return null;
         }
     }
@@ -606,23 +544,19 @@ public class Concert
     {
         int i = 0;
         boolean found = false;
-        while(i < this.seats.length && !found)
-        {
-            if(this.seats[i].equals(seat))
-            {
+        
+        while(i < this.seats.length && !found) {
+            if(this.seats[i].equals(seat)) {
                 found = true;
             }
-            else
-            {
+            else {
                 i++;
             }
         }
-        if(found)
-        {
+        if(found) {
             return this.seats[i];
         }
-        else
-        {
+        else {
             return null;
         }
     }
@@ -636,10 +570,11 @@ public class Concert
     @Override
     public boolean equals(Object obj) 
     {   
-        if(obj.getClass().isInstance(this))
-            if(this.hashCode() == ((Concert) obj).hashCode())        
+        if(obj.getClass().isInstance(this)) {
+            if(this.hashCode() == ((Concert) obj).hashCode()) {
                 return true;
-        
+            }
+        }                      
         return false;       
     }
 

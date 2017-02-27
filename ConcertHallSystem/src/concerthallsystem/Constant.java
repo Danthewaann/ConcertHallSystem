@@ -15,18 +15,14 @@ public class Constant
     {
         String result = "";
         char[] nameChars = name.toLowerCase().toCharArray();                  
-        for(int i = 0; i < nameChars.length; i++)
-        {
-            if(i == 0)
-            {
+        for(int i = 0; i < nameChars.length; i++) {
+            if(i == 0) {
                 result += Character.toUpperCase(nameChars[i]);
             }
-            else if(Character.isWhitespace(nameChars[i-1]))
-            {
+            else if(Character.isWhitespace(nameChars[i-1])) {
                 result += Character.toUpperCase(nameChars[i]);
             }
-            else
-            {
+            else {
                 result += nameChars[i];
             }            
         }
