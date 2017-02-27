@@ -8,7 +8,7 @@ import java.io.File;
  * to send information to this class so I can accurately report the errors that
  * occur when a seat fails to load/save
  * 
- * @author Daniel
+ * @author Daniel Black
  */
 
 public class SeatIOException extends RuntimeException 

@@ -23,7 +23,7 @@ import javafx.util.Duration;
  * This class also calls on the DialogPopup class to display dialog boxes that are
  * used to display query information to the user, based on the concert they are viewing.
  * 
- * @author Daniel
+ * @author Daniel Black
  */
 
 public class SceneController extends StackPane      
@@ -72,7 +72,7 @@ public class SceneController extends StackPane
     {
         if(this.scenes.get(name) != null)
         {     
-            DoubleProperty opacity = opacityProperty();
+            DoubleProperty opacity = this.opacityProperty();
             this.currentScene = this.scenes.get(name);
             if(!getChildren().isEmpty()) {
                 Timeline fadeOut = new Timeline(

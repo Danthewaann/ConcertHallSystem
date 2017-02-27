@@ -18,7 +18,7 @@ import java.util.Scanner;
  * load or save a concert to file, so this class is the main area where error checking will be
  * carried out.
  * 
- * @author Daniel
+ * @author Daniel Black
  */
 
 public class ConcertController 

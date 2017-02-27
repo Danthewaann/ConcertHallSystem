@@ -22,7 +22,7 @@ import javafx.scene.layout.GridPane;
  * on the SceneController and ConcertController classes to provide the necessary information
  * to display to the user
  * 
- * @author Daniel
+ * @author Daniel Black
  */
 
 public class EventController 

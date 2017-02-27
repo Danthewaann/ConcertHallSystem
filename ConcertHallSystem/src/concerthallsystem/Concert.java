@@ -91,6 +91,7 @@ public class Concert
         }
     }
     
+    //Saves the current concert along with its info, booked seats and customers, to file
     public boolean save(PrintWriter concertOutput, String directory) 
     {                
         PrintWriter seatOutput = null; 
@@ -108,12 +109,13 @@ public class Concert
                 directory + File.separator + this
             );
             concertDirectory.mkdir();
-            
-            //Save all booked seats to file                 
+              
+            //Open outputstream to Booked_seats.txt file
             seatOutput = new PrintWriter(new File(
                 concertDirectory + File.separator + "Booked_seats.txt")
             );           
             
+            //Save all booked seats to file 
             for(Seat seat : this.seats) {
                 if(seat.getStatus()) {
                     if(seat.save(seatOutput)) {
@@ -131,11 +133,12 @@ public class Concert
                 }
             }
             
-            //Save all customers to file            
+            //Open outputstream to Customers.txt file                       
             customerOutput = new PrintWriter(new File(
                 concertDirectory + File.separator + "Customers.txt")
             );   
             
+            //Save all customers to file 
             for(Customer customer : this.customers) {
                 if(customer.save(customerOutput)) {
                     System.out.println(
@@ -155,7 +158,7 @@ public class Concert
             System.out.println(io.getMessage());
             return false;
         }
-        finally {           
+        finally { //Close all outputstreams when done           
             if(seatOutput != null) {
                 seatOutput.close();
             }
@@ -166,7 +169,8 @@ public class Concert
         return true;
     }
     
-    //Load in concert from file, populating it with its customers and booked seats
+    //Load in a concert from file, populating it with its customers and booked seats, 
+    //and returns it for the ConcertController to manage
     public static Concert load(Scanner concertInput, String mainDirectory, int concertLineNum) throws FileNotFoundException
     {
         Scanner seatInput = null;
@@ -179,8 +183,7 @@ public class Concert
             Pattern dateRegex = Pattern.compile("[\\d]{4}[-][\\d]{2}[-][\\d]{2}");           
             while(!concertInput.hasNext(dateRegex)) {
                 tempConcert.name_ += " " + concertInput.next();
-            }                 
-            
+            }                             
             tempConcert.date_ = concertInput.next();
             tempConcert.goldSectionPrice_ = concertInput.nextDouble();
             tempConcert.silverSectionPrice_ = concertInput.nextDouble();
@@ -188,7 +191,7 @@ public class Concert
             tempConcert.initializeSeats();          
             /* END OF LOADING IN CONCERT INFO */           
                    
-            //CREATE DIRECTORY FOR THE CURRENTLY LOADED CONCERT. 
+            //CREATE DIRECTORY FOR THE CURRENTLY LOADED CONCERT 
             //THIS IS WHERE ALL THE CURRENT CONCERT'S INFO SHOULD BE
             //STORED, TWO FILES, ONE FOR BOOKED SEATS, ONE FOR CUSTOMERS 
             File concertDirectory = new File(
@@ -262,7 +265,7 @@ public class Concert
         catch(InputMismatchException | IOException io) {
             throw new ConcertIOException(concertLineNum);                                   
         }       
-        finally {
+        finally { //Close all inputstreams when done
             if(seatInput != null) {
                 seatInput.close();
             }
@@ -314,6 +317,7 @@ public class Concert
         }
     }
                   
+    //Books the seat in the current concert that matches the supplied seat
     public void bookSeat(Seat seat, String name)
     {                               
         Customer customer = this.findCustomer(name);
@@ -332,6 +336,7 @@ public class Concert
         }               
     }
             
+    //Unbooks the seat in the current concert that matches the supplied seat
     public void unBookSeat(Seat seat) throws CannotUnbookSeatException
     {        
         Customer customer = this.findCustomer(seat.getBookee());
@@ -365,6 +370,7 @@ public class Concert
         }                       
     }
     
+    //This returns the seat section price of the supplied seat section
     public double getSectionPrice(String seatSection)
     {              
         int i = 0;       
@@ -442,7 +448,8 @@ public class Concert
         }        
     }
     
-    //This method returns all the seats that the supplied customer has booked
+    //This method returns all the seats that the supplied customer has booked,
+    //as well as any entitlements that have been given to them
     public String queryByCustomer(String customerName)
     {              
         String returnQuery = "";
@@ -480,6 +487,8 @@ public class Concert
         }       
     }
     
+    //This method changes a seat sections price, and assigns the new price
+    //to the approriate seats belonging to that section
     public void setSectionPrice(String seatSection, double newPrice) 
     {               
         int i = 0;
@@ -514,6 +523,7 @@ public class Concert
         }                               
     }
     
+    //Finds and returns the customer with the supplied name
     private Customer findCustomer(String name)
     {
         int i = 0;
@@ -535,6 +545,8 @@ public class Concert
         }
     }
     
+    //Finds and returns the seat in the current concert, that matches the 
+    //supplied seat
     private Seat findSeat(Seat seat)
     {
         int i = 0;

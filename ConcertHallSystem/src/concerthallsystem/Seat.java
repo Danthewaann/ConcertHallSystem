@@ -33,10 +33,7 @@ public abstract class Seat implements Comparable
         this.number_ = num;
     }
     
-    private Seat()
-    {
-        
-    }
+    private Seat(){}
             
     @Override
     public int compareTo(Object seat)

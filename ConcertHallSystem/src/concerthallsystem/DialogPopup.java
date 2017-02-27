@@ -23,7 +23,7 @@ import javafx.util.Pair;
  * The SceneController creates an instance of this class for specific events
  * that the EventController tells the SceneController to display
  * 
- * @author Daniel
+ * @author Daniel Black
  */
 
 public class DialogPopup extends Dialog
@@ -131,7 +131,7 @@ public class DialogPopup extends Dialog
         });
         
         Optional<Pair<String, String>> result = this.showAndWait();
-        result.ifPresent(seatAndRow -> {              
+        result.ifPresent(seatAndRow -> {                  
             Seat seat = concert.getSeat(seatAndRow.getKey(), Integer.parseInt(seatAndRow.getValue()));               
             drawResultDialog(concert.queryBySeat(seat));
         });    

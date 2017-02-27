@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -129,5 +130,28 @@ public class Customer
             input.nextLine();
         }        
         return result;
-    }               
+    }    
+
+    @Override
+    public boolean equals(Object obj) 
+    {
+        if(obj.getClass().isInstance(this)) {
+            if(this.hashCode() == ((Customer) obj).hashCode()) {
+                return true;
+            }
+        }
+        return false;          
+    }
+
+    @Override
+    public int hashCode() 
+    {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.name_);
+        return hash;
+    }
+
+    
+    
+    
 }
