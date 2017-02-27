@@ -255,17 +255,17 @@ public class DialogPopup extends Dialog
         
         Optional<String> result = this.showAndWait();       
         result.ifPresent(input -> {                      
-            concert.bookSeat(seat, input);
+            concert.bookSeat(seat, capitalize(input));
             seatIcon.setStyle("-fx-background-color: linear-gradient(#FF0000, #D10000);");
             if(concert.getCustomerEntitlement(seat) != null) {
                 drawResultDialog(
-                    Constant.capitalize(input) + " has booked seat " 
+                    capitalize(input) + " has booked seat " 
                     + "(" + seat + ")" + "\n" + concert.getCustomerEntitlement(seat)
                 );     
             }
             else {
                 drawResultDialog(
-                    Constant.capitalize(input) + " has booked seat " 
+                    capitalize(input) + " has booked seat " 
                     + "(" + seat + ")" 
                 );
             }                      
@@ -306,4 +306,23 @@ public class DialogPopup extends Dialog
             }                                                 
         });
     } 
+    
+    //Used to capitalize a string e.g. "daniel black" becomes "Daniel Black"
+    private static String capitalize(String name)
+    {
+        String result = "";
+        char[] nameChars = name.toLowerCase().toCharArray();                  
+        for(int i = 0; i < nameChars.length; i++) {
+            if(i == 0) {
+                result += Character.toUpperCase(nameChars[i]);
+            }
+            else if(Character.isWhitespace(nameChars[i-1])) {
+                result += Character.toUpperCase(nameChars[i]);
+            }
+            else {
+                result += nameChars[i];
+            }            
+        }
+        return result;
+    }
 }
