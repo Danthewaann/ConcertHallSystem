@@ -527,8 +527,14 @@ public class Concert
     //Finds and returns the customer with the supplied name
     private Customer findCustomer(String name)
     {       
-        return this.customers.get(Arrays.binarySearch(this.customers.toArray(), new Customer(name)));      
+        if(this.customers.size() > 0) {
+            return this.customers.get(Arrays.binarySearch(this.customers.toArray(), new Customer(name)));      
+        }
+        else {
+            return null;
+        }
     }
+        
     
     //Finds and returns the seat in this concert, that matches the supplied seat
     private Seat findSeat(Seat seat)
