@@ -18,7 +18,7 @@ import java.util.Scanner;
  * @author Daniel Black
  */
 
-public class Customer 
+public class Customer implements Comparable
 {
     private final ArrayList<Seat> bookedSeats;  
     private String name_;
@@ -149,6 +149,20 @@ public class Customer
         int hash = 7;
         hash = 67 * hash + Objects.hashCode(this.name_);
         return hash;
+    }
+
+    @Override
+    public int compareTo(Object obj) 
+    {
+        if(this.hashCode() < ((Customer) obj).hashCode()) {
+            return -1;
+        }
+        else if(this.hashCode() == ((Customer) obj).hashCode()) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
     }
 
     
