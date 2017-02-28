@@ -13,6 +13,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.Arrays;
 
 /**
  * The Concert class holds all the important information that can
@@ -41,7 +42,7 @@ public class Concert
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
     public static final int[] SEAT_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public static final int TOTAL_SEATS = SEAT_ROWS.length * SEAT_NUMBERS.length;
-    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("00.00");
+    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("##0.00");
            
     public Concert(String name, String date)
     {
@@ -82,7 +83,7 @@ public class Concert
                 }
             }
             else {
-                for(int j = 0; j < Concert.SEAT_NUMBERS.length; j++) {                                   
+                for(int j = 0; j < SEAT_NUMBERS.length; j++) {                                   
                     this.seats[seatIndex] = new BronzeSeat(SEAT_ROWS[i], SEAT_NUMBERS[j]);
                     this.seats[seatIndex].setPrice(this.bronzeSectionPrice_);
                     seatIndex++;
@@ -301,7 +302,7 @@ public class Concert
     public Seat getSeat(String seatRow, int seatNum)
     {                   
         int i = 0;
-        while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[i]) != 0) {
+        while(!seatRow.equals(SEAT_ROWS[i])) {
             i++;
         }    
         
@@ -374,7 +375,7 @@ public class Concert
     public double getSectionPrice(String seatSection)
     {              
         int i = 0;       
-        while(seatSection.compareToIgnoreCase(Concert.SEAT_SECTIONS[i]) != 0) {
+        while(!seatSection.equals(SEAT_SECTIONS[i])) {
             i++;
         }
         
@@ -494,7 +495,7 @@ public class Concert
         int i = 0;
         double finalPrice = Double.parseDouble(PRICE_FORMAT.format(newPrice)); 
         
-        while(seatSection.compareToIgnoreCase(Concert.SEAT_SECTIONS[i]) != 0) {
+        while(!seatSection.equals(SEAT_SECTIONS[i])) {
             i++;
         }    
         
@@ -525,47 +526,14 @@ public class Concert
     
     //Finds and returns the customer with the supplied name
     private Customer findCustomer(String name)
-    {
-        int i = 0;
-        boolean found = false;
-        
-        while(i < this.customers.size() && !found) {
-            if(this.customers.get(i).getName().compareToIgnoreCase(name) == 0) {
-                found = true;
-            }
-            else {
-                i++;
-            }
-        }
-        if(found) {
-            return this.customers.get(i);
-        }
-        else {
-            return null;
-        }
+    {       
+        return this.customers.get(Arrays.binarySearch(this.customers.toArray(), new Customer(name)));      
     }
     
-    //Finds and returns the seat in the current concert, that matches the 
-    //supplied seat
+    //Finds and returns the seat in this concert, that matches the supplied seat
     private Seat findSeat(Seat seat)
-    {
-        int i = 0;
-        boolean found = false;
-        
-        while(i < this.seats.length && !found) {
-            if(this.seats[i].equals(seat)) {
-                found = true;
-            }
-            else {
-                i++;
-            }
-        }
-        if(found) {
-            return this.seats[i];
-        }
-        else {
-            return null;
-        }
+    {        
+        return this.seats[Arrays.binarySearch(this.seats, seat)];
     }
 
     @Override
