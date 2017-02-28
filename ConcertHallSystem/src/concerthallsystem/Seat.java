@@ -36,12 +36,12 @@ public abstract class Seat implements Comparable
     private Seat(){}
             
     @Override
-    public int compareTo(Object seat)
+    public int compareTo(Object obj)
     {
-        if(this.hashCode() < ((Seat) seat).hashCode()) {
+        if(this.hashCode() < ((Seat) obj).hashCode()) {
             return -1;
         }
-        else if(this.hashCode() == ((Seat) seat).hashCode()) {
+        else if(this.hashCode() == ((Seat) obj).hashCode()) {
             return 0;
         }
         else {
