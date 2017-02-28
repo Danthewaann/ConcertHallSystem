@@ -24,17 +24,15 @@ public abstract class Seat implements Comparable
     private double price_;
     private boolean isBooked_ = false;   
     private String bookedBy_ = null;
-    private String row_;
-    private int number_;    
+    private final String row_;
+    private final int number_;    
        
     public Seat(String row, int num)
     {
         this.row_ = row;
         this.number_ = num;
     }
-    
-    private Seat(){}
-            
+                
     @Override
     public int compareTo(Object obj)
     {

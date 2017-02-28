@@ -38,8 +38,8 @@ public class ConcertController
             File directory = new File(MAIN_DIRECTORY);
             directory.mkdir();
         }
-        catch(ConcertAlreadyExistsException e) {
-            DialogPopup.drawResultDialog(e.getMessage());
+        catch(ConcertAlreadyExistsException e) { //TODO
+            DialogPopup.drawResultDialog(e.getMessage());          
         }
     }
     
@@ -47,9 +47,11 @@ public class ConcertController
     {
         //Connect to concerts directory and load each concert into the system from file
         Scanner concertInput = new Scanner(new File(MAIN_DIRECTORY + File.separator + CONCERT_LIST));
+        
         ArrayList<ConcertIOException> concertExceptions = new ArrayList<>(); //Stores concert load errors
         ArrayList<Concert> dupConcerts = new ArrayList<>(); //Stores duplicate concerts detected in file        
-        int concertLineNum = 1; //Keeps track of what line we are on in the Concert_list file    
+        int concertLineNum = 1; //Keeps track of what line we are on in the Concert_list file  
+        
         while(concertInput.hasNextLine()) {                  
             //This part checks if the currently loaded concert already exists in the system,
             //and if it does it adds it to dupConcerts that will hold it for error checking 
@@ -103,11 +105,12 @@ public class ConcertController
         }       
     }  
     
-    //Saves all concerts, along with their customers and seats to file
+    //Saves all concerts, along with their customers and booked seats to file
     public void saveConcerts() throws FileNotFoundException
     {                             
         //Connect to concerts directory and save each concert to file
         PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
+        
         for(int i = 0; i < this.concerts.size(); i++) {           
             if(this.concerts.get(i).save(concertOutput, MAIN_DIRECTORY)) {
                 System.out.printf(

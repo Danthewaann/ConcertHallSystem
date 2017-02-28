@@ -67,17 +67,18 @@ public class EventController
     @FXML
     private void goToMainMenuScene(ActionEvent event)
     {        
-        if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("SelectConcertScene.fxml"))) {
-            this.sceneController.setScene("MainMenu");
+        if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("SelectConcert"))) {           
             this.dropDownList.getItems().clear();
         }  
-        else {
-            this.sceneController.setScene("MainMenu");
-        }
+        else if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("CreateConcert"))) {
+            this.newConcertName.clear();
+            this.newConcertDate.getEditor().clear();
+        }          
+        this.sceneController.setScene("MainMenu");
     }
     
     @FXML
-    private void exitApplication(ActionEvent event)
+    private void exitApplication(ActionEvent event) //TODO
     {
         System.exit(0);
     }
@@ -93,12 +94,16 @@ public class EventController
         boolean concertAlreadyExists = false;
         while(i < this.concertController.getConcertList().size() && !concertAlreadyExists) {
             if(temp.equals(this.concertController.getConcertList().get(i))) {
-                try {
-                    concertAlreadyExists = true;
+                try {                   
                     throw new ConcertAlreadyExistsException(this.concertController.getConcertList().get(i));
                 }
-                catch(ConcertAlreadyExistsException e) {   //TODO
-                    System.out.println("That concert already Exists!");
+                catch(ConcertAlreadyExistsException e) {   
+                    if(this.sceneController.displayConcertAlreadyExistsDialog(e.getMessage())) {
+                        this.concertController.getConcertList().remove(i);
+                        this.concertController.getConcertList().add(temp);
+                        this.concertController.setCurrentConcert(temp);                        
+                        this.goToSeatingPlanScene(temp.getName() + " | " + temp.getDate());
+                    }              
                 }               
             }
             else {
@@ -111,7 +116,9 @@ public class EventController
             this.concertController.setCurrentConcert(concert);
             this.dropDownList.getItems().add(concert.getName() + " | " + concert.getDate());
             this.goToSeatingPlanScene(concert.getName() + " | " + concert.getDate());
-        }                
+        }             
+        this.newConcertName.clear();
+        this.newConcertDate.getEditor().clear();
     }
     
     @FXML
@@ -214,7 +221,7 @@ public class EventController
                 this.concertController.getCurrentConcert()
             );
         }
-        catch(FileNotFoundException e) {
+        catch(FileNotFoundException e) { //TODO
             System.out.println("Error");
         }
     }       

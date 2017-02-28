@@ -163,9 +163,5 @@ public class Customer implements Comparable
         else {
             return 1;
         }
-    }
-
-    
-    
-    
+    }  
 }

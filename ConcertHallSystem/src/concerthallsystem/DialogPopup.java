@@ -1,5 +1,6 @@
 package concerthallsystem;
 
+import concerthallsystem.controllers.ConcertController;
 import concerthallsystem.exceptions.CannotUnbookSeatException;
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +42,8 @@ public class DialogPopup extends Dialog
         this.grid.setVgap(5);
         this.grid.setHgap(20);        
         this.grid.setPadding(new Insets(25, 25, 25, 25));
-        this.grid.setAlignment(Pos.CENTER); 
-        this.initOwner(Main.WINDOW);
+        this.grid.setAlignment(Pos.CENTER);      
+        this.initOwner(Main.WINDOW);      
         this.getDialogPane().setContent(this.grid);
     }
     
@@ -100,10 +101,10 @@ public class DialogPopup extends Dialog
         numberLabel.setStyle("-fx-font-size: 16px;");
         
         ComboBox rows = new ComboBox();
-        rows.prefWidthProperty().set(50);
+        rows.prefWidthProperty().set(65);
         
         ComboBox numbers = new ComboBox();   
-        numbers.prefWidthProperty().set(50);
+        numbers.prefWidthProperty().set(65);
         
         for(String row : Concert.SEAT_ROWS) {
             rows.getItems().add(row);
@@ -306,6 +307,30 @@ public class DialogPopup extends Dialog
             }                                                 
         });
     } 
+    
+    public boolean drawConcertAlreadyExistsDialog(String message)
+    {       
+        Label label = new Label(message);
+        label.setStyle("-fx-font-size: 16px");
+        
+        this.grid.add(label, 1, 1);
+        this.getDialogPane().getButtonTypes().addAll(OK, CANCEL);      
+        
+        this.setResultConverter(button -> {
+            if(button == OK) {
+                return OK.getText();
+            }
+            return null;
+        });
+        
+        Optional<String> result = this.showAndWait();       
+        return result.isPresent();
+    }
+    
+    public static void drawErrorDialog()
+    {
+        
+    }
     
     //Used to capitalize a string e.g. "daniel black" becomes "Daniel Black"
     private static String capitalize(String name)

@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
@@ -145,5 +146,12 @@ public class SceneController extends StackPane
         DialogPopup sectionDialog = new DialogPopup();
         sectionDialog.setHeaderText("Seat Sections For | " + concert);
         sectionDialog.drawSectionPriceDialog(concert, 1, 4);  
-    }                          
+    }        
+    
+    public boolean displayConcertAlreadyExistsDialog(String message)
+    {
+        DialogPopup alreadyExistsDialog = new DialogPopup();
+        alreadyExistsDialog.setHeaderText("That concert already exists!");
+        return alreadyExistsDialog.drawConcertAlreadyExistsDialog(message);
+    }
 }
