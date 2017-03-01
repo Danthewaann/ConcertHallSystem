@@ -90,33 +90,25 @@ public class EventController
         String date = newConcertDate.getValue().toString();
         Concert temp = new Concert(name, date);
         
-        int i = 0;
-        boolean concertAlreadyExists = false;
-        while(i < this.concertController.getConcertList().size() && !concertAlreadyExists) {
-            if(temp.equals(this.concertController.getConcertList().get(i))) {
-                try {                   
-                    throw new ConcertAlreadyExistsException(this.concertController.getConcertList().get(i));
+        Concert actual = this.concertController.findConcert(temp);
+        if(actual != null) {
+            try {                   
+                    throw new ConcertAlreadyExistsException(actual);
                 }
                 catch(ConcertAlreadyExistsException e) {   
-                    if(this.sceneController.displayConcertAlreadyExistsDialog(e.getMessage())) {
-                        concertAlreadyExists = true;
-                        this.concertController.getConcertList().remove(i);
+                    if(this.sceneController.displayConcertAlreadyExistsDialog(e.getMessage())) {                        
+                        this.concertController.getConcertList().remove(actual);
                         this.concertController.getConcertList().add(temp);
                         this.concertController.setCurrentConcert(temp);                        
                         this.goToSeatingPlanScene(temp.getName() + " | " + temp.getDate());
                     }              
-                }               
-            }
-            else {
-                i++;
-            }
-        }
-        if(!concertAlreadyExists) {
-            Concert concert = new Concert(name, date);
-            this.concertController.getConcertList().add(concert);
-            this.concertController.setCurrentConcert(concert);
-            this.dropDownList.getItems().add(concert.getName() + " | " + concert.getDate());
-            this.goToSeatingPlanScene(concert.getName() + " | " + concert.getDate());
+                }
+        }                     
+        else {           
+            this.concertController.getConcertList().add(temp);
+            this.concertController.setCurrentConcert(temp);
+            this.dropDownList.getItems().add(temp.getName() + " | " + temp.getDate());
+            this.goToSeatingPlanScene(temp.getName() + " | " + temp.getDate());
         }             
         this.newConcertName.clear();
         this.newConcertDate.getEditor().clear();
@@ -131,24 +123,14 @@ public class EventController
         String date = selectedConcert.substring(divider+2);
         Concert temp = new Concert(name, date);
         
-        int i = 0;
-        boolean foundConcert = false;
-        while(i < this.concertController.getConcertList().size() && !foundConcert) {
-            if(temp.equals(this.concertController.getConcertList().get(i))) {               
-                foundConcert = true;
-                break;               
-            }
-            else {
-                i++;
-            }
-        }
-        if(foundConcert) {           
-            this.concertController.setCurrentConcert(this.concertController.getConcertList().get(i));
+        Concert actual = this.concertController.findConcert(temp);
+        if(actual != null) {
+            this.concertController.setCurrentConcert(actual);
             this.goToSeatingPlanScene(selectedConcert);
         }
         else {
             System.out.println("Error, couldn't find concert");
-        }
+        }        
     }
     
     private void goToSeatingPlanScene(String selectedConcert)

@@ -28,7 +28,7 @@ import java.util.Arrays;
  * @author Daniel Black
  */
 
-public class Concert
+public class Concert implements Comparable
 {
     private Seat[] seats;    
     private String name_;
@@ -528,14 +528,13 @@ public class Concert
     private Customer findCustomer(String name)
     {       
         if(this.customers.size() > 0) {
-            return this.customers.get(Arrays.binarySearch(this.customers.toArray(), new Customer(name)));      
+            if(Arrays.binarySearch(this.customers.toArray(), new Customer(name)) >= 0) {
+                return this.customers.get(Arrays.binarySearch(this.customers.toArray(), new Customer(name)));
+            }
         }
-        else {
-            return null;
-        }
+        return null;
     }
-        
-    
+           
     //Finds and returns the seat in this concert, that matches the supplied seat
     private Seat findSeat(Seat seat)
     {        
@@ -547,7 +546,7 @@ public class Concert
     {
         return this.getName() + " " + this.getDate();
     }
-
+    
     @Override
     public boolean equals(Object obj) 
     {   
@@ -567,5 +566,19 @@ public class Concert
         hash = 61 * hash + Objects.hashCode(this.date_);
         return hash;
     }         
+
+    @Override
+    public int compareTo(Object obj) 
+    {
+        if(this.hashCode() < ((Concert) obj).hashCode()) {
+            return -1;
+        }
+        else if(this.hashCode() == ((Concert) obj).hashCode()) {
+            return 0;
+        }
+        else {
+            return 1;
+        }          
+    }
 }                                
 

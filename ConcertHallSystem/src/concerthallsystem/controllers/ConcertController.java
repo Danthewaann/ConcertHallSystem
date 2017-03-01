@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -126,6 +127,16 @@ public class ConcertController
         concertOutput.close();                
     }   
     
+    public Concert findConcert(Concert concert)
+    {
+        if(this.concerts.size() > 0) {
+            if(Arrays.binarySearch(this.concerts.toArray(), concert) >= 0) {
+                return this.concerts.get(Arrays.binarySearch(this.concerts.toArray(), concert));
+            }
+        }
+        return null;   
+    }
+            
     public List<Concert> getConcertList()
     {
         return this.concerts;
