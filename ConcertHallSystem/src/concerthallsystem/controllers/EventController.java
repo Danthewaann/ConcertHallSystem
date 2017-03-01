@@ -99,6 +99,7 @@ public class EventController
                 }
                 catch(ConcertAlreadyExistsException e) {   
                     if(this.sceneController.displayConcertAlreadyExistsDialog(e.getMessage())) {
+                        concertAlreadyExists = true;
                         this.concertController.getConcertList().remove(i);
                         this.concertController.getConcertList().add(temp);
                         this.concertController.setCurrentConcert(temp);                        
