@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 public abstract class Seat implements Comparable
 {
     private double price_;
-    private boolean isBooked_ = false;   
-    private String bookedBy_ = null;
+    private boolean isBooked_;  
+    private String bookedBy_;
     private final String row_;
     private final int number_;    
        

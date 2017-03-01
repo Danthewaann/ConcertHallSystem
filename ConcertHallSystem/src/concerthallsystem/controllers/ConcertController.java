@@ -58,16 +58,17 @@ public class ConcertController
             //and if it does it adds it to dupConcerts that will hold it for error checking 
             //after we have finished loading in all the concerts
             try {
-                Concert concert = Concert.load(concertInput, MAIN_DIRECTORY, concertLineNum++);
-                if(concert != null) {                                       
-                    for(int i = 0; i < this.concerts.size(); i++) {                                               
-                        if(concert.equals(this.concerts.get(i))) {                               
-                            if(!dupConcerts.contains(concert)) {
-                                dupConcerts.add(concert);                                    
-                            }                                                              
-                        }                        
-                    }                    
-                    this.concerts.add(concert);                    
+                Concert temp = Concert.load(concertInput, MAIN_DIRECTORY, concertLineNum++);               
+                if(temp != null) {   
+                    Concert actual = this.findConcert(temp);
+                    if(actual != null) {
+                        if(!dupConcerts.contains(actual)) {
+                            dupConcerts.add(actual);                                    
+                        }
+                    }
+                    else {
+                        this.concerts.add(temp);
+                    }                   
                 }               
             }                       
             catch(ConcertIOException e) {
