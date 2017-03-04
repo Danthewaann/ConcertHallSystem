@@ -330,9 +330,9 @@ public class Concert implements Comparable
         }
         else {           
             Customer newCustomer = new Customer(name); 
-            Seat temp = this.findSeat(seat);
-            temp.book(newCustomer);                       
-            this.customers.add(newCustomer);                       
+            Seat temp = this.findSeat(seat);                                
+            this.customers.add(newCustomer);  
+            temp.book(newCustomer);  
             this.nBookedSeats_++;           
         }               
     }
