@@ -37,7 +37,7 @@ public class Concert implements Comparable
     private double silverSectionPrice_;
     private double goldSectionPrice_;
     private double bronzeSectionPrice_;
-    private final ArrayList<Customer> customers;    
+    private ArrayList<Customer> customers;    
     public static final String[] SEAT_SECTIONS = {"Gold", "Silver", "Bronze"};
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
     public static final int[] SEAT_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -177,10 +177,8 @@ public class Concert implements Comparable
         Scanner seatInput = null;
         Scanner customerInput = null;
         Concert tempConcert = new Concert();
-        try {      
-            /* LOAD IN CONCERT INFO */
-            tempConcert.name_ = concertInput.next(); 
-            
+        try {                  
+            tempConcert.name_ = concertInput.next();            
             Pattern dateRegex = Pattern.compile("[\\d]{4}[-][\\d]{2}[-][\\d]{2}");           
             while(!concertInput.hasNext(dateRegex)) {
                 tempConcert.name_ += " " + concertInput.next();
@@ -189,79 +187,39 @@ public class Concert implements Comparable
             tempConcert.goldSectionPrice_ = concertInput.nextDouble();
             tempConcert.silverSectionPrice_ = concertInput.nextDouble();
             tempConcert.bronzeSectionPrice_ = concertInput.nextDouble();
-            tempConcert.initializeSeats();          
-            /* END OF LOADING IN CONCERT INFO */           
+            tempConcert.initializeSeats();                              
                    
-            //CREATE DIRECTORY FOR THE CURRENTLY LOADED CONCERT 
-            //THIS IS WHERE ALL THE CURRENT CONCERT'S INFO SHOULD BE
-            //STORED, TWO FILES, ONE FOR BOOKED SEATS, ONE FOR CUSTOMERS 
+            //Create directory for currently loaded concert           
             File concertDirectory = new File(
                 mainDirectory + File.separator + tempConcert                                  
             );
             
             //If the current concert's directory doesn't exist, create it
             concertDirectory.mkdir();
-            
-            /* LOAD IN CUSTOMER INFO */
+      
+            //Load in customer information from file
             File customersFile = new File(
                 concertDirectory + File.separator + "Customers.txt"
             );
-            
-            //If the customers file exists, start loading in the customers 
-            if(customersFile.canRead()) {                
-                int customerLineNum = 1;
+            if(customersFile.canRead()) {
                 customerInput = new Scanner(customersFile);
-                
-                while(customerInput.hasNextLine()) {                              
-                    Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);                    
-                    if(tempCustomer != null) {
-                        tempConcert.customers.add(tempCustomer);                       
-                    }                       
-                }
-            }
+                tempConcert.customers = tempConcert.loadCustomers(customersFile, customerInput);
+            } 
             else {
                 customersFile.createNewFile();
-            } 
-            /* END OF LOADING IN CUSTOMER INFO */
+            }
             
-            /* LOAD IN SEAT INFO */
+            //Load in seat information from file 
             File seatsFile = new File(
                 concertDirectory + File.separator + "Booked_seats.txt"
             );
-            
-            //If the seats file exists, start loading in the seats
             if(seatsFile.canRead()) {
-                int seatLineNum = 1;
                 seatInput = new Scanner(seatsFile);
-                
-                while(seatInput.hasNextLine()) {                               
-                    Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
-                    Seat actualSeat = tempConcert.findSeat(tempSeat);
-                    
-                    if(actualSeat != null) {
-                        actualSeat.setStatus(true);                       
-                        actualSeat.setBookee(tempSeat.getBookee());
-                        tempConcert.nBookedSeats_++;
-                        Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
-                        if(tempCustomer != null) {
-                            tempCustomer.addSeat(actualSeat);
-                        }
-                        else {
-                            Customer newCustomer = new Customer(actualSeat.getBookee());
-                            newCustomer.addSeat(actualSeat);
-                            tempConcert.customers.add(newCustomer);
-                        }     
-                    }
-                    else {
-                        System.out.println("Error: tried to load a seat that doesn't exist");
-                    }
-                                         
-                }
+                tempConcert.seats = tempConcert.loadSeats(seatsFile, tempConcert, seatInput);
             }
             else {
                 seatsFile.createNewFile();
-            }   
-            /* END OF LOADING IN SEAT INFO */
+            }                  
         }        
         catch(InputMismatchException | IOException io) {
             throw new ConcertIOException(concertLineNum);                                   
@@ -272,11 +230,52 @@ public class Concert implements Comparable
             }
             if(customerInput != null) {
                 customerInput.close();
-            }
+            }  
             concertInput.nextLine();
         }                     
         return tempConcert;
     }   
+    
+    private ArrayList<Customer> loadCustomers(File customersFile, Scanner customerInput) throws FileNotFoundException, IOException
+    {                             
+        ArrayList<Customer> loadedCustomers = new ArrayList<>();                           
+        int customerLineNum = 1;   
+        while(customerInput.hasNextLine()) {                              
+            Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);                    
+            if(tempCustomer != null) {
+                loadedCustomers.add(tempCustomer);                       
+            }                       
+        }        
+        return loadedCustomers;
+    }
+    
+    private Seat[] loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput) throws FileNotFoundException, IOException
+    {                                                
+        int seatLineNum = 1;
+        while(seatInput.hasNextLine()) {                               
+            Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
+            Seat actualSeat = tempConcert.findSeat(tempSeat);
+
+            if(actualSeat != null) {
+                actualSeat.setStatus(true);                       
+                actualSeat.setBookee(tempSeat.getBookee());
+                tempConcert.nBookedSeats_++;
+                Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
+                if(tempCustomer != null) {
+                    tempCustomer.addSeat(actualSeat);
+                }
+                else {
+                    Customer newCustomer = new Customer(actualSeat.getBookee());
+                    newCustomer.addSeat(actualSeat);
+                    tempConcert.customers.add(newCustomer);
+                }     
+            }
+            else {
+                System.out.println("Error: tried to load a seat that doesn't exist");
+            }
+        }
+        return tempConcert.seats;
+    }
     
     public String getName()
     {

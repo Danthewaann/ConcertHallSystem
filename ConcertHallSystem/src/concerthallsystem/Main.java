@@ -21,10 +21,10 @@ public class Main extends Application
     
     @Override
     public void start(Stage primaryStage)
-    {               
-        WINDOW = primaryStage;            
-        this.sceneController = new SceneController();                             
-           
+    {       
+        WINDOW = primaryStage;
+        this.sceneController = new SceneController();
+        
         Group root = new Group();   
         root.getChildren().addAll(this.sceneController);        
         WINDOW.setTitle("Concert Hall Booking System");
