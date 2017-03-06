@@ -44,7 +44,17 @@ public class DialogPopup extends Dialog
         this.grid.setPadding(new Insets(25, 25, 25, 25));
         this.grid.setAlignment(Pos.CENTER);      
         this.initOwner(Main.WINDOW);      
-        this.getDialogPane().setContent(this.grid);
+        this.getDialogPane().setContent(this.grid);       
+    }
+    
+    public DialogPopup(boolean bool)
+    {
+        this.grid = new GridPane();
+        this.grid.setVgap(5);
+        this.grid.setHgap(20);        
+        this.grid.setPadding(new Insets(25, 25, 25, 25));
+        this.grid.setAlignment(Pos.CENTER);     
+        this.getDialogPane().setContent(this.grid);    
     }
     
     private GridPane drawGridPane(ObservableList<Node> nodes, GridPane grid, int maxCols, int maxRows)
@@ -150,6 +160,20 @@ public class DialogPopup extends Dialog
         dialog.getDialogPane().getButtonTypes().add(OK);
         dialog.show();
     }
+    
+    public static void drawErrorDialog(String result)
+    {
+        DialogPopup dialog = new DialogPopup(true);
+        dialog.setHeaderText("Fatal Error Detected");
+        
+        Label label = new Label(result);
+        label.setStyle("-fx-font-size: 16px");
+        
+        dialog.grid.add(label, 1, 1);
+        dialog.getDialogPane().getButtonTypes().add(OK);
+        dialog.showAndWait();
+    }
+
     
     public void drawQueryCustomerDialog(Concert concert, int maxCols, int maxRows)
     {             

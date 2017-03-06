@@ -115,7 +115,7 @@ public class EventController
     }
     
     @FXML
-    private void viewSelectedConcert(ActionEvent event)
+    private void viewSelectedConcert(ActionEvent event) 
     {
         String selectedConcert = this.dropDownList.getSelectionModel().getSelectedItem().toString();
         int divider = selectedConcert.lastIndexOf("|");
@@ -126,37 +126,38 @@ public class EventController
         Concert actual = this.concertController.findConcert(temp);
         if(actual != null) {
             this.concertController.setCurrentConcert(actual);
-            this.goToSeatingPlanScene(selectedConcert);
+            this.goToSeatingPlanScene(selectedConcert);           
         }
         else {
             System.out.println("Error, couldn't find concert");
-        }        
+        }   
+        this.dropDownList.getItems().clear();
     }
     
     private void goToSeatingPlanScene(String selectedConcert)
     {
         ObservableList<Node> seats = this.seatIcons.getChildren();
-        for(int j = 0; j < seats.size(); j++) {               
-            if(this.concertController.getCurrentConcert().getSeats()[j].getStatus()) {                    
-                seats.get(j).setStyle("-fx-background-color: linear-gradient(#FF0000, #D10000);");
+        for(int i = 0; i < seats.size(); i++) {               
+            if(this.concertController.getCurrentConcert().getSeats()[i].getStatus()) {                    
+                seats.get(i).setStyle("-fx-background-color: linear-gradient(#FF0000, #D10000);");
             }
             else {
-                switch(this.concertController.getCurrentConcert().getSeats()[j].getClass().getSimpleName()) {
+                switch(this.concertController.getCurrentConcert().getSeats()[i].getClass().getSimpleName()) {
                     case "GoldSeat":
-                        seats.get(j).setStyle("-fx-background-color: linear-gradient(#FFD700, #EDC800);");
+                        seats.get(i).setStyle("-fx-background-color: linear-gradient(#FFD700, #EDC800);");
                         break;
                     case "SilverSeat":
-                        seats.get(j).setStyle("-fx-background-color: linear-gradient(#C0C0C0, #ABABAB);");
+                        seats.get(i).setStyle("-fx-background-color: linear-gradient(#C0C0C0, #ABABAB);");
                         break;
                     default:
-                        seats.get(j).setStyle("-fx-background-color: linear-gradient(#CD7F32, #B5702B);");
+                        seats.get(i).setStyle("-fx-background-color: linear-gradient(#CD7F32, #B5702B);");
                         break;
                 }
             }
-            seats.get(j).setCursor(Cursor.HAND);
-            seats.get(j).setOnMouseClicked(new SeatEventHandler(
+            seats.get(i).setCursor(Cursor.HAND);
+            seats.get(i).setOnMouseClicked(new SeatEventHandler(
                 this.concertController.getCurrentConcert(), 
-                this.concertController.getCurrentConcert().getSeats()[j], seats.get(j))
+                this.concertController.getCurrentConcert().getSeats()[i], seats.get(i))
             );
         }           
         this.selectedConcertTitle.setText(selectedConcert);

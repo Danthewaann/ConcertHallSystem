@@ -191,7 +191,5 @@ public abstract class Seat implements Comparable
         hash = 67 * hash + Objects.hashCode(this.row_);
         hash = 67 * hash + this.number_;
         return hash;
-    }
-    
-    
+    } 
 }

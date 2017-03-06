@@ -39,8 +39,9 @@ public class ConcertController
             File directory = new File(MAIN_DIRECTORY);
             directory.mkdir();
         }
-        catch(ConcertAlreadyExistsException e) { //TODO
-            DialogPopup.drawResultDialog(e.getMessage());          
+        catch(ConcertAlreadyExistsException e) { //TODO            
+            DialogPopup.drawErrorDialog(e.getMessage());
+            System.exit(0);
         }
     }
     
@@ -69,7 +70,7 @@ public class ConcertController
                     else {
                         this.concerts.add(temp);
                     }                   
-                }               
+                }                 
             }                       
             catch(ConcertIOException e) {
                 //stores the ConcertIOException when caught, so we can detail all
