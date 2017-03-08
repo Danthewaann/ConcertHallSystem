@@ -142,7 +142,7 @@ public class Customer implements Comparable
         }
         return false;          
     }
-
+    
     @Override
     public int hashCode() 
     {

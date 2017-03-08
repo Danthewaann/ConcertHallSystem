@@ -37,7 +37,7 @@ public class Concert implements Comparable
     private double silverSectionPrice_;
     private double goldSectionPrice_;
     private double bronzeSectionPrice_;
-    private ArrayList<Customer> customers;    
+    private final ArrayList<Customer> customers;    
     public static final String[] SEAT_SECTIONS = {"Gold", "Silver", "Bronze"};
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
     public static final int[] SEAT_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -203,7 +203,7 @@ public class Concert implements Comparable
             );
             if(customersFile.canRead()) {
                 customerInput = new Scanner(customersFile);
-                tempConcert.customers = tempConcert.loadCustomers(customersFile, customerInput);
+                loadCustomers(customersFile, tempConcert, customerInput);
             } 
             else {
                 customersFile.createNewFile();
@@ -215,7 +215,7 @@ public class Concert implements Comparable
             );
             if(seatsFile.canRead()) {
                 seatInput = new Scanner(seatsFile);
-                tempConcert.seats = tempConcert.loadSeats(seatsFile, tempConcert, seatInput);
+                loadSeats(seatsFile, tempConcert, seatInput);
             }
             else {
                 seatsFile.createNewFile();
@@ -236,20 +236,18 @@ public class Concert implements Comparable
         return tempConcert;
     }   
     
-    private ArrayList<Customer> loadCustomers(File customersFile, Scanner customerInput) throws FileNotFoundException, IOException
-    {                             
-        ArrayList<Customer> loadedCustomers = new ArrayList<>();                           
+    private static void loadCustomers(File customersFile, Concert tempConcert, Scanner customerInput) throws FileNotFoundException, IOException
+    {                                                          
         int customerLineNum = 1;   
         while(customerInput.hasNextLine()) {                              
             Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);                    
             if(tempCustomer != null) {
-                loadedCustomers.add(tempCustomer);                       
+                tempConcert.customers.add(tempCustomer);                       
             }                       
         }        
-        return loadedCustomers;
     }
     
-    private Seat[] loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput) throws FileNotFoundException, IOException
+    private static void loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput) throws FileNotFoundException, IOException
     {                                                
         int seatLineNum = 1;
         while(seatInput.hasNextLine()) {                               
@@ -274,7 +272,6 @@ public class Concert implements Comparable
                 System.out.println("Error: tried to load a seat that doesn't exist");
             }
         }
-        return tempConcert.seats;
     }
     
     public String getName()
