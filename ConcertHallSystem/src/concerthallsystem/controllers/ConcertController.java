@@ -22,7 +22,7 @@ import java.util.Scanner;
  * @author Daniel Black
  */
 
-public class ConcertController 
+public class ConcertController
 {
     private List<Concert> concerts;
     private Concert currentConcert;  
@@ -50,8 +50,8 @@ public class ConcertController
         //Connect to concerts directory and load each concert into the system from file
         Scanner concertInput = new Scanner(new File(MAIN_DIRECTORY + File.separator + CONCERT_LIST));
         
-        ArrayList<ConcertIOException> concertExceptions = new ArrayList<>(); //Stores concert load errors
-        ArrayList<Concert> dupConcerts = new ArrayList<>(); //Stores duplicate concerts detected in file        
+        List<ConcertIOException> concertExceptions = new ArrayList<>(); //Stores concert load errors
+        List<Concert> dupConcerts = new ArrayList<>(); //Stores duplicate concerts detected in file
         int concertLineNum = 1; //Keeps track of what line we are on in the Concert_list file  
         
         while(concertInput.hasNextLine()) {                  
@@ -60,7 +60,7 @@ public class ConcertController
             //after we have finished loading in all the concerts
             try {
                 Concert temp = Concert.load(concertInput, MAIN_DIRECTORY, concertLineNum++);               
-                if(temp != null) {   
+                if(temp != null) {
                     Concert actual = this.findConcert(temp);
                     if(actual != null) {
                         if(!dupConcerts.contains(actual)) {

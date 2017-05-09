@@ -36,10 +36,10 @@ public abstract class Seat implements Comparable
     @Override
     public int compareTo(Object obj)
     {
-        if(this.hashCode() < ((Seat) obj).hashCode()) {
+        if(this.hashCode() < obj.hashCode()) {
             return -1;
         }
-        else if(this.hashCode() == ((Seat) obj).hashCode()) {
+        else if(this.hashCode() == obj.hashCode()) {
             return 0;
         }
         else {
@@ -177,7 +177,7 @@ public abstract class Seat implements Comparable
     public boolean equals(Object obj) 
     {
         if(obj.getClass().isInstance(this)) {                           
-            if(this.hashCode() == ((Seat) obj).hashCode()) {
+            if(this.hashCode() == obj.hashCode()) {
                 return true;
             }
         }       

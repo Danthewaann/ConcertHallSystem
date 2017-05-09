@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ConcertHall">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/ConcertHall.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

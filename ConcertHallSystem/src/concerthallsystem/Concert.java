@@ -236,7 +236,7 @@ public class Concert implements Comparable
         return tempConcert;
     }   
     
-    private static void loadCustomers(File customersFile, Concert tempConcert, Scanner customerInput) throws FileNotFoundException, IOException
+    private static void loadCustomers(File customersFile, Concert tempConcert, Scanner customerInput) throws IOException
     {                                                          
         int customerLineNum = 1;   
         while(customerInput.hasNextLine()) {                              
@@ -247,7 +247,7 @@ public class Concert implements Comparable
         }        
     }
     
-    private static void loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput) throws FileNotFoundException, IOException
+    private static void loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput) throws IOException
     {                                                
         int seatLineNum = 1;
         while(seatInput.hasNextLine()) {                               
