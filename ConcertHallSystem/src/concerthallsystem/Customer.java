@@ -1,12 +1,12 @@
 
 package concerthallsystem;
 
+import concerthallsystem.exceptions.CustomerIOException;
+
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * The Customer class is used to represent each customer,
@@ -20,7 +20,7 @@ import java.util.Scanner;
 
 public class Customer implements Comparable
 {
-    private final ArrayList<Seat> bookedSeats;  
+    private final List<Seat> bookedSeats;
     private String name_;
     private boolean goldEntitled_ = false;
     private boolean silverEntitled_ = false;
@@ -89,7 +89,7 @@ public class Customer implements Comparable
         return this.bookedSeats.size() > 0;
     }
     
-    public ArrayList<Seat> getBookedSeats()
+    public List<Seat> getBookedSeats()
     {
         return this.bookedSeats;
     }
@@ -107,28 +107,23 @@ public class Customer implements Comparable
         return true;
     }
     
-    public static Customer load(Scanner input, File customerFile, int customerLineNum)
+    public static Customer load(Scanner input, File customersFile, int customerLineNum) throws CustomerIOException
     {
         Customer result = new Customer();
         try {
             result.name_ = input.next();  
             while(!input.hasNextBoolean()) {
                 result.name_ += " " + input.next();
-            }       
+            }
             result.goldEntitled_ = input.nextBoolean();
             result.silverEntitled_ = input.nextBoolean();            
-        } 
-        //If any info is incorrect, detail them then return null
-        catch(InputMismatchException ex) {            
-            System.out.println(
-                "Fatal Error: Failed to load customer on line " + customerLineNum + "...\n"
-                + "...in location " + customerFile
-            );            
-            return null;
+        }
+        catch(Exception ex) {
+            throw new CustomerIOException(customersFile, customerLineNum);
         }
         finally {
             input.nextLine();
-        }        
+        }
         return result;
     }    
 
@@ -136,7 +131,7 @@ public class Customer implements Comparable
     public boolean equals(Object obj) 
     {
         if(obj.getClass().isInstance(this)) {
-            if(this.hashCode() == ((Customer) obj).hashCode()) {
+            if(this.hashCode() == obj.hashCode()) {
                 return true;
             }
         }
@@ -154,10 +149,10 @@ public class Customer implements Comparable
     @Override
     public int compareTo(Object obj) 
     {
-        if(this.hashCode() < ((Customer) obj).hashCode()) {
+        if(this.hashCode() < obj.hashCode()) {
             return -1;
         }
-        else if(this.hashCode() == ((Customer) obj).hashCode()) {
+        else if(this.hashCode() == obj.hashCode()) {
             return 0;
         }
         else {

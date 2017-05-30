@@ -86,23 +86,23 @@ public class EventController
     @FXML
     private void createNewConcert(ActionEvent event)
     {
-        String name = newConcertName.getText();
+        String name = newConcertName.getText().trim();
         String date = newConcertDate.getValue().toString();
         Concert temp = new Concert(name, date);
         
         Concert actual = this.concertController.findConcert(temp);
         if(actual != null) {
             try {                   
-                    throw new ConcertAlreadyExistsException(actual);
+                throw new ConcertAlreadyExistsException(actual);
+            }
+            catch(ConcertAlreadyExistsException e) {
+                if(this.sceneController.displayConcertAlreadyExistsDialog(e.getMessage())) {
+                    this.concertController.getConcertList().remove(actual);
+                    this.concertController.getConcertList().add(temp);
+                    this.concertController.setCurrentConcert(temp);
+                    this.goToSeatingPlanScene(temp.getName() + " | " + temp.getDate());
                 }
-                catch(ConcertAlreadyExistsException e) {   
-                    if(this.sceneController.displayConcertAlreadyExistsDialog(e.getMessage())) {                        
-                        this.concertController.getConcertList().remove(actual);
-                        this.concertController.getConcertList().add(temp);
-                        this.concertController.setCurrentConcert(temp);                        
-                        this.goToSeatingPlanScene(temp.getName() + " | " + temp.getDate());
-                    }              
-                }
+            }
         }                     
         else {           
             this.concertController.getConcertList().add(temp);

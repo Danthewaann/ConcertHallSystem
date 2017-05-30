@@ -2,6 +2,9 @@ package concerthallsystem;
 
 import concerthallsystem.exceptions.ConcertIOException;
 import concerthallsystem.exceptions.CannotUnbookSeatException;
+import concerthallsystem.exceptions.CustomerIOException;
+import concerthallsystem.exceptions.SeatIOException;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.PrintWriter;
@@ -33,7 +36,8 @@ public class Concert implements Comparable
     private Seat[] seats;    
     private String name_;
     private String date_;   
-    private int nBookedSeats_;     
+    private int nBookedSeats_;
+    private int linePosition;
     private double silverSectionPrice_;
     private double goldSectionPrice_;
     private double bronzeSectionPrice_;
@@ -93,10 +97,10 @@ public class Concert implements Comparable
     }
     
     //Saves the current concert along with its info, booked seats and customers, to file
-    public boolean save(PrintWriter concertOutput, String directory) 
+    public boolean save(PrintWriter concertOutput, String directory) throws FileNotFoundException
     {                
         PrintWriter seatOutput = null; 
-        PrintWriter customerOutput = null;             
+        PrintWriter customerOutput = null;
         try {                                
             //Save concert to Concert_list file
             concertOutput.println(
@@ -159,7 +163,7 @@ public class Concert implements Comparable
             System.out.println(io.getMessage());
             return false;
         }
-        finally { //Close all outputstreams when done           
+        finally { //Close all outputstreams when done
             if(seatOutput != null) {
                 seatOutput.close();
             }
@@ -172,106 +176,118 @@ public class Concert implements Comparable
     
     //Load in a concert from file, populating it with its customers and booked seats, 
     //and returns it for the ConcertController to manage
-    public static Concert load(Scanner concertInput, String mainDirectory, int concertLineNum) throws FileNotFoundException
+    public static Concert load(Scanner concertInput, String mainDirectory, int concertLineNum) throws ConcertIOException
     {
         Scanner seatInput = null;
         Scanner customerInput = null;
         Concert tempConcert = new Concert();
-        try {                  
-            tempConcert.name_ = concertInput.next();            
-            Pattern dateRegex = Pattern.compile("[\\d]{4}[-][\\d]{2}[-][\\d]{2}");           
+        String errorReport = "";
+        try {
+            tempConcert.name_ = concertInput.next();
+            Pattern dateRegex = Pattern.compile("[\\d]{4}[-][\\d]{2}[-][\\d]{2}");
             while(!concertInput.hasNext(dateRegex)) {
                 tempConcert.name_ += " " + concertInput.next();
-            }                             
+            }
             tempConcert.date_ = concertInput.next();
             tempConcert.goldSectionPrice_ = concertInput.nextDouble();
             tempConcert.silverSectionPrice_ = concertInput.nextDouble();
             tempConcert.bronzeSectionPrice_ = concertInput.nextDouble();
-            tempConcert.initializeSeats();                              
-                   
-            //Create directory for currently loaded concert           
+            tempConcert.initializeSeats();
+
+            //Create directory for currently loaded concert
             File concertDirectory = new File(
-                mainDirectory + File.separator + tempConcert                                  
+                mainDirectory + File.separator + tempConcert
             );
-            
+
             //If the current concert's directory doesn't exist, create it
             concertDirectory.mkdir();
-      
+
             //Load in customer information from file
             File customersFile = new File(
                 concertDirectory + File.separator + "Customers.txt"
             );
             if(customersFile.canRead()) {
                 customerInput = new Scanner(customersFile);
-                loadCustomers(customersFile, tempConcert, customerInput);
-            } 
+                errorReport += loadCustomers(customersFile, tempConcert, customerInput);
+            }
             else {
                 customersFile.createNewFile();
             }
-            
-            //Load in seat information from file 
+
+            //Load in seat information from file
             File seatsFile = new File(
                 concertDirectory + File.separator + "Booked_seats.txt"
             );
             if(seatsFile.canRead()) {
                 seatInput = new Scanner(seatsFile);
-                loadSeats(seatsFile, tempConcert, seatInput);
+                errorReport += loadSeats(seatsFile, tempConcert, seatInput);
             }
             else {
                 seatsFile.createNewFile();
-            }                  
-        }        
-        catch(InputMismatchException | IOException io) {
-            throw new ConcertIOException(concertLineNum);                                   
-        }       
-        finally { //Close all inputstreams when done
+            }
+        }
+        catch(IOException io) {
+            System.out.println(io.getMessage());
+        }
+        finally {
             if(seatInput != null) {
                 seatInput.close();
             }
             if(customerInput != null) {
                 customerInput.close();
-            }  
-            concertInput.nextLine();
-        }                     
-        return tempConcert;
-    }   
-    
-    private static void loadCustomers(File customersFile, Concert tempConcert, Scanner customerInput) throws IOException
-    {                                                          
-        int customerLineNum = 1;   
-        while(customerInput.hasNextLine()) {                              
-            Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);                    
-            if(tempCustomer != null) {
-                tempConcert.customers.add(tempCustomer);                       
-            }                       
-        }        
-    }
-    
-    private static void loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput) throws IOException
-    {                                                
-        int seatLineNum = 1;
-        while(seatInput.hasNextLine()) {                               
-            Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
-            Seat actualSeat = tempConcert.findSeat(tempSeat);
-
-            if(actualSeat != null) {
-                actualSeat.setStatus(true);                       
-                actualSeat.setBookee(tempSeat.getBookee());
-                tempConcert.nBookedSeats_++;
-                Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
-                if(tempCustomer != null) {
-                    tempCustomer.addSeat(actualSeat);
-                }
-                else {
-                    Customer newCustomer = new Customer(actualSeat.getBookee());
-                    newCustomer.addSeat(actualSeat);
-                    tempConcert.customers.add(newCustomer);
-                }     
-            }
-            else {
-                System.out.println("Error: tried to load a seat that doesn't exist");
             }
         }
+        if(errorReport.length() > 0) {
+            throw new ConcertIOException(tempConcert, errorReport, concertLineNum);
+        }
+        return tempConcert;
+    }
+    
+    private static String loadCustomers(File customersFile, Concert tempConcert, Scanner customerInput)
+    {                                                          
+        int customerLineNum = 1;
+        String customerErrors = "";
+        while(customerInput.hasNextLine()) {
+            try {
+                Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);
+                if (tempCustomer != null) {
+                    tempConcert.customers.add(tempCustomer);
+                }
+            }
+            catch(CustomerIOException io) {
+                customerErrors += io.getMessage();
+            }
+        }
+        return customerErrors;
+    }
+    
+    private static String loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput)
+    {                                                
+        int seatLineNum = 1;
+        String seatErrors = "";
+        while(seatInput.hasNextLine()) {
+            try {
+                Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
+                Seat actualSeat = tempConcert.findSeat(tempSeat);
+
+                if (actualSeat != null) {
+                    actualSeat.setBookee(tempSeat.getBookee());
+                    tempConcert.nBookedSeats_++;
+                    Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
+                    if (tempCustomer != null) {
+                        tempCustomer.addSeat(actualSeat);
+                    } else {
+                        Customer newCustomer = new Customer(actualSeat.getBookee());
+                        newCustomer.addSeat(actualSeat);
+                        tempConcert.customers.add(newCustomer);
+                    }
+                }
+            }
+            catch(SeatIOException io) {
+                seatErrors += io.getMessage();
+            }
+        }
+        return seatErrors;
     }
     
     public String getName()
@@ -348,7 +364,17 @@ public class Concert implements Comparable
             }
         }                                  
     }
-           
+
+    public void setLinePosition(int lineNum)
+    {
+        this.linePosition = lineNum;
+    }
+
+    public int getLinePosition()
+    {
+        return this.linePosition;
+    }
+
     //This method returns the entitlement of the supplied seats bookee
     public String getCustomerEntitlement(Seat seat)
     {               

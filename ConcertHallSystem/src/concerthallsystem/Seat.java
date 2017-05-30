@@ -1,6 +1,8 @@
 package concerthallsystem;
 
 import concerthallsystem.exceptions.CannotUnbookSeatException;
+import concerthallsystem.exceptions.SeatIOException;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
@@ -49,14 +51,12 @@ public abstract class Seat implements Comparable
     
     public void book(Customer customer)
     {
-        this.setStatus(true);
         this.setBookee(customer.getName());
         customer.addSeat(this);        
     }
     
     public void unBook(Customer customer) throws CannotUnbookSeatException
     {
-        this.setStatus(false);
         this.setBookee(null);
         customer.removeSeat(this);
     }
@@ -74,7 +74,7 @@ public abstract class Seat implements Comparable
         return true;
     }
     
-    public static Seat load(Scanner input, File seatsFile, int seatLineNum)
+    public static Seat load(Scanner input, File seatsFile, int seatLineNum) throws SeatIOException
     {                                 
         Seat result;
         String seatRow, bookee;
@@ -99,32 +99,21 @@ public abstract class Seat implements Comparable
             //Return the seat type depending on its row
             if(rowIndex < 3) {
                 result = new GoldSeat(seatRow, seatNum);
-                result.setStatus(true);
-                result.setBookee(bookee);               
-                return result;
+                result.setBookee(bookee);
             }
             else if(rowIndex < 6) {
                 result = new SilverSeat(seatRow, seatNum);
-                result.setStatus(true);
-                result.setBookee(bookee);                           
-                return result;
+                result.setBookee(bookee);
             }
             else {
                 result = new BronzeSeat(seatRow, seatNum);
-                result.setStatus(true);
                 result.setBookee(bookee);                             
-                return result;
             }
         }
-        //If any info is incorrect detail them then return null
-        catch(InputMismatchException | ArrayIndexOutOfBoundsException ex) {                     
-            input.nextLine();
-            System.out.println(
-                "Fatal Error: Failed to load seat on line " + seatLineNum + "...\n"
-                + "...in location " + seatsFile
-            ); 
-            return null;
-        }        
+        catch(Exception ex) {
+            throw new SeatIOException(seatsFile, seatLineNum);
+        }
+        return result;
     }
       
     public boolean getStatus()
@@ -164,6 +153,12 @@ public abstract class Seat implements Comparable
     
     public void setBookee(String name)
     {
+        if(name != null) {
+            this.setStatus(true);
+        }
+        else {
+            this.setStatus(false);
+        }
         this.bookedBy_ = name;
     }    
       
