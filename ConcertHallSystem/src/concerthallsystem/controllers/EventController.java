@@ -86,6 +86,9 @@ public class EventController
             if(this.concertController.getCurrentConcert().isRecentlyChanged()) {
                 this.sceneController.displaySavePromptDialog(this.concertController.getCurrentConcert());
             }
+            else {
+                this.sceneController.setScene("MainMenu");
+            }
         }
 
     }
