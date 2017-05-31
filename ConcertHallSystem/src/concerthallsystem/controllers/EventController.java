@@ -91,7 +91,7 @@ public class EventController
     }
     
     @FXML
-    private void exitApplication(ActionEvent event) 
+    private void exitApplication(ActionEvent event)
     {
         for(Concert concert : this.concertController.getConcertList()) {
             if(concert.isRecentlyChanged()) {
