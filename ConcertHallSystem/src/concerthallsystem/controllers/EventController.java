@@ -1,6 +1,7 @@
 package concerthallsystem.controllers;
 
 import concerthallsystem.Concert;
+import concerthallsystem.DialogPopup;
 import concerthallsystem.SeatEventHandler;
 import concerthallsystem.exceptions.ConcertAlreadyExistsException;
 import java.io.FileNotFoundException;
@@ -46,6 +47,11 @@ public class EventController
         this.sceneController = controller;
         this.concertController = new ConcertController();        
     }
+
+    public ConcertController getConcertController()
+    {
+        return this.concertController;
+    }
                               
     @FXML
     private void goToCreateConcertScene(ActionEvent event)
@@ -69,17 +75,36 @@ public class EventController
     {        
         if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("SelectConcert"))) {           
             this.dropDownList.getItems().clear();
+            this.sceneController.setScene("MainMenu");
         }  
         else if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("CreateConcert"))) {
             this.newConcertName.clear();
             this.newConcertDate.getEditor().clear();
-        }          
-        this.sceneController.setScene("MainMenu");
+            this.sceneController.setScene("MainMenu");
+        }
+        else if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("SeatingPlan"))) {
+            if(this.concertController.getCurrentConcert().isRecentlyChanged()) {
+                this.sceneController.displaySavePromptDialog(this.concertController.getCurrentConcert());
+            }
+        }
+
     }
     
     @FXML
-    private void exitApplication(ActionEvent event) //TODO
+    private void exitApplication(ActionEvent event) 
     {
+        for(Concert concert : this.concertController.getConcertList()) {
+            if(concert.isRecentlyChanged()) {
+                try {
+                    this.concertController.saveConcerts();
+                    DialogPopup.drawResultDialog("Successfully saved concerts to file");
+                }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
         System.exit(0);
     }
             
@@ -201,12 +226,12 @@ public class EventController
     {
         try {
             this.concertController.saveConcerts();
-            this.sceneController.displaySaveDialog(
+            this.sceneController.displaySaveSuccessfulDialog(
                 this.concertController.getCurrentConcert()
             );
         }
         catch(FileNotFoundException e) { //TODO
-            System.out.println("Error");
+            System.out.println("Error when saving a concert to file");
         }
     }       
 }

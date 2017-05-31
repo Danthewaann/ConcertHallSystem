@@ -1,2 +1,1 @@
-Dan true false
-Ryan false false
+Dan false false

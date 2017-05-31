@@ -109,7 +109,12 @@ public class SceneController extends StackPane
     {
         return this.scenes;
     }                   
-    
+
+    public EventController getEventController()
+    {
+        return this.eventController;
+    }
+
     public void displayReportDialog(Concert concert)
     {
         DialogPopup reportDialog = new DialogPopup();
@@ -118,12 +123,19 @@ public class SceneController extends StackPane
         reportDialog.show();      
     }
     
-    public void displaySaveDialog(Concert concert)
+    public void displaySaveSuccessfulDialog(Concert concert)
     {
         DialogPopup saveDialog = new DialogPopup();
         saveDialog.setHeaderText("Saved Concert | " + concert);       
-        saveDialog.drawSaveDialog("Successfully Saved Concert:\n" + concert);        
-        saveDialog.show();
+        saveDialog.drawSaveSuccessDialog("Successfully Saved Concert:\n" + concert);
+        saveDialog.showAndWait();
+    }
+
+    public void displaySavePromptDialog(Concert concert)
+    {
+        DialogPopup savePromptDialog = new DialogPopup(this);
+        savePromptDialog.setHeaderText("Detected changes | " + concert);
+        savePromptDialog.drawSavePromptDialog("Detected unsaved changes, are you sure you want to exit without saving?", concert);
     }
     
     public void displayQueryCustomerDialog(Concert concert)

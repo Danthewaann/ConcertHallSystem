@@ -62,7 +62,7 @@ public class ConcertController
     private void checkForDuplicatedConcerts(Concert concert, int lineNum)
     {
         //See if the loaded concert already exists,
-        //if not then just add it to the concerts list
+        //if not then just add it to the concert list
         if(concert != null) {
             Concert actual = this.findConcert(concert);
             if(actual != null) {
@@ -107,27 +107,31 @@ public class ConcertController
         concertInput.close();
         this.checkForErrors();
     }  
-    
-    //Saves all concerts, along with their customers and booked seats to file
+
     public void saveConcerts() throws FileNotFoundException
-    {                             
-        //Connect to concerts directory and save each concert to file
+    {
         PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
-        
-        for(int i = 0; i < this.concerts.size(); i++) {           
-            if(this.concerts.get(i).save(concertOutput, MAIN_DIRECTORY)) {
-                System.out.printf(
-                    "Successfully saved concert %s%n", this.concerts.get(i)                   
-                );
-            }
-            else {
-                System.out.printf(
-                    "Failed to save concert %s%n", this.concerts.get(i)
-                );
+
+        for(Concert concert : this.concerts) {
+            if(concert.isRecentlyChanged()) {
+                if (concert.save(concertOutput, MAIN_DIRECTORY)) {
+                    System.out.printf(
+                            "Successfully saved concert %s%n", concert
+                    );
+                } else {
+                    System.out.printf(
+                            "Failed to save concert %s%n", concert
+                    );
+                }
             }
         }
         concertOutput.close();                
-    }   
+    }
+
+    public void saveConcert(Concert concert) throws FileNotFoundException //TODO
+    {
+        PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
+    }
     
     public Concert findConcert(Concert concert)
     {

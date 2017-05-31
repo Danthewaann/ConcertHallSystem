@@ -41,6 +41,7 @@ public class Concert implements Comparable
     private double silverSectionPrice_;
     private double goldSectionPrice_;
     private double bronzeSectionPrice_;
+    private boolean recentlyChanged = false;
     private final ArrayList<Customer> customers;    
     public static final String[] SEAT_SECTIONS = {"Gold", "Silver", "Bronze"};
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
@@ -171,6 +172,7 @@ public class Concert implements Comparable
                 customerOutput.close();
             }
         }
+        this.recentlyChanged = false;
         return true;
     }
     
@@ -236,6 +238,7 @@ public class Concert implements Comparable
             if(customerInput != null) {
                 customerInput.close();
             }
+            concertInput.nextLine();
         }
         if(errorReport.length() > 0) {
             throw new ConcertIOException(tempConcert, errorReport, concertLineNum);
@@ -346,7 +349,8 @@ public class Concert implements Comparable
             this.customers.add(newCustomer);  
             temp.book(newCustomer);  
             this.nBookedSeats_++;           
-        }               
+        }
+        this.recentlyChanged = true;
     }
             
     //Unbooks the seat in the current concert that matches the supplied seat
@@ -355,14 +359,15 @@ public class Concert implements Comparable
         Customer customer = this.findCustomer(seat.getBookee());
         Seat temp = this.findSeat(seat);
         
-        if(customer != null ) {               
+        if(customer != null) {
             temp.unBook(customer);           
             this.nBookedSeats_--; 
             if(!customer.hasBookedASeat())
             {
                 this.customers.remove(customer);               
             }
-        }                                  
+        }
+        this.recentlyChanged = true;
     }
 
     public void setLinePosition(int lineNum)
@@ -543,7 +548,8 @@ public class Concert implements Comparable
                 }   
                 break;
             }        
-        }                               
+        }
+        this.recentlyChanged = true;
     }
     
     //Finds and returns the customer with the supplied name
@@ -601,6 +607,11 @@ public class Concert implements Comparable
         else {
             return 1;
         }          
+    }
+
+    public boolean isRecentlyChanged()
+    {
+        return this.recentlyChanged;
     }
 }                                
 

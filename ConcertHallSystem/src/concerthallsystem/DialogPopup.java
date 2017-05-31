@@ -1,6 +1,9 @@
 package concerthallsystem;
 
+import concerthallsystem.controllers.SceneController;
 import concerthallsystem.exceptions.CannotUnbookSeatException;
+
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import javafx.collections.FXCollections;
@@ -28,16 +31,18 @@ import javafx.util.Pair;
 
 public class DialogPopup extends Dialog
 {
-    private final GridPane grid;   
+    private GridPane grid = new GridPane();
+    private SceneController sceneController;
     private final static ButtonType CANCEL = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
     private final static ButtonType QUERY = new ButtonType("Query", ButtonData.OK_DONE);    
     private final static ButtonType OK = new ButtonType("OK", ButtonData.OK_DONE);
     private final static ButtonType BOOK = new ButtonType("Book", ButtonData.OK_DONE);       
-    private final static ButtonType UNBOOK = new ButtonType("Unbook", ButtonData.YES);      
- 
+    private final static ButtonType UNBOOK = new ButtonType("Unbook", ButtonData.YES);
+    private final static ButtonType SAVE = new ButtonType("Save & Exit", ButtonData.YES);
+    private final static ButtonType EXIT = new ButtonType("Exit", ButtonData.NO);
+
     public DialogPopup()
     {
-        this.grid = new GridPane();        
         this.grid.setVgap(5);
         this.grid.setHgap(20);        
         this.grid.setPadding(new Insets(25, 25, 25, 25));
@@ -48,12 +53,22 @@ public class DialogPopup extends Dialog
     
     public DialogPopup(boolean bool)
     {
-        this.grid = new GridPane();
         this.grid.setVgap(5);
         this.grid.setHgap(20);        
         this.grid.setPadding(new Insets(25, 25, 25, 25));
         this.grid.setAlignment(Pos.CENTER);     
         this.getDialogPane().setContent(this.grid);    
+    }
+
+    public DialogPopup(SceneController sceneController)
+    {
+        this.grid.setVgap(5);
+        this.grid.setHgap(20);
+        this.grid.setPadding(new Insets(25, 25, 25, 25));
+        this.grid.setAlignment(Pos.CENTER);
+        this.initOwner(Main.WINDOW);
+        this.getDialogPane().setContent(this.grid);
+        this.sceneController = sceneController;
     }
     
     private GridPane drawGridPane(ObservableList<Node> nodes, GridPane grid, int maxCols, int maxRows)
@@ -150,14 +165,14 @@ public class DialogPopup extends Dialog
     public static void drawResultDialog(String result)
     {
         DialogPopup dialog = new DialogPopup();
-        dialog.setHeaderText("Result Confirmation");
+        //dialog.setHeaderText("Result Confirmation");
         
         Label label = new Label(result);
         label.setStyle("-fx-font-size: 16px");
         
         dialog.grid.add(label, 1, 1);
         dialog.getDialogPane().getButtonTypes().add(OK);
-        dialog.show();
+        dialog.showAndWait();
     }
     
     public static void drawErrorDialog(String result)
@@ -246,7 +261,41 @@ public class DialogPopup extends Dialog
         });
     }
     
-    public void drawSaveDialog(String message)
+    public void drawSavePromptDialog(String message, Concert concert)
+    {
+        Label label = new Label(message);
+        label.setStyle("-fx-font-size: 16px");
+
+        this.grid.add(label, 0, 0);
+        this.getDialogPane().getButtonTypes().addAll(SAVE, EXIT, CANCEL);
+
+        this.setResultConverter(button -> {
+            if(button == SAVE) {
+                return SAVE.getText();
+            }
+            else if(button == EXIT) {
+                return EXIT.getText();
+            }
+            return null;
+        });
+
+        Optional<String> result = this.showAndWait();
+        if(result.get().equals("Save & Exit")) {
+            try {
+                this.sceneController.getEventController().getConcertController().saveConcerts();
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            this.sceneController.displaySaveSuccessfulDialog(concert);
+            this.sceneController.setScene("MainMenu");
+        }
+        else if(result.get().equals("Exit")) {
+            this.sceneController.setScene("MainMenu");
+        }
+    }
+
+    public void drawSaveSuccessDialog(String message)
     {
         Label label = new Label(message);       
         label.setStyle("-fx-font-size: 16px");
@@ -349,12 +398,7 @@ public class DialogPopup extends Dialog
         Optional<String> result = this.showAndWait();       
         return result.isPresent();
     }
-    
-    public static void drawErrorDialog()
-    {
-        
-    }
-    
+
     //Used to capitalize a string e.g. "daniel black" becomes "Daniel Black"
     private static String capitalize(String name)
     {
