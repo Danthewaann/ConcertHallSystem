@@ -41,7 +41,7 @@ public class EventController
     private ComboBox dropDownList;
     @FXML
     private Label selectedConcertTitle;
-    
+
     public EventController(SceneController controller)
     {        
         this.sceneController = controller;
@@ -72,7 +72,7 @@ public class EventController
     
     @FXML
     private void goToMainMenuScene(ActionEvent event)
-    {        
+    {
         if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("SelectConcert"))) {           
             this.dropDownList.getItems().clear();
             this.sceneController.setScene("MainMenu");

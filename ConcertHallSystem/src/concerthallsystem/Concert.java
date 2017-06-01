@@ -183,7 +183,8 @@ public class Concert implements Comparable
         Scanner seatInput = null;
         Scanner customerInput = null;
         Concert tempConcert = new Concert();
-        String errorReport = "";
+        tempConcert.linePosition = concertLineNum;
+        List<RuntimeException> errors = new ArrayList<>();
         try {
             tempConcert.name_ = concertInput.next();
             Pattern dateRegex = Pattern.compile("[\\d]{4}[-][\\d]{2}[-][\\d]{2}");
@@ -210,7 +211,7 @@ public class Concert implements Comparable
             );
             if(customersFile.canRead()) {
                 customerInput = new Scanner(customersFile);
-                errorReport += loadCustomers(customersFile, tempConcert, customerInput);
+                loadCustomers(customersFile, tempConcert, customerInput, errors);
             }
             else {
                 customersFile.createNewFile();
@@ -222,7 +223,7 @@ public class Concert implements Comparable
             );
             if(seatsFile.canRead()) {
                 seatInput = new Scanner(seatsFile);
-                errorReport += loadSeats(seatsFile, tempConcert, seatInput);
+                loadSeats(seatsFile, tempConcert, seatInput, errors);
             }
             else {
                 seatsFile.createNewFile();
@@ -240,16 +241,15 @@ public class Concert implements Comparable
             }
             concertInput.nextLine();
         }
-        if(errorReport.length() > 0) {
-            throw new ConcertIOException(tempConcert, errorReport, concertLineNum);
+        if(errors.size() > 0) {
+            throw new ConcertIOException(tempConcert, errors);
         }
         return tempConcert;
     }
     
-    private static String loadCustomers(File customersFile, Concert tempConcert, Scanner customerInput)
+    private static void loadCustomers(File customersFile, Concert tempConcert, Scanner customerInput, List<RuntimeException> errors)
     {                                                          
         int customerLineNum = 1;
-        String customerErrors = "";
         while(customerInput.hasNextLine()) {
             try {
                 Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);
@@ -258,16 +258,14 @@ public class Concert implements Comparable
                 }
             }
             catch(CustomerIOException io) {
-                customerErrors += io.getMessage();
+                errors.add(io);
             }
         }
-        return customerErrors;
     }
     
-    private static String loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput)
+    private static void loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput, List<RuntimeException> errors)
     {                                                
         int seatLineNum = 1;
-        String seatErrors = "";
         while(seatInput.hasNextLine()) {
             try {
                 Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
@@ -287,10 +285,9 @@ public class Concert implements Comparable
                 }
             }
             catch(SeatIOException io) {
-                seatErrors += io.getMessage();
+                errors.add(io);
             }
         }
-        return seatErrors;
     }
     
     public String getName()
@@ -368,11 +365,6 @@ public class Concert implements Comparable
             }
         }
         this.recentlyChanged = true;
-    }
-
-    public void setLinePosition(int lineNum)
-    {
-        this.linePosition = lineNum;
     }
 
     public int getLinePosition()
