@@ -106,7 +106,8 @@ public class Customer implements Comparable
         }
         return true;
     }
-    
+
+    //TODO - Need to create a regex for true/false boolean
     public static Customer load(Scanner input, File customersFile, int customerLineNum) throws CustomerIOException
     {
         Customer result = new Customer();

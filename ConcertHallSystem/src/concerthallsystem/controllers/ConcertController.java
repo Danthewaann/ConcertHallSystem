@@ -123,7 +123,8 @@ public class ConcertController
         concertOutput.close();                
     }
 
-    public void saveConcert(Concert concert) throws FileNotFoundException //TODO
+    //TODO - Find a way to save just one concert to file, instead of all concerts
+    public void saveConcert(Concert concert) throws FileNotFoundException
     {
         PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
     }

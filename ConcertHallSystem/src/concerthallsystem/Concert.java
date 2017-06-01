@@ -180,8 +180,6 @@ public class Concert implements Comparable
     //and returns it for the ConcertController to manage
     public static Concert load(Scanner concertInput, String mainDirectory, int concertLineNum) throws ConcertIOException
     {
-        Scanner seatInput = null;
-        Scanner customerInput = null;
         Concert tempConcert = new Concert();
         tempConcert.linePosition = concertLineNum;
         List<RuntimeException> errors = new ArrayList<>();
@@ -197,48 +195,16 @@ public class Concert implements Comparable
             tempConcert.bronzeSectionPrice_ = concertInput.nextDouble();
             tempConcert.initializeSeats();
 
-            //Create directory for currently loaded concert
-            File concertDirectory = new File(
-                mainDirectory + File.separator + tempConcert
-            );
-
-            //If the current concert's directory doesn't exist, create it
+            File concertDirectory = new File(mainDirectory + File.separator + tempConcert);
             concertDirectory.mkdir();
 
-            //Load in customer information from file
-            File customersFile = new File(
-                concertDirectory + File.separator + "Customers.txt"
-            );
-            if(customersFile.canRead()) {
-                customerInput = new Scanner(customersFile);
-                loadCustomers(customersFile, tempConcert, customerInput, errors);
-            }
-            else {
-                customersFile.createNewFile();
-            }
-
-            //Load in seat information from file
-            File seatsFile = new File(
-                concertDirectory + File.separator + "Booked_seats.txt"
-            );
-            if(seatsFile.canRead()) {
-                seatInput = new Scanner(seatsFile);
-                loadSeats(seatsFile, tempConcert, seatInput, errors);
-            }
-            else {
-                seatsFile.createNewFile();
-            }
+            loadCustomers(concertDirectory, tempConcert, errors);
+            loadSeats(concertDirectory, tempConcert, errors);
         }
         catch(IOException io) {
             System.out.println(io.getMessage());
         }
         finally {
-            if(seatInput != null) {
-                seatInput.close();
-            }
-            if(customerInput != null) {
-                customerInput.close();
-            }
             concertInput.nextLine();
         }
         if(errors.size() > 0) {
@@ -247,46 +213,64 @@ public class Concert implements Comparable
         return tempConcert;
     }
     
-    private static void loadCustomers(File customersFile, Concert tempConcert, Scanner customerInput, List<RuntimeException> errors)
+    private static void loadCustomers(File concertDirectory, Concert tempConcert, List<RuntimeException> errors) throws IOException
     {                                                          
         int customerLineNum = 1;
-        while(customerInput.hasNextLine()) {
-            try {
-                Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);
-                if (tempCustomer != null) {
-                    tempConcert.customers.add(tempCustomer);
+        File customersFile = new File(concertDirectory + File.separator + "Customers.txt");
+
+        if(customersFile.canRead()) {
+            Scanner customerInput = new Scanner(customersFile);
+            while(customerInput.hasNextLine()) {
+                try {
+                    Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);
+                    if (tempCustomer != null) {
+                        tempConcert.customers.add(tempCustomer);
+                    }
+                }
+                catch(CustomerIOException io) {
+                    errors.add(io);
                 }
             }
-            catch(CustomerIOException io) {
-                errors.add(io);
-            }
+            customerInput.close();
+        }
+        else {
+            customersFile.createNewFile();
         }
     }
     
-    private static void loadSeats(File seatsFile, Concert tempConcert, Scanner seatInput, List<RuntimeException> errors)
+    private static void loadSeats(File concertDirectory, Concert tempConcert, List<RuntimeException> errors) throws IOException
     {                                                
         int seatLineNum = 1;
-        while(seatInput.hasNextLine()) {
-            try {
-                Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
-                Seat actualSeat = tempConcert.findSeat(tempSeat);
+        File seatsFile = new File(concertDirectory + File.separator + "Booked_seats.txt");
 
-                if (actualSeat != null) {
-                    actualSeat.setBookee(tempSeat.getBookee());
-                    tempConcert.nBookedSeats_++;
-                    Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
-                    if (tempCustomer != null) {
-                        tempCustomer.addSeat(actualSeat);
-                    } else {
-                        Customer newCustomer = new Customer(actualSeat.getBookee());
-                        newCustomer.addSeat(actualSeat);
-                        tempConcert.customers.add(newCustomer);
+        if(seatsFile.canRead()) {
+            Scanner seatInput = new Scanner(seatsFile);
+            while(seatInput.hasNextLine()) {
+                try {
+                    Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
+                    Seat actualSeat = tempConcert.findSeat(tempSeat);
+
+                    if (actualSeat != null) {
+                        actualSeat.setBookee(tempSeat.getBookee());
+                        tempConcert.nBookedSeats_++;
+                        Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
+                        if (tempCustomer != null) {
+                            tempCustomer.addSeat(actualSeat);
+                        } else {
+                            Customer newCustomer = new Customer(actualSeat.getBookee());
+                            newCustomer.addSeat(actualSeat);
+                            tempConcert.customers.add(newCustomer);
+                        }
                     }
                 }
+                catch(SeatIOException io) {
+                    errors.add(io);
+                }
             }
-            catch(SeatIOException io) {
-                errors.add(io);
-            }
+            seatInput.close();
+        }
+        else {
+            seatsFile.createNewFile();
         }
     }
     

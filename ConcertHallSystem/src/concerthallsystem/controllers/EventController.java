@@ -233,7 +233,7 @@ public class EventController
                 this.concertController.getCurrentConcert()
             );
         }
-        catch(FileNotFoundException e) { //TODO
+        catch(FileNotFoundException e) {
             System.out.println("Error when saving a concert to file");
         }
     }       

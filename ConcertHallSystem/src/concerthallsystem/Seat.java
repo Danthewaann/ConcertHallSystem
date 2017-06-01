@@ -81,7 +81,7 @@ public abstract class Seat implements Comparable
         int seatNum;
         int rowIndex = 0;
         int numIndex = 0;
-        try {           
+        try {
             seatRow = input.next(Pattern.compile("[a-iA-I]")).toUpperCase();
             seatNum = input.nextInt();
             bookee = input.nextLine().trim();            
