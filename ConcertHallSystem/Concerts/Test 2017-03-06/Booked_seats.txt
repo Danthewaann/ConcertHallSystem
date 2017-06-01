@@ -1,6 +1,0 @@
-A 1 Dan
-A 2 Dan
-A 3 Dan
-A 4 Dan
-A 5 Dan
-B 1 Dan

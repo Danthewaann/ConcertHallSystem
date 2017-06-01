@@ -15,6 +15,11 @@ public class BronzeSeat extends Seat
         super(row, num);
     }
 
+    public BronzeSeat(Seat seat)
+    {
+        super(seat);
+    }
+
     @Override
     public void unBook(Customer customer) throws CannotUnbookSeatException
     {

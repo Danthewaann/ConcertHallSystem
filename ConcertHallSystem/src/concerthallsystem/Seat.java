@@ -5,9 +5,7 @@ import concerthallsystem.exceptions.SeatIOException;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.InputMismatchException;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -21,18 +19,28 @@ import java.util.regex.Pattern;
 * @author Daniel Black
 */
 
-public abstract class Seat implements Comparable
+public class Seat implements Comparable
 {
     private double price_;
     private boolean isBooked_;  
     private String bookedBy_;
-    private final String row_;
-    private final int number_;    
+    private String row_;
+    private int number_;
        
     public Seat(String row, int num)
     {
         this.row_ = row;
         this.number_ = num;
+    }
+
+    private Seat(){}
+
+    protected Seat(Seat seat)
+    {
+        this.row_ = seat.row_;
+        this.number_ = seat.number_;
+        this.bookedBy_ = seat.bookedBy_;
+        this.isBooked_ = true;
     }
                 
     @Override
@@ -65,7 +73,7 @@ public abstract class Seat implements Comparable
     {             
         try {
             output.println(
-                this.getRow() + " " + this.getNumber() + " " + this.getBookee()                           
+                this.row_ + " " + this.number_ + " " + this.bookedBy_
             );  
         }
         catch(Exception e) {
@@ -76,44 +84,41 @@ public abstract class Seat implements Comparable
     
     public static Seat load(Scanner input, File seatsFile, int seatLineNum) throws SeatIOException
     {                                 
-        Seat result;
-        String seatRow, bookee;
-        int seatNum;
-        int rowIndex = 0;
-        int numIndex = 0;
+        Seat temp = new Seat();
         try {
-            seatRow = input.next(Pattern.compile("[a-iA-I]")).toUpperCase();
-            seatNum = input.nextInt();
-            bookee = input.nextLine().trim();            
+            temp.row_ = input.next().toUpperCase();
+            temp.number_ = input.nextInt();
+            temp.bookedBy_= input.next().trim();
             
             //Check if seatRow is an actual row defined by its concert
-            while(seatRow.compareToIgnoreCase(Concert.SEAT_ROWS[rowIndex]) != 0) {
+            int rowIndex = 0;
+            while(temp.row_.compareToIgnoreCase(Concert.SEAT_ROWS[rowIndex]) != 0) {
                 rowIndex++;
             }
 
             //Check if seatNum is an actual number defined by its concert
-            while(seatNum != (Concert.SEAT_NUMBERS[numIndex])) {
+            int numIndex = 0;
+            while(temp.number_ != (Concert.SEAT_NUMBERS[numIndex])) {
                 numIndex++;
             }
-           
-            //Return the seat type depending on its row
+
             if(rowIndex < 3) {
-                result = new GoldSeat(seatRow, seatNum);
-                result.setBookee(bookee);
+                temp = new GoldSeat(temp);
             }
             else if(rowIndex < 6) {
-                result = new SilverSeat(seatRow, seatNum);
-                result.setBookee(bookee);
+                temp = new SilverSeat(temp);
             }
             else {
-                result = new BronzeSeat(seatRow, seatNum);
-                result.setBookee(bookee);                             
+                temp = new BronzeSeat(temp);
             }
         }
-        catch(Exception ex) {
+        catch(ArrayIndexOutOfBoundsException | NoSuchElementException ex) {
             throw new SeatIOException(seatsFile, seatLineNum);
         }
-        return result;
+        finally {
+            input.nextLine();
+        }
+        return temp;
     }
       
     public boolean getStatus()
@@ -125,17 +130,7 @@ public abstract class Seat implements Comparable
     {       
         return this.bookedBy_;
     }
-       
-    public String getRow()
-    {
-        return this.row_;
-    }
-    
-    public int getNumber()
-    {
-        return this.number_;
-    }
-               
+
     public double getPrice()
     {
         return this.price_;
@@ -145,19 +140,14 @@ public abstract class Seat implements Comparable
     {
         this.price_ = price;
     }
-           
-    public void setStatus(boolean status)
-    {
-        this.isBooked_ = status;
-    }
     
     public void setBookee(String name)
     {
         if(name != null) {
-            this.setStatus(true);
+            this.isBooked_ = true;
         }
         else {
-            this.setStatus(false);
+            this.isBooked_ = false;
         }
         this.bookedBy_ = name;
     }    
@@ -165,7 +155,7 @@ public abstract class Seat implements Comparable
     @Override
     public String toString() 
     {
-        return this.getRow() + this.getNumber();
+        return this.row_ + this.number_;
     }       
 
     @Override

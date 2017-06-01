@@ -13,10 +13,15 @@ public class GoldSeat extends Seat
         super(row, num);
     }
 
+    public GoldSeat(Seat seat)
+    {
+        super(seat);
+    }
+
     @Override
     public void book(Customer customer) 
     {
         super.book(customer); 
         customer.setEntitlement(this);
-    }  
+    }
 }

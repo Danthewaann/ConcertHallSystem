@@ -223,9 +223,7 @@ public class Concert implements Comparable
             while(customerInput.hasNextLine()) {
                 try {
                     Customer tempCustomer = Customer.load(customerInput, customersFile, customerLineNum++);
-                    if (tempCustomer != null) {
-                        tempConcert.customers.add(tempCustomer);
-                    }
+                    tempConcert.customers.add(tempCustomer);
                 }
                 catch(CustomerIOException io) {
                     errors.add(io);

@@ -12,7 +12,12 @@ public class SilverSeat extends Seat
     {
         super(row, num);
     }
-    
+
+    public SilverSeat(Seat seat)
+    {
+        super(seat);
+    }
+
     @Override
     public void book(Customer customer) 
     {
