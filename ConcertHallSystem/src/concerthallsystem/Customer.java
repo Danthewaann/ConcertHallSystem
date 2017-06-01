@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * The Customer class is used to represent each customer,
@@ -107,25 +108,25 @@ public class Customer implements Comparable
         return true;
     }
 
-    //TODO - Need to create a regex for true/false boolean
     public static Customer load(Scanner input, File customersFile, int customerLineNum) throws CustomerIOException
     {
-        Customer result = new Customer();
+        Customer temp = new Customer();
+        Pattern bool = Pattern.compile("true|false");
         try {
-            result.name_ = input.next();  
-            while(!input.hasNextBoolean()) {
-                result.name_ += " " + input.next();
+            temp.name_ = input.next();
+            while(!input.hasNext(bool)) {
+                temp.name_ += " " + input.next();
             }
-            result.goldEntitled_ = input.nextBoolean();
-            result.silverEntitled_ = input.nextBoolean();            
+            temp.goldEntitled_ = input.nextBoolean();
+            temp.silverEntitled_ = input.nextBoolean();
         }
-        catch(Exception ex) {
+        catch(NoSuchElementException ex) {
             throw new CustomerIOException(customersFile, customerLineNum);
         }
         finally {
             input.nextLine();
         }
-        return result;
+        return temp;
     }    
 
     @Override

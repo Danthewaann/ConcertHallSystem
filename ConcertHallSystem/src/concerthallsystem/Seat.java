@@ -115,9 +115,6 @@ public class Seat implements Comparable
         catch(ArrayIndexOutOfBoundsException | NoSuchElementException ex) {
             throw new SeatIOException(seatsFile, seatLineNum);
         }
-        finally {
-            input.nextLine();
-        }
         return temp;
     }
       

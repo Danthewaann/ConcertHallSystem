@@ -245,21 +245,18 @@ public class Concert implements Comparable
             Scanner seatInput = new Scanner(seatsFile);
             while(seatInput.hasNextLine()) {
                 try {
-                    Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum++);
+                    Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum);
                     Seat actualSeat = tempConcert.findSeat(tempSeat);
+                    actualSeat.setBookee(tempSeat.getBookee());
+                    tempConcert.nBookedSeats_++;
 
-                    if (actualSeat != null) {
-                        actualSeat.setBookee(tempSeat.getBookee());
-                        tempConcert.nBookedSeats_++;
-                        Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
-                        if (tempCustomer != null) {
-                            tempCustomer.addSeat(actualSeat);
-                        } else {
-                            Customer newCustomer = new Customer(actualSeat.getBookee());
-                            newCustomer.addSeat(actualSeat);
-                            tempConcert.customers.add(newCustomer);
-                        }
+                    Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
+                    if (tempCustomer != null) {
+                        tempCustomer.addSeat(actualSeat);
+                    } else {
+                        throw new SeatIOException(seatsFile, seatLineNum);
                     }
+                    seatLineNum++;
                 }
                 catch(SeatIOException io) {
                     errors.add(io);
