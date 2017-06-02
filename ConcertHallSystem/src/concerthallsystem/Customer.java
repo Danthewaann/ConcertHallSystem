@@ -111,20 +111,31 @@ public class Customer implements Comparable
     public static Customer load(Scanner input, File customersFile, int customerLineNum) throws CustomerIOException
     {
         Customer temp = new Customer();
-        Pattern bool = Pattern.compile("true|false");
+        Pattern boolPattern = Pattern.compile("true|false|TRUE|FALSE");
         try {
-            temp.name_ = input.next();
-            while(!input.hasNext(bool)) {
-                temp.name_ += " " + input.next();
+            while(input.hasNext()) {
+                if(!input.hasNext(boolPattern)) {
+                    if (temp.name_ != null) {
+                        temp.name_ += " " + input.next();
+                    }
+                    else {
+                        temp.name_ = input.next();
+                    }
+                }
+                else {
+                    if(temp.name_.length() > 0) {
+                        break;
+                    }
+                    else {
+                        throw new InputMismatchException();
+                    }
+                }
             }
             temp.goldEntitled_ = input.nextBoolean();
             temp.silverEntitled_ = input.nextBoolean();
         }
         catch(NoSuchElementException ex) {
             throw new CustomerIOException(customersFile, customerLineNum);
-        }
-        finally {
-            input.nextLine();
         }
         return temp;
     }    

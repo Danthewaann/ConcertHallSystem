@@ -248,12 +248,15 @@ public class Concert implements Comparable
                     Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum);
                     Seat actualSeat = tempConcert.findSeat(tempSeat);
                     actualSeat.setBookee(tempSeat.getBookee());
-                    tempConcert.nBookedSeats_++;
 
-                    Customer tempCustomer = tempConcert.findCustomer(actualSeat.getBookee());
-                    if (tempCustomer != null) {
-                        tempCustomer.addSeat(actualSeat);
-                    } else {
+                    Customer tempCustomer = new Customer(actualSeat.getBookee());
+                    Customer actualCustomer = tempConcert.findCustomer(tempCustomer);
+
+                    if (actualCustomer != null) {
+                        actualCustomer.addSeat(actualSeat);
+                        tempConcert.nBookedSeats_++;
+                    }
+                    else {
                         throw new SeatIOException(seatsFile, seatLineNum);
                     }
                     seatLineNum++;
@@ -312,18 +315,19 @@ public class Concert implements Comparable
     //Books the seat in the current concert that matches the supplied seat
     public void bookSeat(Seat seat, String name)
     {                               
-        Customer customer = this.findCustomer(name);
+        Customer tempCustomer = new Customer(name);
+        Customer actualCustomer = this.findCustomer(tempCustomer);
         
-        if(customer != null) {           
+        if(actualCustomer != null) {
             Seat temp = this.findSeat(seat);
-            temp.book(customer);                         
+            temp.book(actualCustomer);
             this.nBookedSeats_++;
         }
         else {           
             Customer newCustomer = new Customer(name); 
-            Seat temp = this.findSeat(seat);                                
+            Seat actualSeat = this.findSeat(seat);
             this.customers.add(newCustomer);  
-            temp.book(newCustomer);  
+            actualSeat.book(newCustomer);
             this.nBookedSeats_++;           
         }
         this.recentlyChanged = true;
@@ -332,15 +336,16 @@ public class Concert implements Comparable
     //Unbooks the seat in the current concert that matches the supplied seat
     public void unBookSeat(Seat seat) throws CannotUnbookSeatException
     {        
-        Customer customer = this.findCustomer(seat.getBookee());
+        Customer tempCustomer = new Customer(seat.getBookee());
+        Customer actualCustomer = this.findCustomer(tempCustomer);
         Seat temp = this.findSeat(seat);
         
-        if(customer != null) {
-            temp.unBook(customer);           
+        if(actualCustomer != null) {
+            temp.unBook(actualCustomer);
             this.nBookedSeats_--; 
-            if(!customer.hasBookedASeat())
+            if(!actualCustomer.hasBookedASeat())
             {
-                this.customers.remove(customer);               
+                this.customers.remove(actualCustomer);
             }
         }
         this.recentlyChanged = true;
@@ -354,14 +359,15 @@ public class Concert implements Comparable
     //This method returns the entitlement of the supplied seats bookee
     public String getCustomerEntitlement(Seat seat)
     {               
-        Customer customer = this.findCustomer(seat.getBookee());
+        Customer tempCustomer = new Customer(seat.getBookee());
+        Customer actualCustomer = this.findCustomer(tempCustomer);
         
-        if(customer != null)  {
-            if(customer.getEntitlement() == null) {
+        if(actualCustomer != null)  {
+            if(actualCustomer.getEntitlement() == null) {
                 return null;
             }
             else {
-                return customer.getName() + " is entitled to " + customer.getEntitlement();
+                return actualCustomer.getName() + " is entitled to " + actualCustomer.getEntitlement();
             }
         }
         else {
@@ -425,9 +431,10 @@ public class Concert implements Comparable
     public String queryBySeat(Seat seat)
     {                         
         if(seat.getStatus()) {
-            Customer customer = this.findCustomer(seat.getBookee());
-            if(customer != null)  {
-                if(customer.getEntitlement() == null) {
+            Customer tempCustomer = new Customer(seat.getBookee());
+            Customer actualCustomer = this.findCustomer(tempCustomer);
+            if(actualCustomer != null)  {
+                if(actualCustomer.getEntitlement() == null) {
                     return "Selected seat " + "(" + seat 
                             + ")" + " is booked by " + seat.getBookee();
                 }
@@ -435,7 +442,7 @@ public class Concert implements Comparable
                     return "Selected seat " + "(" + seat + ")" 
                             + " is booked by " + seat.getBookee() + "\n" 
                             + seat.getBookee() + " is entitled to " 
-                            + customer.getEntitlement();
+                            + actualCustomer.getEntitlement();
                 }
             }
             else {
@@ -449,19 +456,19 @@ public class Concert implements Comparable
     
     //This method returns all the seats that the supplied customer has booked,
     //as well as any entitlements that have been given to them
-    public String queryByCustomer(String customerName)
+    public String queryByCustomer(Customer customer)
     {              
         String returnQuery = "";
-        Customer customer = this.findCustomer(customerName);
+        Customer actualCustomer = this.findCustomer(customer);
         
-        if(customer != null) {
-            if(customer.getEntitlement() != null) {
-                returnQuery = customer.getName() + " is entitled to " + customer.getEntitlement() + "\n";
+        if(actualCustomer != null) {
+            if(actualCustomer.getEntitlement() != null) {
+                returnQuery = actualCustomer.getName() + " is entitled to " + actualCustomer.getEntitlement() + "\n";
             }       
             
-            returnQuery += customer.getName() + " has booked " + customer.getBookedSeats().size();
+            returnQuery += actualCustomer.getName() + " has booked " + actualCustomer.getBookedSeats().size();
             
-            if(customer.getBookedSeats().size() > 1) {
+            if(actualCustomer.getBookedSeats().size() > 1) {
                 returnQuery += " seats:\n";
             }
             else {
@@ -469,7 +476,7 @@ public class Concert implements Comparable
             }
                            
             int counter = 0;
-            for(Seat seat : customer.getBookedSeats()) {
+            for(Seat seat : actualCustomer.getBookedSeats()) {
                 counter++;
                 if(counter < 5){
                     returnQuery += "(" + seat + ") ";
@@ -524,14 +531,23 @@ public class Concert implements Comparable
     }
     
     //Finds and returns the customer with the supplied name
-    private Customer findCustomer(String name)
-    {       
-        if(this.customers.size() > 0) {
-            if(Arrays.binarySearch(this.customers.toArray(), new Customer(name)) >= 0) {
-                return this.customers.get(Arrays.binarySearch(this.customers.toArray(), new Customer(name)));
+    private Customer findCustomer(Customer customer)
+    {
+        int i = 0;
+        boolean foundCustomer = false;
+        while (i < this.customers.size() && !foundCustomer) {
+            if(this.customers.get(i).equals(customer)) {
+                foundCustomer = true;
+            } else {
+                i++;
             }
         }
-        return null;
+        if(!foundCustomer) {
+            return null;
+        }
+        else {
+            return this.customers.get(i);
+        }
     }
            
     //Finds and returns the seat in this concert, that matches the supplied seat
@@ -541,16 +557,16 @@ public class Concert implements Comparable
     }
 
     @Override
-    public String toString() 
+    public String toString()
     {
-        return this.getName() + " " + this.getDate();
+        return this.name_ + " " + this.date_;
     }
-    
+
     @Override
     public boolean equals(Object obj) 
     {   
         if(obj.getClass().isInstance(this)) {
-            if(this.hashCode() == ((Concert) obj).hashCode()) {
+            if(this.hashCode() == obj.hashCode()) {
                 return true;
             }
         }                      
@@ -569,10 +585,10 @@ public class Concert implements Comparable
     @Override
     public int compareTo(Object obj) 
     {
-        if(this.hashCode() < ((Concert) obj).hashCode()) {
+        if(this.hashCode() < obj.hashCode()) {
             return -1;
         }
-        else if(this.hashCode() == ((Concert) obj).hashCode()) {
+        else if(this.hashCode() == obj.hashCode()) {
             return 0;
         }
         else {

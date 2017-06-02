@@ -6,6 +6,7 @@ import concerthallsystem.exceptions.SeatIOException;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -85,30 +86,49 @@ public class Seat implements Comparable
     public static Seat load(Scanner input, File seatsFile, int seatLineNum) throws SeatIOException
     {                                 
         Seat temp = new Seat();
+        Pattern rowPattern = Pattern.compile("[a-iA-I]");
+        Pattern numPattern = Pattern.compile("[1-9]|10");
         try {
-            temp.row_ = input.next().toUpperCase();
-            temp.number_ = input.nextInt();
-            temp.bookedBy_= input.next().trim();
-            
-            //Check if seatRow is an actual row defined by its concert
-            int rowIndex = 0;
-            while(temp.row_.compareToIgnoreCase(Concert.SEAT_ROWS[rowIndex]) != 0) {
-                rowIndex++;
-            }
-
-            //Check if seatNum is an actual number defined by its concert
-            int numIndex = 0;
-            while(temp.number_ != (Concert.SEAT_NUMBERS[numIndex])) {
-                numIndex++;
-            }
-
-            if(rowIndex < 3) {
-                temp = new GoldSeat(temp);
-            }
-            else if(rowIndex < 6) {
-                temp = new SilverSeat(temp);
+            if(input.hasNext(rowPattern)) {
+                temp.row_ = input.next().toUpperCase();
             }
             else {
+                throw new InputMismatchException();
+            }
+
+            if(input.hasNext(numPattern)) {
+                temp.number_ = input.nextInt();
+            }
+            else {
+                throw new InputMismatchException();
+            }
+
+            while(input.hasNext()) {
+                if(!input.hasNext(rowPattern)) {
+                    if(temp.bookedBy_ != null) {
+                        temp.bookedBy_ += " " + input.next();
+                    }
+                    else {
+                        temp.bookedBy_ = input.next();
+                    }
+                }
+                else {
+                    if(temp.bookedBy_.length() > 0) {
+                        break;
+                    }
+                    else {
+                        throw new InputMismatchException();
+                    }
+                }
+            }
+
+            if(Pattern.compile("[A-C]").pattern().contains(temp.row_) ) {
+                temp = new GoldSeat(temp);
+            }
+            else if(Pattern.compile("[D-F]").pattern().contains(temp.row_)) {
+                temp = new SilverSeat(temp);
+            }
+            else if(Pattern.compile("[G-I]").pattern().contains(temp.row_)) {
                 temp = new BronzeSeat(temp);
             }
         }
