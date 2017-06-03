@@ -102,15 +102,9 @@ public class DialogPopup extends Dialog
         ObservableList<Node> nodes = FXCollections.observableArrayList();
         
         for(String element : elements) {
-            int i = element.lastIndexOf(":");
-            
-            Label label = new Label(element.substring(0, i+1));           
+            Label label = new Label(element);
             label.setStyle("-fx-font-size: 16px");
-            
-            Label value = new Label(element.substring(i+2));
-            value.setStyle("-fx-font-size: 16px");
-            
-            nodes.addAll(label, value);
+            nodes.add(label);
         }      
         this.drawGridPane(nodes, this.grid, maxCols, maxRows);  
         this.getDialogPane().getButtonTypes().add(OK);

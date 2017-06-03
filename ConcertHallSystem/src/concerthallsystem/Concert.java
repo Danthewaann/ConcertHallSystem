@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -374,33 +373,6 @@ public class Concert implements Comparable
             return null;
         }                       
     }
-    
-    //This returns the seat section price of the supplied seat section
-    public double getSectionPrice(String seatSection)
-    {              
-        int i = 0;       
-        while(!seatSection.equals(SEAT_SECTIONS[i])) {
-            i++;
-        }
-        
-        switch(i) {
-            case 0: {
-                return Double.parseDouble(
-                    PRICE_FORMAT.format(this.goldSectionPrice_)
-                );                              
-            }
-            case 1: {
-                return Double.parseDouble(
-                    PRICE_FORMAT.format(this.silverSectionPrice_)
-                );                
-            }
-            default: {
-                return Double.parseDouble(
-                   PRICE_FORMAT.format(this.bronzeSectionPrice_)
-                );               
-            }
-        }       
-    }
 
     //This method returns a report, detailing the available seats,
     //booked seats and total sales of the concert
@@ -415,13 +387,20 @@ public class Concert implements Comparable
             }
         }  
         
-        fullReport.add("Available Seats: " + String.valueOf(this.seats.length - this.nBookedSeats_));      
-        fullReport.add("Booked Seats: " + String.valueOf(this.nBookedSeats_));   
-        fullReport.add("Customers: " + String.valueOf(this.customers.size()));
-        fullReport.add("GoldSeat Price: £" + PRICE_FORMAT.format(this.goldSectionPrice_));
-        fullReport.add("SilverSeat Price: £" + PRICE_FORMAT.format(this.silverSectionPrice_));
-        fullReport.add("BronzeSeat Price: £" + PRICE_FORMAT.format(this.bronzeSectionPrice_));                                  
-        fullReport.add("Total Sales: £" + PRICE_FORMAT.format(totalSales));         
+        fullReport.add("Available Seats: ");
+        fullReport.add(String.valueOf(this.seats.length - this.nBookedSeats_));
+        fullReport.add("Booked Seats: ");
+        fullReport.add(String.valueOf(this.nBookedSeats_));
+        fullReport.add("Customers: ");
+        fullReport.add(String.valueOf(this.customers.size()));
+        fullReport.add("GoldSeat Price: ");
+        fullReport.add("£" + PRICE_FORMAT.format(this.goldSectionPrice_));
+        fullReport.add("SilverSeat Price: ");
+        fullReport.add("£" + PRICE_FORMAT.format(this.silverSectionPrice_));
+        fullReport.add("BronzeSeat Price: ");
+        fullReport.add("£" + PRICE_FORMAT.format(this.bronzeSectionPrice_));
+        fullReport.add("Total Sales: ");
+        fullReport.add("£" + PRICE_FORMAT.format(totalSales));
         return fullReport;
     }
     
@@ -494,7 +473,7 @@ public class Concert implements Comparable
     }
     
     //This method changes a seat sections price, and assigns the new price
-    //to the approriate seats belonging to that section
+    //to the appropriate seats belonging to that section
     public void setSectionPrice(String seatSection, double newPrice) 
     {               
         int i = 0;
@@ -529,8 +508,7 @@ public class Concert implements Comparable
         }
         this.recentlyChanged = true;
     }
-    
-    //Finds and returns the customer with the supplied name
+
     private Customer findCustomer(Customer customer)
     {
         int i = 0;
@@ -549,8 +527,7 @@ public class Concert implements Comparable
             return this.customers.get(i);
         }
     }
-           
-    //Finds and returns the seat in this concert, that matches the supplied seat
+
     private Seat findSeat(Seat seat)
     {        
         return this.seats[Arrays.binarySearch(this.seats, seat)];

@@ -6,7 +6,6 @@ import concerthallsystem.exceptions.SeatIOException;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -134,6 +133,9 @@ public class Seat implements Comparable
         }
         catch(ArrayIndexOutOfBoundsException | NoSuchElementException ex) {
             throw new SeatIOException(seatsFile, seatLineNum);
+        }
+        finally {
+            input.nextLine();
         }
         return temp;
     }

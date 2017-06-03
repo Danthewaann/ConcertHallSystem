@@ -4,7 +4,6 @@ package concerthallsystem;
 import concerthallsystem.exceptions.CustomerIOException;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -136,6 +135,9 @@ public class Customer implements Comparable
         }
         catch(NoSuchElementException ex) {
             throw new CustomerIOException(customersFile, customerLineNum);
+        }
+        finally {
+            input.nextLine();
         }
         return temp;
     }    
