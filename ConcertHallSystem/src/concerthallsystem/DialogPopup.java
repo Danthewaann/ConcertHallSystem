@@ -213,8 +213,7 @@ public class DialogPopup extends Dialog
         
         Optional<String> result = this.showAndWait();
         result.ifPresent(customer -> {
-            Customer temp = new Customer(customer);
-            drawResultDialog(concert.queryByCustomer(temp));
+            drawResultDialog(concert.queryByCustomer(customer));
         });        
     }
     

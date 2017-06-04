@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 * @author Daniel Black
 */
 
-public class Seat implements Comparable
+public class Seat implements Comparable<Seat>
 {
     private double price_;
     private boolean isBooked_;  
@@ -43,7 +43,7 @@ public class Seat implements Comparable
     }
                 
     @Override
-    public int compareTo(Object obj)
+    public int compareTo(Seat obj)
     {
         if(this.hashCode() < obj.hashCode()) {
             return -1;

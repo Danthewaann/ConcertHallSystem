@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @author Daniel Black
  */
 
-public class Customer implements Comparable
+public class Customer implements Comparable<Customer>
 {
     private final List<Seat> bookedSeats;
     private String name_;
@@ -162,16 +162,8 @@ public class Customer implements Comparable
     }
 
     @Override
-    public int compareTo(Object obj) 
+    public int compareTo(Customer obj)
     {
-        if(this.hashCode() < obj.hashCode()) {
-            return -1;
-        }
-        else if(this.hashCode() == obj.hashCode()) {
-            return 0;
-        }
-        else {
-            return 1;
-        }
+        return this.name_.compareTo(obj.name_);
     }  
 }

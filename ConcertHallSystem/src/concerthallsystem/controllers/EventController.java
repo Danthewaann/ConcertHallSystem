@@ -152,28 +152,28 @@ public class EventController
     
     private void goToSeatingPlanScene(String selectedConcert)
     {
-        ObservableList<Node> seats = this.seatIcons.getChildren();
-        for(int i = 0; i < seats.size(); i++) {               
+        ObservableList<Node> seatIcons = this.seatIcons.getChildren();
+        for(int i = 0; i < seatIcons.size(); i++) {
             if(this.concertController.getCurrentConcert().getSeats()[i].getStatus()) {                    
-                seats.get(i).setStyle("-fx-background-color: linear-gradient(#FF0000, #D10000);");
+                seatIcons.get(i).setStyle("-fx-background-color: linear-gradient(#FF0000, #D10000);");
             }
             else {
                 switch(this.concertController.getCurrentConcert().getSeats()[i].getClass().getSimpleName()) {
                     case "GoldSeat":
-                        seats.get(i).setStyle("-fx-background-color: linear-gradient(#FFD700, #EDC800);");
+                        seatIcons.get(i).setStyle("-fx-background-color: linear-gradient(#FFD700, #EDC800);");
                         break;
                     case "SilverSeat":
-                        seats.get(i).setStyle("-fx-background-color: linear-gradient(#C0C0C0, #ABABAB);");
+                        seatIcons.get(i).setStyle("-fx-background-color: linear-gradient(#C0C0C0, #ABABAB);");
                         break;
                     default:
-                        seats.get(i).setStyle("-fx-background-color: linear-gradient(#CD7F32, #B5702B);");
+                        seatIcons.get(i).setStyle("-fx-background-color: linear-gradient(#CD7F32, #B5702B);");
                         break;
                 }
             }
-            seats.get(i).setCursor(Cursor.HAND);
-            seats.get(i).setOnMouseClicked(new SeatEventHandler(
+            seatIcons.get(i).setCursor(Cursor.HAND);
+            seatIcons.get(i).setOnMouseClicked(new SeatEventHandler(
                 this.concertController.getCurrentConcert(), 
-                this.concertController.getCurrentConcert().getSeats()[i], seats.get(i))
+                this.concertController.getCurrentConcert().getSeats()[i], seatIcons.get(i))
             );
         }           
         this.selectedConcertTitle.setText(selectedConcert);
