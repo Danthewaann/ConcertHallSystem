@@ -1,7 +1,8 @@
-This project is currently on hold
+This project has been finished
 ======
+##### Barring some slight revisions I may do in the future
 
-### ConcertHallSystem
+### The ConcertHallSystem
 GUI application that manages concerts, along with their customers and seats.
 
 If you want to download the program to try it out, do the following:
@@ -18,4 +19,4 @@ This was a university assignment that I did, and since then I have been playing 
 1. ~~Completely revamp GUI by decomposing MainGUI class into smaller classes for each UI component.~~ 
 2. ~~Switch over from Swing to JavaFX for a more up-to-date UI look and feel.~~
 3. ~~Create new exception classes, mainly SeatIOException and CustomerIOException.~~
-4. Re-do file save and load operations, so one concert can save itself without having to save all other concerts as well.
+4. ~~Re-do file save and load operations, so one concert can save itself without having to save all other concerts as well.~~
