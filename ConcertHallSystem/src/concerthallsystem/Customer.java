@@ -137,7 +137,9 @@ public class Customer implements Comparable
             throw new CustomerIOException(customersFile, customerLineNum);
         }
         finally {
-            input.nextLine();
+            if(input.hasNextLine()) {
+                input.nextLine();
+            }
         }
         return temp;
     }    

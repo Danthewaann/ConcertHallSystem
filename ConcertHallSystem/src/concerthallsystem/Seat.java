@@ -37,8 +37,7 @@ public class Seat implements Comparable
 
     protected Seat(Seat seat)
     {
-        this.row_ = seat.row_;
-        this.number_ = seat.number_;
+        this(seat.row_, seat.number_);
         this.bookedBy_ = seat.bookedBy_;
         this.isBooked_ = true;
     }
@@ -135,7 +134,9 @@ public class Seat implements Comparable
             throw new SeatIOException(seatsFile, seatLineNum);
         }
         finally {
-            input.nextLine();
+            if(input.hasNextLine()) {
+                input.nextLine();
+            }
         }
         return temp;
     }

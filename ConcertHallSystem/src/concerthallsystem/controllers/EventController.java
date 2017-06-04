@@ -228,7 +228,7 @@ public class EventController
     private void saveConcert(ActionEvent event)
     {
         try {
-            this.concertController.saveConcerts();
+            this.concertController.saveCurrentConcert();
             this.sceneController.displaySaveSuccessfulDialog(
                 this.concertController.getCurrentConcert()
             );

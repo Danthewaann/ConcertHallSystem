@@ -108,35 +108,68 @@ public class ConcertController
         PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
 
         for(Concert concert : this.concerts) {
-            if(concert.isRecentlyChanged()) {
-                if (concert.save(concertOutput, MAIN_DIRECTORY)) {
-                    System.out.printf(
-                            "Successfully saved concert %s%n", concert
-                    );
-                } else {
-                    System.out.printf(
-                            "Failed to save concert %s%n", concert
-                    );
-                }
+            if (concert.save(MAIN_DIRECTORY)) {
+                System.out.printf(
+                        "Successfully saved concert %s%n", concert
+                );
+            } else {
+                System.out.printf(
+                        "Failed to save concert %s%n", concert
+                );
             }
         }
         concertOutput.close();                
     }
 
     //TODO - Find a way to save just one concert to file, instead of all concerts
-    public void saveConcert(Concert concert) throws FileNotFoundException
+    public void saveCurrentConcert() throws FileNotFoundException
     {
         PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
-    }
-    
-    public Concert findConcert(Concert concert)
-    {
-        if(this.concerts.size() > 0) {
-            if(Arrays.binarySearch(this.concerts.toArray(), concert) >= 0) {
-                return this.concerts.get(Arrays.binarySearch(this.concerts.toArray(), concert));
+        concertOutput.printf("%s %.2f %.2f %.2f%n", this.currentConcert,
+                this.currentConcert.getSectionPrice(Concert.SEAT_SECTIONS[0]),
+                this.currentConcert.getSectionPrice(Concert.SEAT_SECTIONS[1]),
+                this.currentConcert.getSectionPrice(Concert.SEAT_SECTIONS[2])
+        );
+
+        for(Concert concert : this.concerts) {
+            if(!concert.equals(this.currentConcert)) {
+                concertOutput.printf("%s %.2f %.2f %.2f%n", concert,
+                        concert.getSectionPrice(Concert.SEAT_SECTIONS[0]),
+                        concert.getSectionPrice(Concert.SEAT_SECTIONS[1]),
+                        concert.getSectionPrice(Concert.SEAT_SECTIONS[2])
+                );
             }
         }
-        return null;   
+
+        if(this.currentConcert.save(MAIN_DIRECTORY)) {
+            System.out.printf(
+                    "Successfully saved concert %s%n", this.currentConcert
+            );
+        } else {
+            System.out.printf(
+                    "Failed to save concert %s%n", this.currentConcert
+            );
+        }
+        concertOutput.close();
+    }
+
+    public Concert findConcert(Concert concert)
+    {
+        int i = 0;
+        boolean foundConcert = false;
+        while (i < this.concerts.size() && !foundConcert) {
+            if(this.concerts.get(i).equals(concert)) {
+                foundConcert = true;
+            } else {
+                i++;
+            }
+        }
+        if(!foundConcert) {
+            return null;
+        }
+        else {
+            return this.concerts.get(i);
+        }
     }
 
     private void checkForErrors()

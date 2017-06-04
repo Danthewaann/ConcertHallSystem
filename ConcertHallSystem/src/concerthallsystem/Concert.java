@@ -41,7 +41,7 @@ public class Concert implements Comparable
     private double goldSectionPrice_;
     private double bronzeSectionPrice_;
     private boolean recentlyChanged = false;
-    private final ArrayList<Customer> customers;    
+    private final List<Customer> customers;
     public static final String[] SEAT_SECTIONS = {"Gold", "Silver", "Bronze"};
     public static final String[] SEAT_ROWS = {"A","B","C","D","E","F","G","H","I"};
     public static final int[] SEAT_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -97,82 +97,71 @@ public class Concert implements Comparable
     }
     
     //Saves the current concert along with its info, booked seats and customers, to file
-    public boolean save(PrintWriter concertOutput, String directory) throws FileNotFoundException
-    {                
-        PrintWriter seatOutput = null; 
-        PrintWriter customerOutput = null;
-        try {                                
-            //Save concert to Concert_list file
-            concertOutput.println(
-                this + " " + this.goldSectionPrice_ 
-                + " " + this.silverSectionPrice_ 
-                + " " + this.bronzeSectionPrice_
-            );
-            
+    public boolean save(String directory) throws FileNotFoundException
+    {
+        try {
             //Create directory for current concert
             File concertDirectory = new File(
                 directory + File.separator + this
             );
             concertDirectory.mkdir();
-              
-            //Open outputstream to Booked_seats.txt file
-            seatOutput = new PrintWriter(new File(
-                concertDirectory + File.separator + "Booked_seats.txt")
-            );           
-            
-            //Save all booked seats to file 
-            for(Seat seat : this.seats) {
-                if(seat.getStatus()) {
-                    if(seat.save(seatOutput)) {
-                        System.out.println(
-                            "Successfully saved seat " + "(" + seat + ")" 
-                            + " for concert " + this
-                        );
-                    }
-                    else {
-                        System.out.println(
-                            "Failed to save seat " + "(" + seat + ")" 
-                            + " for concert " + this
-                        );
-                    }
-                }
-            }
-            
-            //Open outputstream to Customers.txt file                       
-            customerOutput = new PrintWriter(new File(
-                concertDirectory + File.separator + "Customers.txt")
-            );   
-            
-            //Save all customers to file 
-            for(Customer customer : this.customers) {
-                if(customer.save(customerOutput)) {
-                    System.out.println(
-                        "Successfully saved customer " + customer.getName() 
-                        + " for concert " + this
-                    );
-                }
-                else {
-                    System.out.println(
-                        "Failed to save customer " + customer.getName() 
-                        + " for concert " + this
-                    );
-                }
-            }            
+
+            this.saveCustomers(concertDirectory);
+            this.saveSeats(concertDirectory);
         }
         catch(IOException io) {
             System.out.println(io.getMessage());
             return false;
         }
-        finally { //Close all outputstreams when done
-            if(seatOutput != null) {
-                seatOutput.close();
-            }
-            if(customerOutput != null) {
-                customerOutput.close();
-            }
-        }
         this.recentlyChanged = false;
         return true;
+    }
+
+    private void saveSeats(File concertDirectory) throws FileNotFoundException
+    {
+        PrintWriter seatOutput = new PrintWriter(new File(
+                concertDirectory + File.separator + "Booked_seats.txt")
+        );
+
+        for (Seat seat : this.seats) {
+            if (seat.getStatus()) {
+                if (seat.save(seatOutput)) {
+                    System.out.println(
+                            "Successfully saved seat " + "(" + seat + ")"
+                                    + " for concert " + this
+                    );
+                } else {
+                    System.out.println(
+                            "Failed to save seat " + "(" + seat + ")"
+                                    + " for concert " + this
+                    );
+                }
+            }
+        }
+        seatOutput.close();
+    }
+
+    private void saveCustomers(File concertDirectory) throws FileNotFoundException
+    {
+        PrintWriter customerOutput = new PrintWriter(new File(
+                concertDirectory + File.separator + "Customers.txt")
+        );
+
+        for(Customer customer : this.customers) {
+            if(customer.save(customerOutput)) {
+                System.out.println(
+                        "Successfully saved customer " + customer.getName()
+                                + " for concert " + this
+                );
+            }
+            else {
+                System.out.println(
+                        "Failed to save customer " + customer.getName()
+                                + " for concert " + this
+                );
+            }
+        }
+        customerOutput.close();
     }
     
     //Load in a concert from file, populating it with its customers and booked seats, 
@@ -286,7 +275,7 @@ public class Concert implements Comparable
         return this.seats;
     }
     
-    public ArrayList<Customer> getCustomers()
+    public List<Customer> getCustomers()
     {
         return this.customers;
     }
@@ -507,6 +496,32 @@ public class Concert implements Comparable
             }        
         }
         this.recentlyChanged = true;
+    }
+
+    public double getSectionPrice(String seatSection)
+    {
+        int i = 0;
+        while(!seatSection.equals(SEAT_SECTIONS[i])) {
+            i++;
+        }
+
+        switch(i) {
+            case 0: {
+                return Double.parseDouble(
+                        PRICE_FORMAT.format(this.goldSectionPrice_)
+                );
+            }
+            case 1: {
+                return Double.parseDouble(
+                        PRICE_FORMAT.format(this.silverSectionPrice_)
+                );
+            }
+            default: {
+                return Double.parseDouble(
+                        PRICE_FORMAT.format(this.bronzeSectionPrice_)
+                );
+            }
+        }
     }
 
     private Customer findCustomer(Customer customer)
