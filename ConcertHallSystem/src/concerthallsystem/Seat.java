@@ -71,9 +71,7 @@ public class Seat implements Comparable
     public boolean save(PrintWriter output)
     {             
         try {
-            output.println(
-                this.row_ + " " + this.number_ + " " + this.bookedBy_
-            );  
+            output.printf("%s %d %s%n", this.row_, this.number_, this.bookedBy_);
         }
         catch(Exception e) {
             return false;

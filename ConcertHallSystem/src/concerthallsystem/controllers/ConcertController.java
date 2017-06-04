@@ -103,25 +103,6 @@ public class ConcertController
         this.checkForErrors();
     }  
 
-    public void saveConcerts() throws FileNotFoundException
-    {
-        PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
-
-        for(Concert concert : this.concerts) {
-            if (concert.save(MAIN_DIRECTORY)) {
-                System.out.printf(
-                        "Successfully saved concert %s%n", concert
-                );
-            } else {
-                System.out.printf(
-                        "Failed to save concert %s%n", concert
-                );
-            }
-        }
-        concertOutput.close();                
-    }
-
-    //TODO - Find a way to save just one concert to file, instead of all concerts
     public void saveCurrentConcert() throws FileNotFoundException
     {
         PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);

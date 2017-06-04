@@ -43,6 +43,7 @@ public class DialogPopup extends Dialog
 
     public DialogPopup()
     {
+        this.setTitle("Dialog Box");
         this.grid.setVgap(5);
         this.grid.setHgap(20);        
         this.grid.setPadding(new Insets(25, 25, 25, 25));
@@ -53,6 +54,7 @@ public class DialogPopup extends Dialog
     
     public DialogPopup(boolean bool)
     {
+        this.setTitle("Dialog Box");
         this.grid.setVgap(5);
         this.grid.setHgap(20);        
         this.grid.setPadding(new Insets(25, 25, 25, 25));
@@ -62,6 +64,7 @@ public class DialogPopup extends Dialog
 
     public DialogPopup(SceneController sceneController)
     {
+        this.setTitle("Dialog Box");
         this.grid.setVgap(5);
         this.grid.setHgap(20);
         this.grid.setPadding(new Insets(25, 25, 25, 25));
@@ -159,7 +162,7 @@ public class DialogPopup extends Dialog
     public static void drawResultDialog(String result)
     {
         DialogPopup dialog = new DialogPopup();
-        //dialog.setHeaderText("Result Confirmation");
+        dialog.setHeaderText("Result Confirmation");
         
         Label label = new Label(result);
         label.setStyle("-fx-font-size: 16px");
@@ -277,7 +280,7 @@ public class DialogPopup extends Dialog
         Optional<String> result = this.showAndWait();
         if(result.get().equals("Save & Exit")) {
             try {
-                this.sceneController.getEventController().getConcertController().saveConcerts();
+                this.sceneController.getEventController().getConcertController().saveCurrentConcert();
             }
             catch (FileNotFoundException e) {
                 e.printStackTrace();

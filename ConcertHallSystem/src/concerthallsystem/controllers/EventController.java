@@ -96,18 +96,6 @@ public class EventController
     @FXML
     private void exitApplication(ActionEvent event)
     {
-        for(Concert concert : this.concertController.getConcertList()) {
-            if(concert.isRecentlyChanged()) {
-                try {
-                    this.concertController.saveConcerts();
-                    DialogPopup.drawResultDialog("Successfully saved concerts to file");
-                }
-                catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-        }
         System.exit(0);
     }
             

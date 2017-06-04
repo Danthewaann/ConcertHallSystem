@@ -97,9 +97,7 @@ public class Customer implements Comparable
     public boolean save(PrintWriter output)
     {
         try {
-            output.println(
-                this.name_ + " " + this.goldEntitled_ + " " + this.silverEntitled_
-            );
+            output.printf("%s %b %b%n", this.name_, this.goldEntitled_, this.silverEntitled_);
         }
         catch(Exception e) {
             return false;
