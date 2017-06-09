@@ -15,7 +15,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.util.Arrays;
 
 /**
  * The Concert class holds all the important information that can
@@ -30,7 +29,7 @@ import java.util.Arrays;
  * @author Daniel Black
  */
 
-public class Concert
+public class Concert implements Comparable<Concert>
 {
     private Seat[] seats;    
     private String name_;
@@ -236,7 +235,7 @@ public class Concert
             while(seatInput.hasNextLine()) {
                 try {
                     Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum);
-                    Seat actualSeat = tempConcert.findSeat(tempSeat);
+                    Seat actualSeat = tempConcert.getSeat(tempSeat.getRow(), tempSeat.getNumber());
                     actualSeat.setBookee(tempSeat.getBookee());
 
                     Customer tempCustomer = new Customer(actualSeat.getBookee());
@@ -297,7 +296,7 @@ public class Concert
             //If the seatRow is not A, return seat at index (seatNum - 1) + (seatRow index * 10)
             //Each row has 10 seats, so if seatRow is B and seatNum is 5,
             //its index is 14 because seatRow B index is 1 and (5 - 1) + (1 * 10) = 14
-            return this.seats[(seatNum-1) + (i*Concert.SEAT_NUMBERS.length)]; 
+            return this.seats[(seatNum-1) + (i*SEAT_NUMBERS.length)];
         }
     }
 
@@ -306,13 +305,11 @@ public class Concert
         Customer customer = this.findCustomer(new Customer(name));
         
         if(customer != null) {
-            Seat actualSeat = this.findSeat(seat);
-            actualSeat.book(customer);
+            seat.book(customer);
         }
         else {           
-            Customer newCustomer = new Customer(name); 
-            Seat actualSeat = this.findSeat(seat);
-            actualSeat.book(newCustomer);
+            Customer newCustomer = new Customer(name);
+            seat.book(newCustomer);
             this.customers.add(newCustomer);
             this.customers.sort(null);
         }
@@ -323,10 +320,9 @@ public class Concert
     public void unBookSeat(Seat seat) throws CannotUnbookSeatException
     {
         Customer customer = this.findCustomer(new Customer(seat.getBookee()));
-        Seat temp = this.findSeat(seat);
         
         if(customer != null) {
-            temp.unBook(customer);
+            seat.unBook(customer);
             this.nBookedSeats_--; 
             if(!customer.hasBookedASeat())
             {
@@ -539,15 +535,24 @@ public class Concert
         }
     }
 
-    private Seat findSeat(Seat seat)
-    {        
-        return this.seats[Arrays.binarySearch(this.seats, seat)];
-    }
-
     @Override
     public String toString()
     {
         return this.name_ + " " + this.date_;
+    }
+
+    @Override
+    public int compareTo(Concert obj)
+    {
+        if(this.hashCode() < obj.hashCode()) {
+            return -1;
+        }
+        else if(this.hashCode() == obj.hashCode()) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
     }
 
     @Override

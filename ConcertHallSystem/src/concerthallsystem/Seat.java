@@ -138,7 +138,17 @@ public class Seat implements Comparable<Seat>
         }
         return temp;
     }
-      
+
+    public String getRow()
+    {
+        return this.row_;
+    }
+
+    public int getNumber()
+    {
+        return this.number_;
+    }
+
     public boolean getStatus()
     {
         return this.isBooked_;

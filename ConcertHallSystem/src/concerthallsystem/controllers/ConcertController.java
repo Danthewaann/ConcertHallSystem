@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -105,6 +104,10 @@ public class ConcertController
 
     public void saveCurrentConcert() throws FileNotFoundException
     {
+        /**
+         * Need to save all Concerts to the Concert_list.txt file, so we
+         * firstly save the current concert, then append all the others to file
+         */
         PrintWriter concertOutput = new PrintWriter(MAIN_DIRECTORY + File.separator + CONCERT_LIST);
         concertOutput.printf("%s %.2f %.2f %.2f%n", this.currentConcert,
                 this.currentConcert.getSectionPrice(Concert.SEAT_SECTIONS[0]),

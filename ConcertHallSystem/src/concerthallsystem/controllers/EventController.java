@@ -74,7 +74,7 @@ public class EventController
     private void goToMainMenuScene(ActionEvent event)
     {
         if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("SelectConcert"))) {           
-            this.dropDownList.getItems().clear();
+            this.dropDownList.getSelectionModel().clearSelection();
             this.sceneController.setScene("MainMenu");
         }  
         else if(this.sceneController.getCurrentScene().equals(this.sceneController.getAllScenes().get("CreateConcert"))) {
@@ -90,7 +90,6 @@ public class EventController
                 this.sceneController.setScene("MainMenu");
             }
         }
-
     }
     
     @FXML
@@ -116,6 +115,7 @@ public class EventController
                     this.concertController.getConcertList().remove(actual);
                     this.concertController.getConcertList().add(temp);
                     this.concertController.setCurrentConcert(temp);
+                    this.concertController.getConcertList().sort(null);
                     this.goToSeatingPlanScene(temp.getName() + " | " + temp.getDate());
                 }
             }
@@ -123,7 +123,7 @@ public class EventController
         else {           
             this.concertController.getConcertList().add(temp);
             this.concertController.setCurrentConcert(temp);
-            this.dropDownList.getItems().add(temp.getName() + " | " + temp.getDate());
+            this.concertController.getConcertList().sort(null);
             this.goToSeatingPlanScene(temp.getName() + " | " + temp.getDate());
         }             
         this.newConcertName.clear();
