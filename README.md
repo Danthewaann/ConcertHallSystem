@@ -7,7 +7,7 @@ GUI application that manages concerts, along with their customers and seats.
 
 If you want to download the program to try it out, do the following:
 
-1. Go to the "dist" folder inside the main directory.
+1. Go to the "dist" folder inside the JavaFX/Swing directory.
 2. Download the jar file.
 3. Create a folder for the jar and place it in that (Makes life easier).
 4. Enjoy!
