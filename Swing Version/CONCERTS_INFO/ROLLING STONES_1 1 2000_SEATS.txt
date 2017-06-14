@@ -1,0 +1,16 @@
+A 1 Daniel Black false
+A 2 Daniel Black false
+A 5 Daniel Black false
+B 1 Daniel Black false
+B 2 Daniel Black false
+B 3 Daniel Black false
+B 5 George false
+C 1 Daniel Black false
+C 2 daniel black false
+D 1 Daniel Black true
+D 2 daniel black true
+D 5 george bingham true
+G 3 minyu lei false
+G 4 Minyu Lei false
+G 5 Minyu Lei false
+I 10 Daniel Black false
