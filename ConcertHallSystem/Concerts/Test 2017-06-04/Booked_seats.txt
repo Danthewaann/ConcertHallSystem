@@ -1,5 +1,0 @@
-A 1 Daniel
-A 2 Alan
-A 3 Adam
-A 4 Daniel
-D 1 Adam

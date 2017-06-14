@@ -1,3 +1,0 @@
-Adam false true
-Alan false false
-Daniel false false
