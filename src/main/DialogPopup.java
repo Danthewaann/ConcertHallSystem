@@ -188,7 +188,7 @@ public class DialogPopup extends Dialog
 
     public void drawQueryCustomerDialog(Concert concert, int maxCols, int maxRows)
     {
-        Label label = new Label("Select /Customer to Query:");
+        Label label = new Label("Select Customer to Query:");
         label.setStyle("-fx-font-size: 16px");
 
         ComboBox options = new ComboBox();
