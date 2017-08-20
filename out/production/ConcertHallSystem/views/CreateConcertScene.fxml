@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox alignment="CENTER" prefHeight="137.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="800.0" text="Create New Concert">
+                    <font>
+                        <Font name="Arial Bold" size="42.0" />
+                    </font>
+                </Label>
+                <Label alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="800.0" text="Fill in fields below to create a new concert">
+                    <font>
+                        <Font size="21.0" />
+                    </font>
+                </Label>
+                <Separator minWidth="-Infinity" prefHeight="10.0" prefWidth="800.0" />
+            </children>
+            <padding>
+                <Insets top="30.0" />
+            </padding>
+        </VBox>
+        <VBox alignment="TOP_CENTER" fillWidth="false" layoutY="174.0" prefHeight="200.0" prefWidth="800.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="174.0">
+            <children>
+                <HBox alignment="CENTER" prefHeight="13.0" prefWidth="352.0">
+                    <children>
+                        <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="125.0" text="Input New Name">
+                            <font>
+                                <Font name="Calibri" size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <TextField fx:id="newConcertName" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="200.0" promptText="Input a name...">
+                    <effect>
+                        <DropShadow color="#00000040" height="0.0" offsetY="1.0" radius="0.0" width="0.0" />
+                    </effect>
+                </TextField>
+                <HBox alignment="CENTER" prefHeight="13.0" prefWidth="352.0">
+                    <children>
+                        <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="96.0" text="Select a Date">
+                            <font>
+                                <Font name="Calibri" size="18.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets top="10.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                </HBox>
+                <DatePicker fx:id="newConcertDate" editable="false" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" promptText="Select a date...">
+                    <effect>
+                        <DropShadow color="#00000040" height="0.0" offsetY="1.0" radius="0.0" width="0.0" />
+                    </effect>
+                </DatePicker>
+            </children>
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+        </VBox>
+        <VBox alignment="CENTER" fillWidth="false" layoutY="374.0" prefHeight="119.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="374.0">
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+            <children>
+                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createNewConcert" prefHeight="45.0" prefWidth="200.0" text="Create New Concert" textAlignment="CENTER">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                    <effect>
+                        <DropShadow color="#00000040" height="1.0" offsetY="1.0" radius="0.0" spread="1.0" width="0.0" />
+                    </effect>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+            </children>
+        </VBox>
+        <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" layoutX="677.0" layoutY="514.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goToMainMenuScene" prefHeight="35.0" prefWidth="95.0" text="Main Menu" textAlignment="CENTER" AnchorPane.bottomAnchor="51.0" AnchorPane.rightAnchor="28.0">
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+    </children>
+</AnchorPane>
+
