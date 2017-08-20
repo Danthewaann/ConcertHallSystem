@@ -115,10 +115,10 @@ public class DialogPopup extends Dialog
 
     public void drawQuerySeatDialog(Concert concert, int maxCols, int maxRows)
     {
-        Label rowLabel = new Label("Select a main.Seat Row:");
+        Label rowLabel = new Label("Select a Seat Row:");
         rowLabel.setStyle("-fx-font-size: 16px;");
 
-        Label numberLabel = new Label("Select a main.Seat Number:");
+        Label numberLabel = new Label("Select a Seat Number:");
         numberLabel.setStyle("-fx-font-size: 16px;");
 
         ComboBox rows = new ComboBox();
@@ -188,7 +188,7 @@ public class DialogPopup extends Dialog
 
     public void drawQueryCustomerDialog(Concert concert, int maxCols, int maxRows)
     {
-        Label label = new Label("Select main.Customer to Query:");
+        Label label = new Label("Select /Customer to Query:");
         label.setStyle("-fx-font-size: 16px");
 
         ComboBox options = new ComboBox();
@@ -219,7 +219,7 @@ public class DialogPopup extends Dialog
 
     public void drawSectionPriceDialog(Concert concert, int maxCols, int maxRows)
     {
-        Label sectionLabel = new Label("Select a main.Seat Section:");
+        Label sectionLabel = new Label("Select a Seat Section:");
         sectionLabel.setStyle("-fx-font-size: 16px;");
 
         Label inputLabel = new Label("Input a New Price:");
@@ -303,7 +303,7 @@ public class DialogPopup extends Dialog
 
     public void drawBookSeatDialog(Concert concert, Seat seat, Node seatIcon)
     {
-        this.setHeaderText("Book main.Seat (" + seat + ")");
+        this.setHeaderText("Book Seat (" + seat + ")");
         Label label = new Label("Input name to book this seat:");
         label.setStyle("-fx-font-size: 16px;");
 
@@ -344,7 +344,7 @@ public class DialogPopup extends Dialog
 
     public void drawUnBookSeatDialog(Concert concert, Seat seat, Node seatIcon)
     {
-        this.setHeaderText("Unbook main.Seat (" + seat + ")");
+        this.setHeaderText("Unbook Seat (" + seat + ")");
         Label label = new Label("Are you sure you want to unbook this seat?");
         label.setStyle("-fx-font-size: 16px;");
 
@@ -364,7 +364,7 @@ public class DialogPopup extends Dialog
         result.ifPresent(input -> {
             try {
                 concert.unBookSeat(seat);
-                if(seat.getClass().getSimpleName().equals("main.GoldSeat")) {
+                if(seat.getClass().getSimpleName().equals("GoldSeat")) {
                     seatIcon.setStyle("-fx-background-color: linear-gradient(#FFD700, #EDC800);");
                 }
                 else {

@@ -42,14 +42,14 @@ public class Customer implements Comparable<Customer>
 
     public void setEntitlement(Seat seat)
     {
-        if(seat.getClass().getSimpleName().equals("main.GoldSeat")) {
+        if(seat.getClass().getSimpleName().equals("GoldSeat")) {
             //1 in 10 chance of getting a free backstage pass
             int randomNum = ((int)(Math.random() * 10 + 1 ));
             if(randomNum == 1) {
                 this.goldEntitled_ = true;
             }
         }
-        else if(seat.getClass().getSimpleName().equals("main.SilverSeat")) {
+        else if(seat.getClass().getSimpleName().equals("SilverSeat")) {
             this.silverEntitled_ = true;
         }
     }

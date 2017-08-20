@@ -15,7 +15,7 @@ public class ConcertAlreadyExistsException extends RuntimeException
     public ConcertAlreadyExistsException(Concert concert)
     {
         super(
-                "main.Concert: " + concert + " already exists, do you want to override it?"
+                "Concert: " + concert + " already exists, do you want to override it?"
         );
     }
 

@@ -227,13 +227,14 @@ public class Concert implements Comparable<Concert>
 
     private static void loadSeats(File concertDirectory, Concert tempConcert, List<RuntimeException> errors) throws IOException
     {
-        int seatLineNum = 1;
+        int seatLineNum = 0;
         File seatsFile = new File(concertDirectory + File.separator + "Booked_seats.txt");
 
         if(seatsFile.canRead()) {
             Scanner seatInput = new Scanner(seatsFile);
             while(seatInput.hasNextLine()) {
                 try {
+                    seatLineNum++;
                     Seat tempSeat = Seat.load(seatInput, seatsFile, seatLineNum);
                     Seat actualSeat = tempConcert.getSeat(tempSeat.getRow(), tempSeat.getNumber());
                     actualSeat.setBookee(tempSeat.getBookee());
@@ -248,7 +249,6 @@ public class Concert implements Comparable<Concert>
                     else {
                         throw new SeatIOException(seatsFile, seatLineNum);
                     }
-                    seatLineNum++;
                 }
                 catch(SeatIOException io) {
                     errors.add(io);
@@ -375,11 +375,11 @@ public class Concert implements Comparable<Concert>
         fullReport.add(String.valueOf(this.nBookedSeats_));
         fullReport.add("Customers: ");
         fullReport.add(String.valueOf(this.customers.size()));
-        fullReport.add("main.GoldSeat Price: ");
+        fullReport.add("GoldSeat Price: ");
         fullReport.add("£" + PRICE_FORMAT.format(this.goldSectionPrice_));
-        fullReport.add("main.SilverSeat Price: ");
+        fullReport.add("SilverSeat Price: ");
         fullReport.add("£" + PRICE_FORMAT.format(this.silverSectionPrice_));
-        fullReport.add("main.BronzeSeat Price: ");
+        fullReport.add("BronzeSeat Price: ");
         fullReport.add("£" + PRICE_FORMAT.format(this.bronzeSectionPrice_));
         fullReport.add("Total Sales: ");
         fullReport.add("£" + PRICE_FORMAT.format(totalSales));
@@ -449,7 +449,7 @@ public class Concert implements Comparable<Concert>
             return returnQuery;
         }
         else {
-            return "main.Customer does not exist";
+            return "Customer does not exist";
         }
     }
 

@@ -27,7 +27,7 @@ public class Main extends Application
 
         Group root = new Group();
         root.getChildren().addAll(this.sceneController);
-        WINDOW.setTitle("main.Concert Hall Booking System");
+        WINDOW.setTitle("Concert Hall Booking System");
         WINDOW.setScene(new Scene(root,900, 700));
         WINDOW.show();
     }
