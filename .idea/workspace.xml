@@ -6,9 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8a84495d-b6d6-4e14-884d-a8e9a86ded9c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/DialogPopup.java" afterPath="$PROJECT_DIR$/src/main/DialogPopup.java" />
-    </list>
+    <list default="true" id="8a84495d-b6d6-4e14-884d-a8e9a86ded9c" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -46,8 +44,8 @@
       <file leaf-file-name="DialogPopup.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/DialogPopup.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="196" column="56" lean-forward="true" selection-start-line="196" selection-start-column="56" selection-end-line="196" selection-end-column="56" />
+            <state relative-caret-position="389">
+              <caret line="195" column="0" lean-forward="true" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -371,12 +369,12 @@
       <option name="presentableId" value="Default" />
       <updated>1503184709675</updated>
       <workItem from="1503184717668" duration="3000000" />
-      <workItem from="1503188923367" duration="5932000" />
+      <workItem from="1503188923367" duration="6361000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8932000" />
+    <option name="totallyTimeSpent" value="9361000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -729,8 +727,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/DialogPopup.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="196" column="56" lean-forward="true" selection-start-line="196" selection-start-column="56" selection-end-line="196" selection-end-column="56" />
+        <state relative-caret-position="389">
+          <caret line="195" column="0" lean-forward="true" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
