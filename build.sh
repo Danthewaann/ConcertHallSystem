@@ -8,7 +8,7 @@ rm -rf $SCRIPT_DIR/build/*
 
 # Compile .java files into build/
 echo "-------------- COMPILING ---------------"
-javac -Xlint:unchecked $(find src/ -name "*.java") -d $SCRIPT_DIR/build/
+javac -Xlint:unchecked $(find $SCRIPT_DIR/src/ -name "*.java") -d $SCRIPT_DIR/build/
 echo "----------------------------------------"
 
 # Copy view fxml files into build/
