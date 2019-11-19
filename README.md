@@ -2,7 +2,12 @@ This project has been finished
 ======
 ##### Barring some slight revisions I may do in the future
 
-### The ConcertHallSystem
+## Java version
+openjdk version "1.8.0_222"  
+OpenJDK Runtime Environment (build1.8.0_222-8u222-b10-1ubuntu1~18.04.1-b10)  
+OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode)
+
+## The ConcertHallSystem
 GUI application that manages concerts, along with their customers and seats.
 
 If you want to download the program to try it out, do the following:
