@@ -13,7 +13,7 @@ If you want to download the program to try it out, do the following:
 
 1. Install [Maven](https://maven.apache.org/download.cgi).
 2. Run `mvn package` to compile code and create jar file.
-4. Run `concerthallsystem-<version>.jar` file (should be located in `target` folder).
+4. Run `concerthallsystem-<version>.jar` file.
 
 This was a university assignment that I did, and since then I have been playing around with since late November 2016, I will probably still make some changes, so that's why it's here.
 
