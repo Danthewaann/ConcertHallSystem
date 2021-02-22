@@ -29,6 +29,7 @@ public class Main extends Application
         root.getChildren().addAll(this.sceneController);
         WINDOW.setTitle("Concert Hall Booking System");
         WINDOW.setScene(new Scene(root,900, 700));
+        WINDOW.setResizable(false);
         WINDOW.show();
     }
 

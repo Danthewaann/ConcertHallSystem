@@ -27,7 +27,7 @@
         <Separator layoutY="200.0" minWidth="-Infinity" prefHeight="10.0" prefWidth="800.0" AnchorPane.bottomAnchor="390.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0" />
         <VBox alignment="CENTER" prefHeight="250.0" prefWidth="800.0" spacing="10.0" AnchorPane.bottomAnchor="145.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="205.0">
             <children>
-                <Button fx:id="createConcertButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="0.0" mnemonicParsing="false" onAction="#goToCreateConcertScene" prefHeight="45.0" prefWidth="200.0" text="Create New Concert" textAlignment="CENTER">
+                <Button fx:id="createConcertButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="0.0" mnemonicParsing="false" onAction="#goToCreateConcertScene" prefHeight="45.0" prefWidth="300.0" text="Create New Concert" textAlignment="CENTER">
                     <font>
                         <Font size="16.0" />
                     </font>
@@ -35,7 +35,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="selectConcertButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="0.0" mnemonicParsing="false" onAction="#goToSelectConcertScene" prefHeight="45.0" prefWidth="200.0" text="Select Concert to View" textAlignment="CENTER">
+                <Button fx:id="selectConcertButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="0.0" mnemonicParsing="false" onAction="#goToSelectConcertScene" prefHeight="45.0" prefWidth="300.0" text="Select Concert to View" textAlignment="CENTER">
                     <font>
                         <Font size="16.0" />
                     </font>
@@ -43,7 +43,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="exitProgramButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="0.0" mnemonicParsing="false" onAction="#exitApplication" prefHeight="45.0" prefWidth="200.0" text="Exit Application" textAlignment="CENTER">
+                <Button fx:id="exitProgramButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="0.0" mnemonicParsing="false" onAction="#exitApplication" prefHeight="45.0" prefWidth="300.0" text="Exit Application" textAlignment="CENTER">
                     <font>
                         <Font size="16.0" />
                     </font>
@@ -55,4 +55,3 @@
         </VBox>
     </children>
 </AnchorPane>
-
