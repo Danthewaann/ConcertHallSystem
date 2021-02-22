@@ -310,9 +310,9 @@
                 </Label>
             </children>
         </AnchorPane>
-        <AnchorPane maxWidth="200.0" minHeight="0.0" minWidth="200.0" prefWidth="200.0">
+        <AnchorPane maxWidth="220.0" minHeight="0.0" minWidth="220.0" prefWidth="220.0">
             <children>
-                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="208.0" mnemonicParsing="false" onAction="#obtainReport" prefHeight="35.0" prefWidth="165.0" text="Obtain Report" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="208.0" mnemonicParsing="false" onAction="#obtainReport" prefHeight="35.0" prefWidth="165.0" text="Obtain Report" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="30.0">
                     <font>
                         <Font name="Calibri" size="16.0" />
                     </font>
@@ -320,7 +320,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="253.0" mnemonicParsing="false" onAction="#setSectionPrice" prefHeight="35.0" prefWidth="165.0" text="Set Section Price" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="253.0" mnemonicParsing="false" onAction="#setSectionPrice" prefHeight="35.0" prefWidth="165.0" text="Set Section Price" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="30.0">
                     <font>
                         <Font name="Calibri" size="16.0" />
                     </font>
@@ -328,7 +328,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="298.0" mnemonicParsing="false" onAction="#querySeat" prefHeight="35.0" prefWidth="165.0" text="Query Seat" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="298.0" mnemonicParsing="false" onAction="#querySeat" prefHeight="35.0" prefWidth="165.0" text="Query Seat" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="30.0">
                     <font>
                         <Font name="Calibri" size="16.0" />
                     </font>
@@ -336,7 +336,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="343.0" mnemonicParsing="false" onAction="#queryCustomer" prefHeight="35.0" prefWidth="165.0" text="Query Customer" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="343.0" mnemonicParsing="false" onAction="#queryCustomer" prefHeight="35.0" prefWidth="165.0" text="Query Customer" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="30.0">
                     <font>
                         <Font name="Calibri" size="16.0" />
                     </font>
@@ -344,7 +344,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="388.0" mnemonicParsing="false" onAction="#saveConcert" prefHeight="35.0" prefWidth="165.0" text="Save Concert" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="388.0" mnemonicParsing="false" onAction="#saveConcert" prefHeight="35.0" prefWidth="165.0" text="Save Concert" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="30.0">
                     <font>
                         <Font name="Calibri" size="16.0" />
                     </font>
@@ -352,7 +352,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="433.0" mnemonicParsing="false" onAction="#goToMainMenuScene" prefHeight="35.0" prefWidth="165.0" text="Main Menu" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="14.0" layoutY="433.0" mnemonicParsing="false" onAction="#goToMainMenuScene" prefHeight="35.0" prefWidth="165.0" text="Main Menu" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="30.0">
                     <font>
                         <Font name="Calibri" size="16.0" />
                     </font>
